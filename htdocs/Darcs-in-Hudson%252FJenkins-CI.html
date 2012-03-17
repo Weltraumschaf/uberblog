@@ -1,0 +1,47 @@
+<!DOCTYPE html public "for-legacy-parsers">
+<html>
+    <head>
+        <title>Darcs in Hudson/Jenkins CI</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    </head>
+    <body>
+        <header>
+            <h1>Das Weltraumschaf</h1>
+            <h2>The music making space animal</h2>
+        </header>
+
+        <strong>2011-02-15</strong>
+
+        <article>
+          <h2 id="darcs-in-hudsonjenkins-ci">Darcs in Hudson/Jenkins CI</h2>
+
+<p>At <a href="http://blog.kwick.de/uber-uns/">work</a> we’re using heavily the <a href="http://en.wikipedia.org/wiki/Distributed_Version_Control_System">DVCS</a> <a href="http://darcs.net/">Darcs</a>. Beyond dispute Darcs is in my opinion a good and suitable workhorse. Ok, it’s not that hip like Git is. But the biggest drawback is the lack of integration in other tools like IDEs, issuetrackers, build tools etc. There is also no SCM integration for Hudson/<a href="http://jenkins-ci.org/">Jenkins</a> continious integration server, which we’re using at work, <a href="http://stackoverflow.com/questions/1468760/is-there-a-darcs-plugin-for-hudson">too</a>.</p>
+
+<p>Long time I were complaining about this bad integration like others, too. Now I considered to give the community something back and decided to write a <a href="https://github.com/Weltraumschaf/darcs-plugin">Darcs SCM plugin</a> for the Jenkins CI.</p>
+
+<p>The plugin is in a stage it still works and I would call it an alpha release (0.3.1). You can watch the project status <a href="http://weltraumschaf.github.com/darcs-plugin/">here</a>. It implements the base functionality for checking out a Darcs repository and tracks the patches as build changesets. Also it integrates <a href="http://blitiri.com.ar/p/darcsweb/">Darcsweb</a> and <a href="http://darcsden.com/">Darcsden</a> for code browsing.</p>
+
+<p>Todos for further versions are:</p>
+
+<ul>
+  <li>write more unittests
+    <ul>
+      <li>DarcsSaxHandler/DarcsChangelogParser tests</li>
+      <li>BrowserChooser</li>
+    </ul>
+  </li>
+  <li>iput validation for code browsers URL</li>
+  <li>implement polling support</li>
+  <li>use org.jenkinsci.plugins as namespace</li>
+  <li>write more javadoc</li>
+  <li>ipmroving the changeset index view</li>
+</ul>
+
+<p>If you want to join the project you can fork me on <a href="https://github.com/Weltraumschaf/darcs-plugin">Github</a>.</p>
+
+<p>Many thanks to <a href="https://github.com/rpetti">Rob Petti</a>, <a href="https://github.com/jieryn">Jesse Farinacci</a>, the developers of the <a href="https://github.com/jenkinsci/bazaar-plugin">Bazaar</a>, <a href="https://github.com/jenkinsci/tfs-plugin">TFS</a>, <a href="https://github.com/jenkinsci/git-plugin">Git</a>, <a href="https://github.com/jenkinsci/subversion-plugin">SVN</a> and <a href="https://github.com/jenkinsci/perforce-plugin">Perforce</a> plugins. And last but not least all in #darcs and #jenkins IRC channels on freenode which helped me with good advices developing this plugin.</p>
+
+
+        </article>
+    </body>
+</html>

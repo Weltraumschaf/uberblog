@@ -1,0 +1,65 @@
+<!DOCTYPE html public "for-legacy-parsers">
+<html>
+    <head>
+        <title>What causes E_STRICT errors in PHP</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    </head>
+    <body>
+        <header>
+            <h1>Das Weltraumschaf</h1>
+            <h2>The music making space animal</h2>
+        </header>
+
+        <strong>2011-07-16</strong>
+
+        <article>
+          <h2 id="what-causes-estrict-errors-in-php">What causes E_STRICT errors in PHP</h2>
+
+<p>Some months ago this question came up on my work. We asked our self what kind of errors causes an <em>E_STRICT</em> error. The naive approach was to search the <a href="http://php.net/">php.net</a>. But I didn’t find anything about that. Yes there is some information what number <em>E_STRICT</em> has and that it causes errors if you don’t satisfy the strict standards and it’s important to be future compatible. But why? And what?</p>
+
+<p>Then I thought: Ok, to implement this feature (<em>E_STRICT</em> standard) they needed a list for what they will throw an <em>E_STRICT</em> error. I asked Google. What i found was not really helpful. Only a not exhaustive list on <a href="http://pear.php.net/">pear.php.net</a>. I wonder how they can implement something such <em>E_STRICT</em>, if they don’t have a list for that. Are they still hacking on without thinking about what to do?</p>
+
+<p>So I gathered the sparely information from the web and started to grep the PHP source code. So I can present a hopefully exhaustive list what causes <em>E_STRICT</em> errors:</p>
+
+<ul>
+  <li>when static methods are declared as abstrac</li>
+  <li>when non-static methods are called static</li>
+  <li>when a static property is accessed dynamicly</li>
+  <li>
+    <p>when assigning new with reference</p>
+
+    <p>$foo =&amp; new Foo();</p>
+  </li>
+  <li>if you use <kbd>is_a()</kbd> instead of instanceof (in 5.2, in 5.3 undeprecated…)</li>
+  <li>if you use var instead of <kbd>private</kbd>/<kbd>protected</kbd>/<kbd>public</kbd> for class properties</li>
+  <li>if method declaration/signature of overriden methods differ</li>
+  <li>if you declare both the PHP4 and PHP5 constructor in a class</li>
+  <li>
+    <p>if you use “Automagic Objects”</p>
+
+    <p>$notInitializedYet-&gt;foo = ‘bar’;</p>
+  </li>
+  <li>
+    <p>if you assign function/method return vlaues as reference</p>
+
+    <p>$foo =&amp; bar();</p>
+  </li>
+  <li>
+    <p>if you pass function/method return vlaues as reference to a function/method</p>
+
+    <p>foo(bar()); //if function foo(&amp;$aReference { &hellip; }</p>
+  </li>
+  <li>
+    <p>if resources are catsed implicit to an integer</p>
+
+    <p>$row[$query_id] = mysql_fetch_array($query_id); // if get_type($query_id) == ‘resource’</p>
+  </li>
+  <li>if <kbd>mktime()</kbd> is called without parameter. You should use <kbd>time()</kbd> instead</li>
+  <li>if you call <kbd>mysqli_next_result()</kbd>/<kbd>mysqli::next_result()</kbd> although there are no further results. You should test with <kbd>mysqli_more_results()</kbd>/<kbd>mysqli::more_results()</kbd> before</li>
+  <li>and last but not least: If you don’t set a default timezone (neither in Code nor in php.ini)</li>
+</ul>
+
+
+        </article>
+    </body>
+</html>
