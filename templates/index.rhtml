@@ -10,13 +10,13 @@
     <body>
         <header>
           <h1>Das Weltraumschaf</h1>
-          <h2>The music making space animal</h2>
+          <h2>The Music Making Space Animal</h2>
         </header>
 
-        <h2>Blog posts</h2>
+        <h2>All Blog Posts</h2>
         <ul>
-          <% for @post in @posts %>
-              <li><a href="<%= @post.filename %>"><%= h(@post.title) %></a></li>
+          <% for @post in @posts.reverse! %>
+              <li><a href="<%= @post.filename %>"><%= @post.title %></a> (<%= @post.date %>)</li>
           <% end %>
         </ul>
 </body>

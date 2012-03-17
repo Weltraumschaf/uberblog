@@ -17,7 +17,7 @@ module Uberblog
         end
 
         def filename
-            URI.escape "#{@title.gsub(' ', '-').gsub('/', '%2F')}.html"
+            "#{@title.downcase.gsub(/[^a-z0-9]/, '-')}.html"
         end
 
         def to_s
@@ -35,9 +35,8 @@ module Uberblog
             self
         end
 
-        def [](key)
-            return @posts[key] if key.kind_of?(Integer)
-            return nil
+        def getBinding
+            binding
         end
     end
 
