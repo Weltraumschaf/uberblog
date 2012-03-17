@@ -8,22 +8,78 @@
         <link href="<%= @siteUrl %>img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
         <link rel="alternate" type="application/rss+xml" title="Das Weltraumschaf | Feed" href="<%= @siteUrl %>feed.xml"/>
     </head>
-    <body>
-        <header>
-          <h1>Das Weltraumschaf</h1>
-          <h2>The Music Making Space Animal</h2>
-        </header>
+    <body class="home blog single-author two-column left-sidebar">
+        <div id="page">
+            <header id="branding">
+                <hgroup>
+                    <h1 id="site-title">
+                        <span><a rel="home" title="Das Weltraumschaf" href="<%= @siteUrl %>">Das Weltraumschaf</a></span>
+                    </h1>
+                    <h2 id="site-description">The Music Making Space Animal</h2>
+                </hgroup>
 
-        <h2>All Blog Posts</h2>
-        <ul>
-            <% for @post in @posts.reverse! %>
-                <li><a href="<%= @siteUrl + @post.filename %>"><%= @post.title %></a> (<%= @post.date %>)</li>
-            <% end %>
-        </ul>
+                <a href="<%= @siteUrl %>">
+                    <img width="940" height="198" src="<%= @siteUrl %>img/cherryblossoms.jpg">
+                </a>
 
-        <footer>
-            Proudly made without PHP and MySQL!
-        </footer>
+                <nav id="access">
+                    <h3 class="assistive-text">Main menu</h3>
+                    <div class="skip-link">
+                        <a class="assistive-text" title="Skip to primary content" href="#content">Skip to primary content</a>
+                    </div>
+                    <div class="skip-link">
+                        <a class="assistive-text" title="Skip to secondary content" href="#secondary">Skip to secondary content</a>
+                    </div>
+                    <div class="menu">
+                        <ul>
+                            <li class="current_page_item">
+                                <a title="Home" href="<%= @siteUrl %>">Home</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+
+            <div id="main">
+                <div id="primary">
+                    <div id="content" role="main">
+                        <ul>
+                            <% for @post in @posts.reverse! %>
+                                <li><a href="<%= @siteUrl + @post.filename %>"><%= @post.title %></a> (<%= @post.date %>)</li>
+                            <% end %>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="secondary" class="widget-area">
+                    <aside id="linkcat-6" class="widget widget_links">
+                        <h3 class="widget-title">me</h3>
+                        <ul class="xoxo blogroll">
+                            <li><a href="https://plus.google.com/111699688981457167133/posts" rel="me" title="My profile in Google Plus." target="_blank">Me on G+</a></li>
+                            <li><a href="http://github.com/Weltraumschaf" rel="me" title="My Github profile." target="_blank" onclick="javascript:_gaq.push(['_trackEvent','outbound-blogroll','http://github.com/Weltraumschaf']);">Me on Github</a></li>
+                            <li><a href="http://www.kwick.de/Weltraumschaf" rel="me" title="Here is where I work." target="_blank" onclick="javascript:_gaq.push(['_trackEvent','outbound-blogroll','http://www.kwick.de/Weltraumschaf']);">Me on KWICK!</a></li>
+                            <li><a href="http://www.xing.com/profile/Sven_Strittmatter" rel="me" title="My Xing profile." target="_blank" onclick="javascript:_gaq.push(['_trackEvent','outbound-blogroll','http://www.xing.com/profile/Sven_Strittmatter']);">Me on Xing</a></li>
+                        </ul>
+                    </aside>
+                    <aside id="linkcat-2" class="widget widget_links">
+                        <h3 class="widget-title">others</h3>
+                        <ul class="xoxo blogroll">
+                            <li><a href="http://chaosradio.ccc.de/chaosradio_express.html" title="The Chaos Radio Express podcast (german)." target="" onclick="javascript:_gaq.push(['_trackEvent','outbound-blogroll','http://chaosradio.ccc.de/chaosradio_express.html']);">Chaosradio Express</a></li>
+                            <li><a href="http://dypsilon.com/notes" rel="friend met colleague" title="Business Value driven Web Developer." target="" onclick="javascript:_gaq.push(['_trackEvent','outbound-blogroll','http://dypsilon.com/notes']);">Double Ypsilon</a></li>
+                            <li><a href="http://www.garanbo.de/" title="Easy organize your warranty papers." target="" onclick="javascript:_gaq.push(['_trackEvent','outbound-blogroll','http://www.garanbo.de/']);">Garanbo</a></li>
+                            <li><a href="http://www.heise.de/developer/podcast/" title="The Heise Developer Podcast (german)." target="" onclick="javascript:_gaq.push(['_trackEvent','outbound-blogroll','http://www.heise.de/developer/podcast/']);">Heise Developer Podcast</a></li>
+                            <li><a href="http://twitter.com/_stritti_" rel="met sibling" title="My big brothers Twitter." target="" onclick="javascript:_gaq.push(['_trackEvent','outbound-blogroll','http://twitter.com/_stritti_']);">Mo Brother</a></li>
+                        </ul>
+                    </aside>
+                </div>
+
+                <footer id="colophon" role="contentinfo">
+                    <div id="site-generator">
+                        Proudly made without PHP and MySQL :P
+                    </div>
+                </footer>
+            </div>
+        </div>
         <script type="text/javascript" src="<%= @siteUrl %>js/main.js"></script>
     </body>
 </html>
