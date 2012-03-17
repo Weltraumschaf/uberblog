@@ -4,12 +4,13 @@ require 'pathname'
 
 module Uberblog
     class BlogPost
-        attr_reader :title, :date
+        attr_reader :title, :date, :content, :siteUrl
 
-        def initialize(title, content, date)
-            @title = title
-            @content = content
-            @date = date
+        def initialize(title, content, date, siteUrl)
+            @title      = title
+            @content    = content
+            @date       = date
+            @siteUrl    = siteUrl
         end
 
         def getBinding
@@ -26,8 +27,11 @@ module Uberblog
     end
 
     class BlogPostList
-        def initialize
-            @posts = Array.new
+        attr_reader :posts, :siteUrl
+
+        def initialize(siteUrl)
+            @posts   = Array.new
+            @siteUrl = siteUrl
         end
 
         def append(aBlogPost)
@@ -56,14 +60,43 @@ module Uberblog
         end
 
         def date
-            basename = Pathname.new(@filename).basename.to_s
+            basename  = Pathname.new(@filename).basename.to_s
             dateParts = basename[0, basename.index('_')].split(/-/)
-            date = Time.utc(dateParts[0], dateParts[1], dateParts[2])
+            date      = Time.utc(dateParts[0], dateParts[1], dateParts[2])
             date.strftime('%d.%m.%Y')
         end
 
         def to_s
             "<BlogData: #{title}>"
+        end
+    end
+
+    class SiteMap
+        class Url
+            attr_accessor :loc, :lastmod, :changefreq, :priority
+
+            def initialize
+                @changefreq = 'weekly'
+                @priority   = '0.2'
+            end
+        end
+
+        attr_reader :urls
+
+        def initialize(siteUrl)
+            @siteUrl = siteUrl
+            @urls    = Array.new
+        end
+
+        def append(aFile)
+            url = Url.new
+            url.lastmod = File.ctime(aFile).strftime('%Y-%m-%d')
+            url.loc     = @siteUrl + Pathname.new(aFile).basename.to_s
+            @urls.push(url)
+        end
+
+        def getBinding
+            binding
         end
     end
 end

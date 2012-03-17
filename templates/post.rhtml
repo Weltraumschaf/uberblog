@@ -3,9 +3,9 @@
     <head>
         <title>Das Weltraumschaf | <%= @title %></title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-        <link href="css/normalize.css" rel="stylesheet" type="text/css" media="screen"/>
-        <link href="css/main.css" rel="stylesheet" type="text/css" media="screen"/>
-        <link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+        <link href="<%= @siteUrl %>css/normalize.css" rel="stylesheet" type="text/css" media="screen"/>
+        <link href="<%= @siteUrl %>css/main.css" rel="stylesheet" type="text/css" media="screen"/>
+        <link href="<%= @siteUrl %>img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
     </head>
     <body>
         <header>
@@ -13,10 +13,13 @@
             <h2>The Music Making Space Animal</h2>
         </header>
 
-        <strong><%= @date %></strong>
+        <nav>
+            <a href="<%= @siteUrl %>index.html">Home</a>
+        </nav>
 
         <article>
-          <%= @content %>
+            <strong><%= @date %></strong><br/>
+            <%= @content %>
         </article>
     </body>
 </html>
