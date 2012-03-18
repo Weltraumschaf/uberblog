@@ -6,10 +6,10 @@
   xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
   <channel>
     <title>Das Weltraumschaf</title>
-    <link>http://localhost/~sxs/uberblog/feed.xml</link>
+    <link>https://blog.weltraumschaf.de/feed.xml</link>
     <description>The Music Making Space Animal</description>
     <language>en</language>
-    <lastBuildDate>Sun, 18 Mar 2012 13:54:27 +0100</lastBuildDate>
+    <lastBuildDate>Sun, 18 Mar 2012 14:07:43 +0100</lastBuildDate>
     <item>
       <title>All Web Developers Should Stop Doing This Immediately, Too</title>
       <link>all-web-developers-should-stop-doing-this-immediately--too.html</link>

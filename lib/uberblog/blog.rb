@@ -3,7 +3,19 @@ require 'uri'
 require 'pathname'
 
 module Uberblog
+
+    def generate_slug_url(path)
+        path.downcase.gsub(/[^a-z0-9]/, '-')
+    end
+
+    def create_date(filename)
+        dateParts = filename[0, filename.index('_')].split(/-/)
+        Time.utc(dateParts[0], dateParts[1], dateParts[2])
+    end
+
     class BlogData
+        include Uberblog
+
         def initialize(filename)
             @basename = Pathname.new(filename).basename.to_s
             @document = File.open(filename, "rb") { |file| Kramdown::Document.new(file.read) }
@@ -18,8 +30,7 @@ module Uberblog
         end
 
         def date
-            dateParts = @basename[0, @basename.index('_')].split(/-/)
-            date      = Time.utc(dateParts[0], dateParts[1], dateParts[2])
+            date = create_date(@basename)
             date.strftime('%d.%m.%Y')
         end
 
@@ -29,6 +40,7 @@ module Uberblog
     end
 
     class BlogPost
+        include Uberblog
         attr_reader :title, :date, :content, :siteUrl
 
         def initialize(title, content, date, siteUrl)
@@ -43,7 +55,7 @@ module Uberblog
         end
 
         def filename
-            "#{@title.downcase.gsub(/[^a-z0-9]/, '-')}.html"
+            "#{generate_slug_url(@title)}.html"
         end
 
         def to_s
