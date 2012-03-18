@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
-        <loc>http://localhost/~sxs/uberblog/writing-compilers-and-interpreters--a-software-engineering-approach.html</loc>
+        <loc>http://localhost/~sxs/uberblog/writing-compilers-and-interpreters-a-software-engineering-approach.html</loc>
         <lastmod>2012-03-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
@@ -86,7 +86,7 @@
     </url>
 
     <url>
-        <loc>http://localhost/~sxs/uberblog/good-thinking-----good-products.html</loc>
+        <loc>http://localhost/~sxs/uberblog/good-thinking-good-products.html</loc>
         <lastmod>2012-03-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
@@ -107,7 +107,7 @@
     </url>
 
     <url>
-        <loc>http://localhost/~sxs/uberblog/all-web-developers-should-stop-doing-this-immediately--too.html</loc>
+        <loc>http://localhost/~sxs/uberblog/all-web-developers-should-stop-doing-this-immediately-too.html</loc>
         <lastmod>2012-03-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>

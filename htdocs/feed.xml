@@ -6,13 +6,13 @@
   xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
   <channel>
     <title>Das Weltraumschaf</title>
-    <link>https://blog.weltraumschaf.de/feed.xml</link>
+    <link>http://localhost/~sxs/uberblog/feed.xml</link>
     <description>The Music Making Space Animal</description>
     <language>en</language>
-    <lastBuildDate>Sun, 18 Mar 2012 14:07:43 +0100</lastBuildDate>
+    <lastBuildDate>Sun, 18 Mar 2012 14:35:11 +0100</lastBuildDate>
     <item>
       <title>All Web Developers Should Stop Doing This Immediately, Too</title>
-      <link>all-web-developers-should-stop-doing-this-immediately--too.html</link>
+      <link>all-web-developers-should-stop-doing-this-immediately-too.html</link>
       <description>&lt;h2 id=&quot;all-web-developers-should-stop-doing-this-immediately-too&quot;&gt;All Web Developers Should Stop Doing This Immediately, Too&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href=&quot;http://www.technologyreview.com/blog/mimssbits/27581/?nlid=nldly&amp;amp;nld=2012-02-16&quot;&gt;Christopher Mims complains about the fact that a website is treating him with his iPad as a second class citicen&lt;/a&gt;. He’s right that web developers shouldn’t do that. But he’s arguing that he don’t want to download the offered iPad-App because in his opion this is antisocial doing that on a low bandwith public wifi. Is it better to watch a video over that low bandwith public wifi?&lt;/p&gt;
@@ -62,7 +62,7 @@
     </item>
     <item>
       <title>Writing Compilers and Interpreters: A Software Engineering Approach</title>
-      <link>writing-compilers-and-interpreters--a-software-engineering-approach.html</link>
+      <link>writing-compilers-and-interpreters-a-software-engineering-approach.html</link>
       <description>&lt;h2 id=&quot;writing-compilers-and-interpreters-a-software-engineering-approach&quot;&gt;Writing Compilers and Interpreters: A Software Engineering Approach&lt;/h2&gt;
 
 &lt;p&gt;I have bought a &lt;a href=&quot;http://www.amazon.de/Writing-Compilers-Interpreters-Software-Engineering/dp/0470177071&quot;&gt;Book&lt;/a&gt; from &lt;a href=&quot;http://www.apropos-logic.com/&quot;&gt;Ronald Mak&lt;/a&gt; about how to write compilers and interpreters. Interesting approach is the software design view: How to specify and implement the modules/components language independent as possible. This book is a good extension to the book &lt;a href=&quot;http://pragprog.com/book/tpdsl/language-implementation-patterns&quot;&gt;Language Implementation Patterns&lt;/a&gt; from Terence Parr. The code I produce during my lessons you can see on &lt;a href=&quot;https://github.com/Weltraumschaf/cay-the&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
@@ -200,7 +200,7 @@
     </item>
     <item>
       <title>Good Thinking – Good Products</title>
-      <link>good-thinking-----good-products.html</link>
+      <link>good-thinking-good-products.html</link>
       <description>&lt;h2 id=&quot;good-thinking--good-products&quot;&gt;Good Thinking – Good Products&lt;/h2&gt;
 
 &lt;blockquote&gt;
