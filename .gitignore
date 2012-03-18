@@ -1,2 +1,5 @@
 .idea
-config/blog.yml
+config/blog.dev.yml
+config/blog.prod.yml
+htdocs/.htaccess
+htdocs/redirect.php
