@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require File.dirname(__FILE__) + '/../lib/uberblog'
+require 'uberblog/exec'
+
+cmd = Uberblog::Publisher.new()
+cmd.execute()
