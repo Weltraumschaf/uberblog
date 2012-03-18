@@ -5,11 +5,15 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     outline: 0 none;
     padding: 0;
     vertical-align: baseline;
+    font-style: inherit;
+    font-weight: inherit;
 }
 
 body {
     background: none repeat scroll 0 0 #E4E4E4;
     padding: 0 2em;
+    color: #373737;
+    font: 300 15px/1.625 "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 a {
@@ -125,8 +129,10 @@ ul {
     width: 58.4%;
 }
 
-#content h3 {
-    margin-bottom: 1.2em;
+#content h2 {
+    font-size: 2.2em;
+    line-height: 1.2em;
+    margin-bottom: 0.6em;
 }
 
 #secondary {
@@ -142,7 +148,7 @@ ul {
     margin: 0 0 2.2em;
 }
 
-#secondary aside h3 {
+.meta {
     color: #666666;
     font-size: 10px;
     font-weight: 500;
@@ -180,4 +186,8 @@ footer {
 footer a {
     color: #555555;
     font-weight: bold;
+}
+
+article p {
+    margin-bottom: 1.625em;
 }

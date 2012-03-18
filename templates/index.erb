@@ -1,4 +1,4 @@
-<h3>All Blog Posts</h3>
+<h2>All Blog Posts</h2>
 <ul>
     <% for @post in @posts.reverse! %>
         <li><a href="<%= @siteUrl + @post.filename %>"><%= @post.title %></a></li>
