@@ -2,11 +2,8 @@
 
 baseDir = File.dirname(__FILE__) + '/..'
 require 'rubygems'
-require 'yaml'
 require "#{baseDir}/lib/uberblog"
 require 'uberblog/exec'
 
-conf = File.open("#{baseDir}/config/blog.yml") { |file| YAML.load(file) }
-conf['baseDir'] = baseDir
-cmd = Uberblog::Publisher.new(conf)
+cmd = Uberblog::Publisher.new(baseDir, ARGV)
 cmd.execute

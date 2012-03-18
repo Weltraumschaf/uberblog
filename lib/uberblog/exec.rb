@@ -1,16 +1,18 @@
-require 'uberblog/blog'
-require 'uberblog/sitemap'
 require 'erb'
 require 'rss/maker'
 require 'find'
 require 'pathname'
+require 'yaml'
+require 'uberblog/blog'
+require 'uberblog/sitemap'
 
 module Uberblog
     class Publisher
-        def initialize(config)
-            @dataDir     = config['baseDir'] + config['dataDir']
-            @htdocs      = config['baseDir'] + config['htdocs']
-            @tplDir      = config['baseDir'] + config['tplDir']
+        def initialize(baseDir, args)
+            config = File.open("#{baseDir}/config/blog.yml") { |file| YAML.load(file) }
+            @dataDir     = baseDir + config['dataDir']
+            @htdocs      = baseDir + config['htdocs']
+            @tplDir      = baseDir + config['tplDir']
             @siteUrl     = config['siteUrl']
             @headline    = config['headline']
             @description = config['description']
