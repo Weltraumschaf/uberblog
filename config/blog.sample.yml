@@ -1,6 +1,7 @@
 headline:    The Blog Headline
 description: The Blog Descrption
 siteUrl:     http://www.your-blog.de/
+language:    en
 dataDir:     /data
 tplDir:      /templates
 htdocs:      /htdocs

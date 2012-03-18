@@ -70,12 +70,13 @@ module Uberblog
     end
 
     class Layout
-        attr_reader :siteUrl
+        attr_reader :siteUrl, :language
         attr_accessor :title, :headline, :description, :content
 
-        def initialize(siteUrl, template)
+        def initialize(siteUrl, template, language)
             @siteUrl     = siteUrl
             @template    = template
+            @language    = language
             @title       = 'no title'
             @headline    = 'no headline'
             @description = 'no description'

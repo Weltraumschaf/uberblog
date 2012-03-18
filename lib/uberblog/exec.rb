@@ -16,8 +16,9 @@ module Uberblog
             @siteUrl     = config['siteUrl']
             @headline    = config['headline']
             @description = config['description']
+            @language    = config['language']
             @list        = Uberblog::BlogPostList.new(config['siteUrl'])
-            @layout      = Uberblog::Layout.new(config['siteUrl'], create_template("layout"))
+            @layout      = Uberblog::Layout.new(config['siteUrl'], create_template("layout"), @language)
             @layout.headline    = config['headline']
             @layout.description = config['description']
         end
@@ -51,7 +52,7 @@ module Uberblog
                 maker.channel.title         = @headline
                 maker.channel.link          = "#{@siteUrl}feed.xml"
                 maker.channel.description   = @description
-                maker.channel.language      = 'en'
+                maker.channel.language      = @language
                 maker.channel.lastBuildDate = Time.now
                 maker.items.do_sort         = true
 
