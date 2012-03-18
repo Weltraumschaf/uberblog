@@ -1,6 +1,6 @@
 <h2>All Blog Posts</h2>
 <ul>
-    <% for @post in @posts.reverse! %>
+    <% for @post in @posts.sort!.reverse! %>
         <li>
             <a href="<%= @siteUrl + @post.filename %>"><%= @post.title %></a>
             <span class="meta">(<%= @post.date_formatted %>)</span>
