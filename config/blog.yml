@@ -1,7 +1,0 @@
-headline:    Das Weltraumschaf
-description: The Music Making Space Animal
-siteUrl:     https://blog.weltraumschaf.de/
-baseDir:     /Users/sxs/src/ruby/uberblog
-dataDir:     /data
-tplDir:      /templates
-htdocs:      /htdocs
