@@ -2,3 +2,5 @@
 config/blog.yml
 htdocs/.htaccess
 htdocs/redirect.php
+htdocs/*.html
+htdocs/*.xml
