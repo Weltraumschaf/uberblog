@@ -16,50 +16,46 @@ $htdocs      = "#{$baseDir}/htdocs"
 module Uberblog
     class Publisher
         def initialize
-
+            @list     = Uberblog::BlogPostList.new($siteUrl)
+            @layout   = Uberblog::Layout.new($siteUrl, createTemplate("layout"))
+            @layout.headline    = $headline
+            @layout.description = $description
         end
 
         def createTemplate(name)
             File.open("#{$tplDir}/#{name}.erb", "rb") { |file| ERB.new(file.read) }
         end
 
-        def execute
-            puts 'Publishing the blog...'
-            template = createTemplate("layout")
-            layout   = Uberblog::Layout.new($siteUrl, template)
-            layout.headline    = $headline
-            layout.description = $description
-
-# crate the blog posts
+        def createPosts
             template = createTemplate("post")
-            list     = Uberblog::BlogPostList.new($siteUrl)
-
             Dir.foreach($dataDir) do |file|
                 next if file == '.' or file == '..'
                 data = Uberblog::BlogData.new("#{$dataDir}/#{file}")
                 post = Uberblog::BlogPost.new(data.title, data.html, data.date, $siteUrl)
-                layout.title   = "#{$headline} | #{data.title}"
-                layout.content = template.result(post.getBinding)
-                File.open("#{$htdocs}/#{post.filename}", 'w') { |file| file.write(layout.to_html) }
-                list.append(post)
+                @layout.title   = "#{$headline} | #{data.title}"
+                @layout.content = template.result(post.getBinding)
+                File.open("#{$htdocs}/#{post.filename}", 'w') { |file| file.write(@layout.to_html) }
+                @list.append(post)
             end
+        end
 
-#create the index
+        def createIndex
             template = createTemplate("index")
-            layout.title   = "#{$headline} | Blog"
-            layout.content = template.result(list.getBinding)
-            File.open("#{$htdocs}/index.html", 'w') { |file| file.write(layout.to_html) }
+            @layout.title   = "#{$headline} | Blog"
+            @layout.content = template.result(@list.getBinding)
+            File.open("#{$htdocs}/index.html", 'w') { |file| file.write(@layout.to_html) }
+        end
 
-#create the feeds
+        def createFeed
             feed = RSS::Maker.make('2.0') do |maker|
-                maker.channel.title         = 'Das Weltraumschaf'
+                maker.channel.title         = $headline
                 maker.channel.link          = "#{$siteUrl}feed.xml"
-                maker.channel.description   = 'The Music Making Space Animal'
+                maker.channel.description   = $description
                 maker.channel.language      = 'en'
                 maker.channel.lastBuildDate = Time.now
                 maker.items.do_sort         = true
 
-                list.posts.each do |post|
+                @list.posts.each do |post|
                     item = maker.items.new_item
                     item.title         = post.title
                     item.link          = post.filename
@@ -68,8 +64,9 @@ module Uberblog
                 end
             end
             File.open("#{$htdocs}/feed.xml","w") { |file| file.write(feed) }
+        end
 
-#create the google site map
+        def createSiteMap
             sitemap  = Uberblog::SiteMap.new($siteUrl, createTemplate("sitemap"))
             Find.find($htdocs) do |file|
                 if file =~ /.html$/
@@ -77,6 +74,14 @@ module Uberblog
                 end
             end
             File.open("#{$htdocs}/sitemap.xml","w") { |f| f.write(sitemap.to_xml) }
+        end
+
+        def execute
+            puts 'Publishing the blog...'
+            createPosts
+            createIndex
+            createFeed
+            createSiteMap
             exit 0
         end
     end

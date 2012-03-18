@@ -4,5 +4,5 @@ require 'rubygems'
 require File.dirname(__FILE__) + '/../lib/uberblog'
 require 'uberblog/exec'
 
-cmd = Uberblog::Publisher.new()
-cmd.execute()
+cmd = Uberblog::Publisher.new
+cmd.execute
