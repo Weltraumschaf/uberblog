@@ -83,9 +83,10 @@ module Uberblog
 
         attr_reader :urls
 
-        def initialize(siteUrl)
-            @siteUrl = siteUrl
-            @urls    = Array.new
+        def initialize(siteUrl, template)
+            @siteUrl  = siteUrl
+            @template = template
+            @urls     = Array.new
         end
 
         def append(aFile)
@@ -95,8 +96,8 @@ module Uberblog
             @urls.push(url)
         end
 
-        def getBinding
-            binding
+        def to_xml
+            @template.result(binding)
         end
     end
 

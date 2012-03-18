@@ -13,14 +13,17 @@ $dataDir     = "#{$baseDir}/data"
 $tplDir      = "#{$baseDir}/templates"
 $htdocs      = "#{$baseDir}/htdocs"
 
-template = File.open("#{$tplDir}/layout.erb", "rb") { |file| ERB.new(file.read) }
-layout = Uberblog::Layout.new($siteUrl, template)
-layout.headline = $headline
+def createTemplate(name)
+    File.open("#{$tplDir}/#{name}.erb", "rb") { |file| ERB.new(file.read) }
+end
+
+template = createTemplate("layout")
+layout   = Uberblog::Layout.new($siteUrl, template)
+layout.headline    = $headline
 layout.description = $description
 
 # crate the blog posts
-template = File.open("#{$tplDir}/post.erb", "rb") { |file| file.read }
-rhtml    = ERB.new(template)
+template = createTemplate("post")
 list     = Uberblog::BlogPostList.new($siteUrl)
 
 Dir.foreach($dataDir) do |file|
@@ -28,16 +31,15 @@ Dir.foreach($dataDir) do |file|
     data = Uberblog::BlogData.new("#{$dataDir}/#{file}")
     post = Uberblog::BlogPost.new(data.title, data.html, data.date, $siteUrl)
     layout.title   = "#{$headline} | #{data.title}"
-    layout.content = rhtml.result(post.getBinding)
+    layout.content = template.result(post.getBinding)
     File.open("#{$htdocs}/#{post.filename}", 'w') { |file| file.write(layout.to_html) }
     list.append(post)
 end
 
 #create the index
-template = File.open("#{$tplDir}/index.erb", "rb") { |file| file.read }
-rhtml    = ERB.new(template)
+template = createTemplate("index")
 layout.title   = "#{$headline} | Blog"
-layout.content = rhtml.result(list.getBinding)
+layout.content = template.result(list.getBinding)
 File.open("#{$htdocs}/index.html", 'w') { |file| file.write(layout.to_html) }
 
 #create the feeds
@@ -60,13 +62,10 @@ end
 File.open("#{$htdocs}/feed.xml","w") { |file| file.write(feed) }
 
 #create the google site map
-template = File.open("#{$tplDir}/sitemap.erb", "rb") { |file| file.read }
-rhtml    = ERB.new(template)
-sitemap  = Uberblog::SiteMap.new($siteUrl)
+sitemap  = Uberblog::SiteMap.new($siteUrl, createTemplate("sitemap"))
 Find.find($htdocs) do |file|
     if file =~ /.html$/
         sitemap.append(file)
     end
 end
-xml = rhtml.result(sitemap.getBinding)
-File.open("#{$htdocs}/sitemap.xml","w") { |f| f.write(xml) }
+File.open("#{$htdocs}/sitemap.xml","w") { |f| f.write(sitemap.to_xml) }
