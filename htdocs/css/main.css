@@ -16,6 +16,40 @@ body {
     font: 300 15px/1.625 "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+cite, em, i {
+    font-style: italic;
+}
+
+code, kbd {
+    font: 13px Monaco,Consolas,"Andale Mono","DejaVu Sans Mono",monospace;
+}
+
+pre {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #CCCCCC;
+    margin: 10px;
+    padding: 5px;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: "";
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: "";
+}
+
+blockquote {
+    font-family: Georgia,"Bitstream Charter",serif;
+    font-style: italic;
+    font-weight: normal;
+    margin: 0 3em;
+}
+
+blockquote, q {
+    quotes: "" "";
+}
+
 a {
     color: #1982D1;
     text-decoration: none;
