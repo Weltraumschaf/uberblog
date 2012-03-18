@@ -99,4 +99,22 @@ module Uberblog
             binding
         end
     end
+
+    class Layout
+        attr_reader :siteUrl
+        attr_accessor :title, :headline, :description, :content
+
+        def initialize(siteUrl, template)
+            @siteUrl     = siteUrl
+            @template    = template
+            @title       = 'no title'
+            @headline    = 'no headline'
+            @description = 'no description'
+            @content     = 'no content'
+        end
+
+        def to_html
+            @template.result(binding)
+        end
+    end
 end

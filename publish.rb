@@ -5,11 +5,18 @@ require 'find'
 require 'pathname'
 
 # config stuff
-$siteUrl = 'http://localhost/~sxs/uberblog/'
-$baseDir = Pathname.pwd.to_s
-$dataDir = "#{$baseDir}/data"
-$tplDir  = "#{$baseDir}/templates"
-$htdocs  = "#{$baseDir}/htdocs"
+$headline    = 'Das Weltraumschaf'
+$description = 'The Music Making Space Animal'
+$siteUrl     = 'http://localhost/~sxs/uberblog/'
+$baseDir     = Pathname.pwd.to_s
+$dataDir     = "#{$baseDir}/data"
+$tplDir      = "#{$baseDir}/templates"
+$htdocs      = "#{$baseDir}/htdocs"
+
+template = File.open("#{$tplDir}/layout.erb", "rb") { |file| ERB.new(file.read) }
+layout = Uberblog::Layout.new($siteUrl, template)
+layout.headline = $headline
+layout.description = $description
 
 # crate the blog posts
 template = File.open("#{$tplDir}/post.erb", "rb") { |file| file.read }
@@ -20,16 +27,18 @@ Dir.foreach($dataDir) do |file|
     next if file == '.' or file == '..'
     data = Uberblog::BlogData.new("#{$dataDir}/#{file}")
     post = Uberblog::BlogPost.new(data.title, data.html, data.date, $siteUrl)
-    html = rhtml.result(post.getBinding)
-    File.open("#{$htdocs}/#{post.filename}", 'w') { |file| file.write(html) }
+    layout.title   = "#{$headline} | #{data.title}"
+    layout.content = rhtml.result(post.getBinding)
+    File.open("#{$htdocs}/#{post.filename}", 'w') { |file| file.write(layout.to_html) }
     list.append(post)
 end
 
 #create the index
 template = File.open("#{$tplDir}/index.erb", "rb") { |file| file.read }
 rhtml    = ERB.new(template)
-index    = rhtml.result(list.getBinding)
-File.open("#{$htdocs}/index.html", 'w') { |file| file.write(index) }
+layout.title   = "#{$headline} | Blog"
+layout.content = rhtml.result(list.getBinding)
+File.open("#{$htdocs}/index.html", 'w') { |file| file.write(layout.to_html) }
 
 #create the feeds
 feed = RSS::Maker.make('2.0') do |maker|
