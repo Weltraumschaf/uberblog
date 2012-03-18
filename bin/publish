@@ -1,9 +1,8 @@
 #!/usr/bin/env ruby
 
-baseDir = File.dirname(__FILE__) + '/..'
-require 'rubygems'
-require "#{baseDir}/lib/uberblog"
+$baseDir = File.dirname(__FILE__) + '/..'
+require "#{$baseDir}/lib/uberblog"
 require 'uberblog/exec'
 
-cmd = Uberblog::Publisher.new(baseDir, ARGV)
+cmd = Uberblog::Publisher.new($baseDir, ARGV)
 cmd.execute

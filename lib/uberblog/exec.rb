@@ -3,16 +3,77 @@ require 'rss/maker'
 require 'find'
 require 'pathname'
 require 'yaml'
+require 'optparse'
 require 'uberblog/blog'
 require 'uberblog/sitemap'
 
 module Uberblog
-    class Publisher
+
+    class Generic
         def initialize(baseDir, args)
-            config = File.open("#{baseDir}/config/blog.yml") { |file| YAML.load(file) }
-            @dataDir     = baseDir + config['dataDir']
-            @htdocs      = baseDir + config['htdocs']
-            @tplDir      = baseDir + config['tplDir']
+            @baseDir = baseDir
+            @args    = args
+            @options = {}
+        end
+
+        def execute
+            @opts = OptionParser.new(&method(:set_opts))
+            @opts.parse!(@args)
+        end
+
+        protected
+        def set_opts(opts)
+            opts.on('-c', '--config <FILE>', 'Config file to use.') do |file|
+                @options[:config] = file.to_sym
+            end
+
+            opts.on_tail('-?', '-h', '--help', 'Show this message.') do
+                puts opts
+                exit 0
+            end
+        end
+
+        def load_config(filepath)
+            File.open("#{Pathname.getwd}/#{filepath}") { |file| YAML.load(file) }
+        end
+    end
+
+    class Create < Generic
+        def execute
+            super
+            config   = load_config(@options[:config])
+            dataDir  = @baseDir + config['dataDir']
+            id       = 0
+            now      = Time.now
+
+            while true
+                filename = "#{dataDir}/%d-%02d-%02d_#{id}.md" % [ now.year, now.month, now.day ]
+                break unless File.exist? filename
+                id += 1
+            end
+
+            File.open(filename, 'w') { |file| file.write("## #{@options[:title]}") }
+            puts "Created blog post #{filename}"
+            exit 0
+        end
+
+        protected
+        def set_opts(opts)
+            super
+            opts.on('-t', '--title TITLE', 'Title of the blog post.') do |title|
+                @options[:title] = title.to_sym
+            end
+        end
+    end
+
+    class Publisher < Generic
+
+        def execute
+            puts 'Publishing the blog...'
+            config = File.open("#{@baseDir}/config/blog.dev.yml") { |file| YAML.load(file) }
+            @dataDir     = @baseDir + config['dataDir']
+            @htdocs      = @baseDir + config['htdocs']
+            @tplDir      = @baseDir + config['tplDir']
             @siteUrl     = config['siteUrl']
             @headline    = config['headline']
             @description = config['description']
@@ -21,7 +82,14 @@ module Uberblog
             @layout      = Uberblog::Layout.new(config['siteUrl'], create_template("layout"), @language)
             @layout.headline    = config['headline']
             @layout.description = config['description']
+            create_posts
+            create_index
+            create_feed
+            create_site_map
+            exit 0
         end
+
+        protected
 
         def create_template(name)
             File.open("#{@tplDir}/#{name}.erb", "rb") { |file| ERB.new(file.read) }
@@ -74,16 +142,7 @@ module Uberblog
                     site_map.append(file)
                 end
             end
-            File.open("#{@htdocs}/site_map.xml","w") { |f| f.write(site_map.to_xml) }
-        end
-
-        def execute
-            puts 'Publishing the blog...'
-            create_posts
-            create_index
-            create_feed
-            create_site_map
-            exit 0
+            File.open("#{@htdocs}/sitemap.xml","w") { |f| f.write(site_map.to_xml) }
         end
     end
 end

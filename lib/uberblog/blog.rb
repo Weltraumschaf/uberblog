@@ -5,7 +5,7 @@ require 'pathname'
 module Uberblog
 
     def generate_slug_url(path)
-        path.downcase.gsub(/[^a-z0-9]/, '-')
+        path.downcase.gsub(/[^a-z0-9]/, '-').gsub(/-+/, '-')
     end
 
     def create_date(filename)
