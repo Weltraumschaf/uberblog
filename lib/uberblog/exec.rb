@@ -69,8 +69,9 @@ module Uberblog
     class Publisher < Generic
 
         def execute
+            super
             puts 'Publishing the blog...'
-            config = File.open("#{@baseDir}/config/blog.dev.yml") { |file| YAML.load(file) }
+            config       = load_config(@options[:config])
             @dataDir     = @baseDir + config['dataDir']
             @htdocs      = @baseDir + config['htdocs']
             @tplDir      = @baseDir + config['tplDir']
