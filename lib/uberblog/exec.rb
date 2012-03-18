@@ -130,7 +130,7 @@ module Uberblog
                     item.title         = post.title
                     item.link          = post.filename
                     item.description   = post.content
-                    item.date          = Time.parse(post.date)
+                    item.date          = Time.parse(post.date_formatted)
                 end
             end
             File.open("#{@htdocs}/feed.xml","w") { |file| file.write(feed) }

@@ -3,7 +3,7 @@
     <% for @post in @posts.reverse! %>
         <li>
             <a href="<%= @siteUrl + @post.filename %>"><%= @post.title %></a>
-            <span class="meta">(<%= @post.date %>)</span>
+            <span class="meta">(<%= @post.date_formatted %>)</span>
         </li>
     <% end %>
 </ul>

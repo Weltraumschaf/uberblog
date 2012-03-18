@@ -30,8 +30,7 @@ module Uberblog
         end
 
         def date
-            date = create_date(@basename)
-            date.strftime('%d.%m.%Y')
+            create_date(@basename)
         end
 
         def to_s
@@ -41,6 +40,7 @@ module Uberblog
 
     class BlogPost
         include Uberblog
+        include Comparable
         attr_reader :title, :date, :content, :siteUrl
 
         def initialize(title, content, date, siteUrl)
@@ -50,12 +50,20 @@ module Uberblog
             @siteUrl    = siteUrl
         end
 
+        def <=>(other)
+            self.date <=> other.date
+        end
+
         def get_binding
             binding
         end
 
         def filename
             "#{generate_slug_url(@title)}.html"
+        end
+
+        def date_formatted
+            @date.strftime('%d.%m.%Y')
         end
 
         def to_s
