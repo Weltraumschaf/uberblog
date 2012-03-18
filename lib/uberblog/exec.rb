@@ -17,36 +17,36 @@ module Uberblog
             @headline    = config['headline']
             @description = config['description']
             @list        = Uberblog::BlogPostList.new(config['siteUrl'])
-            @layout      = Uberblog::Layout.new(config['siteUrl'], createTemplate("layout"))
+            @layout      = Uberblog::Layout.new(config['siteUrl'], create_template("layout"))
             @layout.headline    = config['headline']
             @layout.description = config['description']
         end
 
-        def createTemplate(name)
+        def create_template(name)
             File.open("#{@tplDir}/#{name}.erb", "rb") { |file| ERB.new(file.read) }
         end
 
-        def createPosts
-            template = createTemplate("post")
+        def create_posts
+            template = create_template("post")
             Dir.foreach(@dataDir) do |file|
                 next if file == '.' or file == '..'
                 data = Uberblog::BlogData.new("#{@dataDir}/#{file}")
-                post = Uberblog::BlogPost.new(data.title, data.html, data.date, @siteUrl)
+                post = Uberblog::BlogPost.new(data.title, data.to_html, data.date, @siteUrl)
                 @layout.title   = "#{@headline} | #{data.title}"
-                @layout.content = template.result(post.getBinding)
+                @layout.content = template.result(post.get_binding)
                 File.open("#{@htdocs}/#{post.filename}", 'w') { |file| file.write(@layout.to_html) }
                 @list.append(post)
             end
         end
 
-        def createIndex
-            template = createTemplate("index")
+        def create_index
             @layout.title   = "#{@headline} | Blog"
-            @layout.content = template.result(@list.getBinding)
+            template        = create_template("index")
+            @layout.content = template.result(@list.get_binding)
             File.open("#{@htdocs}/index.html", 'w') { |file| file.write(@layout.to_html) }
         end
 
-        def createFeed
+        def create_feed
             feed = RSS::Maker.make('2.0') do |maker|
                 maker.channel.title         = @headline
                 maker.channel.link          = "#{@siteUrl}feed.xml"
@@ -66,22 +66,22 @@ module Uberblog
             File.open("#{@htdocs}/feed.xml","w") { |file| file.write(feed) }
         end
 
-        def createSiteMap
-            sitemap  = Uberblog::SiteMap.new(@siteUrl, createTemplate("sitemap"))
+        def create_site_map
+            site_map  = Uberblog::SiteMap.new(@siteUrl, create_template("site_map"))
             Find.find(@htdocs) do |file|
                 if file =~ /.html$/
-                    sitemap.append(file)
+                    site_map.append(file)
                 end
             end
-            File.open("#{@htdocs}/sitemap.xml","w") { |f| f.write(sitemap.to_xml) }
+            File.open("#{@htdocs}/site_map.xml","w") { |f| f.write(site_map.to_xml) }
         end
 
         def execute
             puts 'Publishing the blog...'
-            createPosts
-            createIndex
-            createFeed
-            createSiteMap
+            create_posts
+            create_index
+            create_feed
+            create_site_map
             exit 0
         end
     end
