@@ -88,7 +88,7 @@ ul {
     text-decoration: none;
 }
 
-#access .current_page_item > a, #access .current_page_ancestor > a {
+#access .current_page_item > a {
     font-weight: bold;
 }
 
@@ -134,18 +134,15 @@ ul {
     margin-left: 7.6%;
     margin-right: 0;
     width: 18.8%;
-}
-
-.widget-area {
     font-size: 12px;
 }
 
-.widget {
+#secondary aside {
     clear: both;
     margin: 0 0 2.2em;
 }
 
-.widget-title {
+#secondary aside h3 {
     color: #666666;
     font-size: 10px;
     font-weight: 500;
@@ -154,17 +151,17 @@ ul {
     text-transform: uppercase;
 }
 
-.widget ul {
+#secondary aside ul {
     font-size: 15px;
     margin: 0;
 }
 
-.widget ul li {
+#secondary aside ul li {
     color: #777777;
     font-size: 13px;
 }
 
-.widget a {
+#secondary aside a {
     font-weight: bold;
     text-decoration: none;
 }
