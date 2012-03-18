@@ -59,7 +59,7 @@ module Uberblog
         end
 
         def to_s
-            "<BlogPost: #{@title}>"
+            "<BlogPost: #{@title}, #{@date}>"
         end
     end
 
