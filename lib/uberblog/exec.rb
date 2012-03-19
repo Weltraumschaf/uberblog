@@ -128,7 +128,7 @@ module Uberblog
                 @list.posts.each do |post|
                     item = maker.items.new_item
                     item.title         = post.title
-                    item.link          = post.filename
+                    item.link          = "#{@siteUrl}#{post.filename}"
                     item.description   = post.content
                     item.date          = Time.parse(post.date_formatted)
                 end
