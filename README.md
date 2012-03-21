@@ -15,3 +15,8 @@ shared unter Creative Commons.
 
 All other stuff made by me (Weltraumschaf) is under the 
 [Beer Ware License](http://www.weltraumschaf.de/the-beer-ware-license.txt).
+
+## Todo
+
+- implement --purge
+- generate suffixed output files if duplicate (on blogposts with same title)
