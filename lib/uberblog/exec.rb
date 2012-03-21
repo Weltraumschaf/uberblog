@@ -95,9 +95,9 @@ module Uberblog
             super
             opts.banner = 'Usage: publish -c <file> [-p] [-h]'
 
-            #opts.on('-p', '--purge', 'Regenerate all blog posts.') do
-            #    @options[:purge] = true
-            #end
+            opts.on('-p', '--purge', 'Regenerate all blog posts.') do
+                @options[:purge] = true
+            end
 
             opts.on('-v', '--verbose', 'Tell you more.') do
                 @options[:verbose] = true
@@ -125,10 +125,17 @@ module Uberblog
                 @layout.title   = "#{@headline} | #{data.title}"
                 @layout.content = template.result(post.get_binding)
                 targetFile      = "#{@htdocs}/#{post.filename}"
+
+                if File.exist?(targetFile) && !@options[:purge]
+                    be_verbose("Skip regeneration of '#{Pathname.new(targetFile).realpath.to_s}'.")
+                    next
+                end
+
                 File.open(targetFile, 'w') do |file|
-                    be_verbose("Write post to #{Pathname.new(targetFile).realpath.to_s}.")
+                    be_verbose("Write post to '#{Pathname.new(targetFile).realpath.to_s}'.")
                     file.write(@layout.to_html)
                 end
+
                 @list.append(post)
                 count +=1
             end

@@ -18,5 +18,4 @@ All other stuff made by me (Weltraumschaf) is under the
 
 ## Todo
 
-- implement --purge
 - generate suffixed output files if duplicate (on blogposts with same title)
