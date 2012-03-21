@@ -120,8 +120,11 @@ module Uberblog
             template = create_template("post")
             Dir.foreach(@dataDir) do |file|
                 next if file == '.' or file == '..'
+
                 data = Uberblog::BlogData.new("#{@dataDir}/#{file}")
                 post = Uberblog::BlogPost.new(data.title, data.to_html, data.date, @siteUrl)
+                @list.append(post)
+
                 @layout.title   = "#{@headline} | #{data.title}"
                 @layout.content = template.result(post.get_binding)
                 targetFile      = "#{@htdocs}/#{post.filename}"
@@ -136,7 +139,6 @@ module Uberblog
                     file.write(@layout.to_html)
                 end
 
-                @list.append(post)
                 count +=1
             end
             puts "#{count} posts generated."
