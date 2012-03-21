@@ -51,6 +51,7 @@ module Uberblog
             end
 
             File.open(filename, 'w') { |file| file.write("## #{@options[:title]}") }
+            filename = Pathname.new(filename).realpath.to_s
             puts "Created blog post #{filename}"
             exit 0
         end
@@ -58,6 +59,7 @@ module Uberblog
         protected
         def set_opts(opts)
             super
+            opts.banner = 'Usage: create -c <file> -t "The Blog Title" [-h]'
             opts.on('-t', '--title TITLE', 'Title of the blog post.') do |title|
                 @options[:title] = title.to_sym
             end
@@ -79,8 +81,8 @@ module Uberblog
             @language    = config['language']
             @list        = Uberblog::BlogPostList.new(config['siteUrl'])
             @layout      = Uberblog::Layout.new(config['siteUrl'], create_template("layout"), @language)
-            @layout.headline    = config['headline']
-            @layout.description = config['description']
+            @layout.headline     = config['headline']
+            @layout.description  = config['description']
             create_posts
             create_index
             create_feed
@@ -88,13 +90,33 @@ module Uberblog
             exit 0
         end
 
+        protected
+        def set_opts(opts)
+            super
+            opts.banner = 'Usage: publish -c <file> [-p] [-h]'
+
+            #opts.on('-p', '--purge', 'Regenerate all blog posts.') do
+            #    @options[:purge] = true
+            #end
+
+            opts.on('-v', '--verbose', 'Tell you more.') do
+                @options[:verbose] = true
+            end
+
+        end
+
         private
+        def be_verbose(message)
+            puts message if @options[:verbose]
+        end
 
         def create_template(name)
             File.open("#{@tplDir}/#{name}.erb", "rb") { |file| ERB.new(file.read) }
         end
 
         def create_posts
+            be_verbose 'Create posts...'
+            count    = 0
             template = create_template("post")
             Dir.foreach(@dataDir) do |file|
                 next if file == '.' or file == '..'
@@ -102,12 +124,19 @@ module Uberblog
                 post = Uberblog::BlogPost.new(data.title, data.to_html, data.date, @siteUrl)
                 @layout.title   = "#{@headline} | #{data.title}"
                 @layout.content = template.result(post.get_binding)
-                File.open("#{@htdocs}/#{post.filename}", 'w') { |file| file.write(@layout.to_html) }
+                targetFile      = "#{@htdocs}/#{post.filename}"
+                File.open(targetFile, 'w') do |file|
+                    be_verbose("Write post to #{Pathname.new(targetFile).realpath.to_s}.")
+                    file.write(@layout.to_html)
+                end
                 @list.append(post)
+                count +=1
             end
+            puts "#{count} posts generated."
         end
 
         def create_index
+            be_verbose 'Create index...'
             @layout.title   = "#{@headline} | Blog"
             template        = create_template("index")
             @layout.content = template.result(@list.get_binding)
@@ -115,6 +144,7 @@ module Uberblog
         end
 
         def create_feed
+            be_verbose 'Create feed...'
             feed = RSS::Maker.make('2.0') do |maker|
                 maker.channel.title         = @headline
                 maker.channel.link          = "#{@siteUrl}feed.xml"
@@ -135,6 +165,7 @@ module Uberblog
         end
 
         def create_site_map
+            be_verbose 'Create site map...'
             site_map  = Uberblog::SiteMap.new(@siteUrl, create_template("site_map"))
             Find.find(@htdocs) do |file|
                 if file =~ /.html$/
