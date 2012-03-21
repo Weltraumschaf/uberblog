@@ -44,13 +44,10 @@ module Uberblog
         attr_reader :title, :date, :content, :siteUrl
 
         def initialize(title, content, date, siteUrl)
-            @title      = title
-            @content    = content
-            @date       = date
-            @siteUrl    = siteUrl
+            @title, @content, @date, @siteUrl = title, content, date, siteUrl
         end
 
-        def <=>(other)
+        def <=> other
             self.date <=> other.date
         end
 
@@ -75,12 +72,11 @@ module Uberblog
         attr_reader :posts, :siteUrl
 
         def initialize(siteUrl)
-            @posts   = Array.new
-            @siteUrl = siteUrl
+            @posts, @siteUrl   = Array.new, siteUrl
         end
 
         def append(aBlogPost)
-            @posts.push(aBlogPost)
+            @posts.push aBlogPost
             self
         end
 
@@ -94,17 +90,12 @@ module Uberblog
         attr_accessor :title, :headline, :description, :content
 
         def initialize(siteUrl, template, language)
-            @siteUrl     = siteUrl
-            @template    = template
-            @language    = language
-            @title       = 'no title'
-            @headline    = 'no headline'
-            @description = 'no description'
-            @content     = 'no content'
+            @siteUrl, @template, @language = siteUrl, template, language
+            @title, @headline, @description, @content = 'n/a'
         end
 
         def to_html
-            @template.result(binding)
+            @template.result binding
         end
     end
 end

@@ -6,17 +6,14 @@ module Uberblog
             attr_accessor :loc, :lastmod, :changefreq, :priority
 
             def initialize
-                @changefreq = 'weekly'
-                @priority   = '0.2'
+                @changefreq, @priority = 'weekly', '0.2'
             end
         end
 
         attr_reader :urls
 
         def initialize(siteUrl, template)
-            @siteUrl  = siteUrl
-            @template = template
-            @urls     = Array.new
+            @siteUrl, @template, @urls  = siteUrl, template, Array.new
         end
 
         def append(aFile)

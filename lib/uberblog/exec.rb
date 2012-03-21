@@ -11,9 +11,7 @@ module Uberblog
 
     class Generic
         def initialize(baseDir, args)
-            @baseDir = baseDir
-            @args    = args
-            @options = {}
+            @baseDir, @args, @options = baseDir, args, {}
         end
 
         def execute
@@ -90,7 +88,7 @@ module Uberblog
             exit 0
         end
 
-        protected
+        private
 
         def create_template(name)
             File.open("#{@tplDir}/#{name}.erb", "rb") { |file| ERB.new(file.read) }
