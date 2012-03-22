@@ -4,6 +4,7 @@ require 'find'
 require 'pathname'
 require 'yaml'
 require 'optparse'
+require 'twitter'
 require 'uberblog/blog'
 require 'uberblog/sitemap'
 
@@ -183,5 +184,15 @@ module Uberblog
             end
             File.open("#{@htdocs}/sitemap.xml","w") { |f| f.write(site_map.to_xml) }
         end
+
+        def update_twitter(message) {
+            Twitter.configure do |config|
+                config.consumer_key       = ''
+                config.consumer_secret    = ''
+                config.oauth_token        = ''
+                config.oauth_token_secret = ''
+            end
+            Twitter.update(message)
+        }
     end
 end
