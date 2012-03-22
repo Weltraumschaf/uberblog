@@ -4,8 +4,8 @@ require 'find'
 require 'pathname'
 require 'yaml'
 require 'optparse'
-require 'twitter'
-require 'bitly'
+#require 'twitter'
+#require 'bitly'
 require 'uberblog/blog'
 require 'uberblog/sitemap'
 
@@ -189,34 +189,34 @@ module Uberblog
       File.open("#{@htdocs}/sitemap.xml", "w") { |f| f.write(site_map.to_xml) }
     end
 
-    def update_twitter(title, longUrl)
-      be_verbose("Post to twitter: #{title}...")
-
-      begin
-        Bitly.use_api_version_3
-        bitly = Bitly.new(@config['bitly']['username'], @config['bitly']['apikey'])
-        url = bitly.shorten(longUrl).short_url
-      rescue BitlyError
-        url = longUrl
-      end
-
-      msg   = "#{title} - #{url}"
-
-      if msg.length > 140
-        reduce = msg.length - 140 + 3
-        title = title[0, reduce] + '...'
-      end
-
-      msg = "#{title} - #{url}"
-
-      twitter = Twitter.new({
-        :consumer_key       => @config['twitter']['consumer_key'],
-        :consumer_secret    => @config['twitter']['consumer_secret'],
-        :oauth_token        => @config['twitter']['oauth_token'],
-        :oauth_token_secret => @config['twitter']['oauth_token_secret']
-      })
-      twitter.update(msg)
-    end
+    #def update_twitter(title, longUrl)
+    #  be_verbose("Post to twitter: #{title}...")
+    #
+    #  begin
+    #    Bitly.use_api_version_3
+    #    bitly = Bitly.new(@config['bitly']['username'], @config['bitly']['apikey'])
+    #    url = bitly.shorten(longUrl).short_url
+    #  rescue BitlyError
+    #    url = longUrl
+    #  end
+    #
+    #  msg   = "#{title} - #{url}"
+    #
+    #  if msg.length > 140
+    #    reduce = msg.length - 140 + 3
+    #    title = title[0, reduce] + '...'
+    #  end
+    #
+    #  msg = "#{title} - #{url}"
+    #
+    #  twitter = Twitter.new({
+    #    :consumer_key       => @config['twitter']['consumer_key'],
+    #    :consumer_secret    => @config['twitter']['consumer_secret'],
+    #    :oauth_token        => @config['twitter']['oauth_token'],
+    #    :oauth_token_secret => @config['twitter']['oauth_token_secret']
+    #  })
+    #  twitter.update(msg)
+    #end
 
   end
 end
