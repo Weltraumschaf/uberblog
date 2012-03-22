@@ -10,3 +10,6 @@ twitter:
     consumer_secret:    ''
     oauth_token:        ''
     oauth_token_secret: ''
+ bitly:
+    username: ''
+    apikey:   ''
