@@ -5,6 +5,7 @@ require 'pathname'
 require 'yaml'
 require 'optparse'
 require 'twitter'
+require 'bitly'
 require 'uberblog/blog'
 require 'uberblog/sitemap'
 
@@ -18,6 +19,7 @@ module Uberblog
     def execute
       @opts = OptionParser.new(&method(:set_opts))
       @opts.parse!(@args)
+      @config = load_config(@options[:config])
     end
 
     protected
@@ -40,9 +42,8 @@ module Uberblog
   class Create < Generic
     def execute
       super
-      config = load_config(@options[:config])
-      dataDir = @baseDir + config['dataDir']
-      id = 0
+      dataDir = Pathname.new(@baseDir + @config['dataDir']).realpath
+      id  = 0
       now = Time.now
 
       while true
@@ -72,18 +73,13 @@ module Uberblog
     def execute
       super
       puts 'Publishing the blog...'
-      config = load_config(@options[:config])
-      @dataDir = @baseDir + config['dataDir']
-      @htdocs = @baseDir + config['htdocs']
-      @tplDir = @baseDir + config['tplDir']
-      @siteUrl = config['siteUrl']
-      @headline = config['headline']
-      @description = config['description']
-      @language = config['language']
-      @list = Uberblog::BlogPostList.new(config['siteUrl'])
-      @layout = Uberblog::Layout.new(config['siteUrl'], create_template("layout"), @language)
-      @layout.headline = config['headline']
-      @layout.description = config['description']
+      @dataDir     = Pathname.new(@baseDir + @config['dataDir']).realpath
+      @htdocs      = Pathname.new(@baseDir + @config['htdocs']).realpath
+      @tplDir      = Pathname.new(@baseDir + @config['tplDir']).realpath
+      @list        = Uberblog::BlogPostList.new(@config['siteUrl'])
+      @layout      = Uberblog::Layout.new(@config['siteUrl'], create_template("layout"), @config['language'])
+      @layout.headline    = @config['headline']
+      @layout.description = @config['description']
       create_posts
       create_index
       create_feed
@@ -123,17 +119,19 @@ module Uberblog
         next if file == '.' or file == '..'
 
         data = Uberblog::BlogData.new("#{@dataDir}/#{file}")
-        post = Uberblog::BlogPost.new(data.title, data.to_html, data.date, @siteUrl)
+        post = Uberblog::BlogPost.new(data.title, data.to_html, data.date, @config['siteUrl'])
         @list.append(post)
 
-        @layout.title = "#{@headline} | #{data.title}"
+        @layout.title   = "#{@config['headline']} | #{data.title}"
         @layout.content = template.result(post.get_binding)
-        targetFile = "#{@htdocs}/#{post.filename}"
+        targetFile      = "#{@htdocs}/#{post.filename}"
 
         if File.exist?(targetFile) && !@options[:purge]
           be_verbose("Skip regeneration of '#{Pathname.new(targetFile).realpath.to_s}'.")
           next
         end
+
+        #update_twitter(data.title, @config['siteUrl'] + post.filename) unless File.exist?(targetFile)
 
         File.open(targetFile, 'w') do |file|
           be_verbose("Write post to '#{Pathname.new(targetFile).realpath.to_s}'.")
@@ -142,59 +140,83 @@ module Uberblog
 
         count +=1
       end
+
       puts "#{count} posts generated."
     end
 
     def create_index
       be_verbose 'Create index...'
-      @layout.title = "#{@headline} | Blog"
-      template = create_template("index")
-      @layout.content = template.result(@list.get_binding)
+
+      @layout.title   = "#{@config['headline']} | Blog"
+      @layout.content = create_template("index").result(@list.get_binding)
+
       File.open("#{@htdocs}/index.html", 'w') { |file| file.write(@layout.to_html) }
     end
 
     def create_feed
       be_verbose 'Create feed...'
+
       feed = RSS::Maker.make('2.0') do |maker|
-        maker.channel.title = @headline
-        maker.channel.link = "#{@siteUrl}feed.xml"
-        maker.channel.description = @description
-        maker.channel.language = @language
+        maker.channel.title         = @config['headline']
+        maker.channel.link          = "#{@config['siteUrl']}feed.xml"
+        maker.channel.description   = @config['description']
+        maker.channel.language      = @config['language']
         maker.channel.lastBuildDate = Time.now
-        maker.items.do_sort = true
+        maker.items.do_sort         = true
 
         @list.posts.each do |post|
-          item = maker.items.new_item
-          item.title = post.title
-          item.link = "#{@siteUrl}#{post.filename}"
+          item             = maker.items.new_item
+          item.title       = post.title
+          item.link        = @config['siteUrl'] + post.filename
           item.description = post.content
-          item.date = Time.parse(post.date_formatted)
+          item.date        = Time.parse(post.date_formatted)
         end
       end
+
       File.open("#{@htdocs}/feed.xml", "w") { |file| file.write(feed) }
     end
 
     def create_site_map
       be_verbose 'Create site map...'
-      site_map = Uberblog::SiteMap.new(@siteUrl, create_template("site_map"))
+      site_map = Uberblog::SiteMap.new(@config['siteUrl'], create_template("site_map"))
 
       Find.find(@htdocs) do |file|
         if file =~ /.html$/
           site_map.append(file)
         end
       end
+
       File.open("#{@htdocs}/sitemap.xml", "w") { |f| f.write(site_map.to_xml) }
     end
 
+    def update_twitter(title, longUrl)
+      be_verbose("Post to twitter: #{title}...")
 
-    def update_twitter(message)
-      Twitter.configure do |config|
-        config.consumer_key       = ''
-        config.consumer_secret    = ''
-        config.oauth_token        = ''
-        config.oauth_token_secret = ''
+      begin
+        Bitly.use_api_version_3
+        bitly = Bitly.new(@config['bitly']['username'], @config['bitly']['apikey'])
+        url = bitly.shorten(longUrl).short_url
+      rescue BitlyError
+        url = longUrl
       end
-      Twitter.update(message)
+
+      msg   = "#{title} - #{url}"
+
+      if msg.length > 140
+        reduce = msg.length - 140 + 3
+        title = title[0, reduce] + '...'
+      end
+
+      msg = "#{title} - #{url}"
+
+      twitter = Twitter.new({
+        :consumer_key       => @config['twitter']['consumer_key'],
+        :consumer_secret    => @config['twitter']['consumer_secret'],
+        :oauth_token        => @config['twitter']['oauth_token'],
+        :oauth_token_secret => @config['twitter']['oauth_token_secret']
+      })
+      twitter.update(msg)
     end
+
   end
 end
