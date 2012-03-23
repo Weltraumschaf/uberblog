@@ -4,8 +4,8 @@ require 'find'
 require 'pathname'
 require 'yaml'
 require 'optparse'
-#require 'twitter'
-#require 'bitly'
+require 'twitter'
+require 'bitly'
 require 'uberblog/blog'
 require 'uberblog/sitemap'
 
@@ -137,7 +137,7 @@ module Uberblog
           next
         end
 
-        #update_twitter(data.title, @config['siteUrl'] + post.filename) unless File.exist?(targetFile)
+        update_twitter(data.title, @config['siteUrl'] + post.filename) unless File.exist?(targetFile)
 
         File.open(targetFile, 'w') do |file|
           be_verbose("Write post to '#{Pathname.new(targetFile).realpath.to_s}'.")
@@ -195,34 +195,52 @@ module Uberblog
       File.open("#{@htdocs}/sitemap.xml", "w") { |f| f.write(site_map.to_xml) }
     end
 
-    #def update_twitter(title, longUrl)
-    #  be_verbose("Post to twitter: #{title}...")
-    #
-    #  begin
-    #    Bitly.use_api_version_3
-    #    bitly = Bitly.new(@config['bitly']['username'], @config['bitly']['apikey'])
-    #    url = bitly.shorten(longUrl).short_url
-    #  rescue BitlyError
-    #    url = longUrl
-    #  end
-    #
-    #  msg   = "#{title} - #{url}"
-    #
-    #  if msg.length > 140
-    #    reduce = msg.length - 140 + 3
-    #    title = title[0, reduce] + '...'
-    #  end
-    #
-    #  msg = "#{title} - #{url}"
-    #
-    #  twitter = Twitter.new({
-    #    :consumer_key       => @config['twitter']['consumer_key'],
-    #    :consumer_secret    => @config['twitter']['consumer_secret'],
-    #    :oauth_token        => @config['twitter']['oauth_token'],
-    #    :oauth_token_secret => @config['twitter']['oauth_token_secret']
-    #  })
-    #  twitter.update(msg)
-    #end
+    def to_log?(msg)
+      msg.length > 140
+    end
+
+    def update_twitter(title, longUrl)
+      be_verbose("Post to twitter: #{title}...")
+
+      begin
+        Bitly.use_api_version_3
+        bitly = Bitly.new(@config['bitly']['username'], @config['bitly']['apikey'])
+        url = bitly.shorten(longUrl).short_url
+      rescue BitlyError
+        url = longUrl
+      end
+
+      #url.sub!('http:', '').sub!('https:', '')
+      msg = "#{title} - #{url}"
+
+      if to_log? msg
+        reduce = msg.length - 140 + 3
+        title = title[0, reduce] + '...'
+      end
+
+      msg = "#{title} - #{url}"
+
+      if to_log? msg
+        msg = "Blogged: #{url}"
+      end
+
+      if to_log? msg
+        puts "Can't post to twitter! Way too manny characters."
+        return
+      end
+
+      begin
+        twitter = Twitter.new({
+          :consumer_key       => @config['twitter']['consumer_key'],
+          :consumer_secret    => @config['twitter']['consumer_secret'],
+          :oauth_token        => @config['twitter']['oauth_token'],
+          :oauth_token_secret => @config['twitter']['oauth_token_secret']
+        })
+        twitter.update(msg)
+      rescue
+        puts "Error on updating twitter!"
+      end
+    end
 
   end
 end
