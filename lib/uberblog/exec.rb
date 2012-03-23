@@ -19,7 +19,13 @@ module Uberblog
     def execute
       @opts = OptionParser.new(&method(:set_opts))
       @opts.parse!(@args)
-      @config = load_config(@options[:config])
+
+      begin
+        @config = load_config(@options[:config])
+      rescue
+        puts "Cant read config file '#{@options[:config]}'!"
+        exit 1
+      end
     end
 
     protected
