@@ -19,4 +19,3 @@ All other stuff made by me (Weltraumschaf) is under the
 ## Todo
 
 - generate suffixed output files if duplicate (on blogposts with same title)
-- post to [twitter](http://twitter.rubyforge.org/)
