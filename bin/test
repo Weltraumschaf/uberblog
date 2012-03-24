@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+
+$baseDir = Pathname.new(File.dirname(__FILE__) + '/..').realpath.to_s
+
+require "#{$baseDir}/lib/uberblog"
+require "#{$baseDir}/test/uberblog"
+require 'test/unit/ui/console/testrunner'
+
+Test::Unit::UI::Console::TestRunner.run(Uberblog::UnitTests::Suite)
