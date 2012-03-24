@@ -1,0 +1,6 @@
+#!/bin/bash
+
+gem install kramdown
+gem install twitter
+gem install bitly
+gem install sqlite3
