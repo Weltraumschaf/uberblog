@@ -19,3 +19,6 @@ All other stuff made by me (Weltraumschaf) is under the
 ## Todo
 
 - generate suffixed output files if duplicate (on blogposts with same title)
+
+
+https://github.com/luislavena/sqlite3-ruby
