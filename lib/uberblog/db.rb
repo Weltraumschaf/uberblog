@@ -22,13 +22,17 @@ module Uberblog
         super(self.class, dbFile)
       end
 
+      def create_repo
+        return RatingRepo.new(db, name
+      end
+
       def create
         db.execute <<-SQL
           create table name (
-            post        varchar(500), # host agnostic URI /foo/bar-baz.html eg.
-            ratingSum   int,
-            ratingCount int,
-            average     int           # ratingSum / ratingCount
+            post     varchar(500), # host agnostic URI /foo/bar-baz.html eg.
+            sum      int,
+            count    int,
+            average  int           # ratingSum / ratingCount
           );
         SQL
       end
@@ -48,12 +52,19 @@ module Uberblog
 
     class RatingRepo
 
-      def find_by_post(post)
+      def initialize(name, db)
+        @db   = db
+        @name = name
+      end
 
+      def find_by_post(post)
+        @db.execute "select * from #{name} where post = '?'", post do |row|
+
+        end
       end
 
       def create(rating)
-
+        @db.execute "insert into #{name} values (?, ?, ?, ?)", rating.post, rating.sum, rating.count, rating.average
       end
 
       def update(rating)
@@ -61,7 +72,7 @@ module Uberblog
       end
 
       def delete(rating)
-
+        @db.execute "delete from #{name} where post = '?'", rating.post
       end
 
     end

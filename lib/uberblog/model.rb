@@ -4,7 +4,7 @@ module Uberblog
   module Model
 
     class Rating
-      attr_accessor :post, :ratingSum, :ratingCount, :average
+      attr_accessor :post, :sum, :count, :average
 
       def initialize
         @changed = false

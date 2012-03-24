@@ -243,4 +243,11 @@ module Uberblog
     end
 
   end
+
+  class Db < Generic
+    def execute
+      super
+
+    end
+  end
 end
