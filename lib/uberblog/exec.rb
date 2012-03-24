@@ -102,6 +102,10 @@ module Uberblog
         @options[:purge] = true
       end
 
+      opts.on('-q', '--quiet', 'Be quiet and dont post to social networks.') do
+        @options[:quiet] = true
+      end
+
       opts.on('-v', '--verbose', 'Tell you more.') do
         @options[:verbose] = true
       end
@@ -137,7 +141,8 @@ module Uberblog
           next
         end
 
-        update_twitter(data.title, @config['siteUrl'] + post.filename) unless File.exist?(targetFile)
+
+        update_twitter(data.title, @config['siteUrl'] + post.filename) unless File.exist?(targetFile) or @options[:quiet]
 
         File.open(targetFile, 'w') do |file|
           be_verbose("Write post to '#{Pathname.new(targetFile).realpath.to_s}'.")
