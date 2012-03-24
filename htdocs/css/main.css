@@ -77,7 +77,7 @@ a img {
 #page {
     background: none repeat scroll 0 0 #FFFFFF;
     margin: 2em auto;
-    max-width: 940px;
+    max-width: 940px;;
 }
 
 #branding {
@@ -107,7 +107,7 @@ a img {
 }
 
 #site-title a {
-    color: #507FAB;
+    color: #666666;
     font-size: 30px;
     font-weight: bold;
     line-height: 36px;
