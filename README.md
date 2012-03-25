@@ -23,3 +23,4 @@ All other stuff made by me (Weltraumschaf) is under the
 
 
 https://github.com/luislavena/sqlite3-ruby
+http://www.wbotelhos.com/raty/
