@@ -123,10 +123,15 @@ module Uberblog
     end
 
     def load_posts
+      dataList = []
+
       Dir.foreach(@dataDir) do |file|
         next if file == '.' or file == '..'
 
-        data = Uberblog::BlogData.new("#{@dataDir}/#{file}")
+        dataList << Uberblog::BlogData.new("#{@dataDir}/#{file}")
+      end
+
+      dataList.sort!.each do |data|
         post = Uberblog::BlogPost.new(data, @config['siteUrl'])
         @list.add(post)
       end

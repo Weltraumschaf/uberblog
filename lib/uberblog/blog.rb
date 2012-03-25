@@ -33,6 +33,10 @@ module Uberblog
       create_date(@basename)
     end
 
+    def <=>(other)
+      date <=> other.date
+    end
+
     def to_s
       "<BlogData: #{title}, #{date}>"
     end
