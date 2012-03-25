@@ -141,8 +141,7 @@ module Uberblog
           next
         end
 
-
-        update_twitter(data.title, @config['siteUrl'] + post.filename) unless File.exist?(targetFile) or @options[:quiet]
+        update_twitter(post.title, post.url) unless File.exist?(targetFile) or @options[:quiet]
 
         File.open(targetFile, 'w') do |file|
           be_verbose("Write post to '#{Pathname.new(targetFile).realpath.to_s}'.")
@@ -178,7 +177,7 @@ module Uberblog
         @list.posts.each do |post|
           item             = maker.items.new_item
           item.title       = post.title
-          item.link        = @config['siteUrl'] + post.filename
+          item.link        = post.url
           item.description = post.content
           item.date        = Time.parse(post.date_formatted)
         end

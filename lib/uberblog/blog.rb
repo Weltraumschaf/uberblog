@@ -42,6 +42,7 @@ module Uberblog
     include Uberblog
     include Comparable
     attr_reader :title, :date, :content, :siteUrl
+    attr_accessor :prev, :next
 
     def initialize(title, content, date, siteUrl)
       @title, @content, @date, @siteUrl = title, content, date, siteUrl
@@ -63,6 +64,10 @@ module Uberblog
       @date.strftime('%d.%m.%Y')
     end
 
+    def url
+      @siteUrl + filename
+    end
+
     def to_s
       "<BlogPost: #{@title}, #{@date}>"
     end
@@ -78,6 +83,10 @@ module Uberblog
     def append(aBlogPost)
       @posts.push aBlogPost
       self
+    end
+
+    def last
+      @posts[-1]
     end
 
     def get_binding
