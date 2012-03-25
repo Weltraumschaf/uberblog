@@ -48,12 +48,15 @@ module Uberblog
   class Create < Generic
     def execute
       super
+
       dataDir = Pathname.new(@baseDir + @config['dataDir']).realpath
       id  = 0
       now = Time.now
 
       while true
-        filename = "#{dataDir}/%d-%02d-%02d_#{id}.md" % [now.year, now.month, now.day]
+        filename = "#{dataDir}/%d-%02d-%02d_#{id}" % [now.year, now.month, now.day]
+        filename << '_draft' if @options[:draft]
+        filename << '.md'
         break unless File.exist? filename
         id += 1
       end
@@ -67,9 +70,15 @@ module Uberblog
     protected
     def set_opts(opts)
       super
+
       opts.banner = 'Usage: create -c <file> -t "The Blog Title" [-h]'
+
       opts.on('-t', '--title TITLE', 'Title of the blog post.') do |title|
         @options[:title] = title.to_sym
+      end
+
+      opts.on('-d', '--draft', 'Will mark the file name as draft') do
+        @options[:draft] = true
       end
     end
   end
@@ -126,7 +135,7 @@ module Uberblog
       dataList = []
 
       Dir.foreach(@dataDir) do |file|
-        next if file == '.' or file == '..'
+        next if file == '.' or file == '..' or is_draft?(file)
 
         dataList << Uberblog::BlogData.new("#{@dataDir}/#{file}")
       end
@@ -256,6 +265,10 @@ module Uberblog
       end
     end
 
+    private
+    def is_draft?(file)
+      file.index(/_draft/) != nil
+    end
   end
 
   class Db < Generic
