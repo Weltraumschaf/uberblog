@@ -10,21 +10,19 @@ dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tf
     font-weight: inherit;
 }
 
-$color1: #646D68;
-$color2: #373737;
-$color3: #EEEEEE;
-$color4: #CCCCCC;
-$color5: #6995AE;
-$color6: #FFFFFF;
-$color7: #666666;
-$color8: #507FAB;
-$color9: #777777;
-$color10: #444444;
+$white: #FFFFFF;
+$black: #646D68;
+$lightBlue: #6995AE;
+$darkBlue:  #507FAB;
+/* grey scale */
+$lightGrey:  #EEEEEE;
+$grey:       #CCCCCC;
+$darkGrey:   #777777;
 
 body {
-    background: none repeat scroll 0 0 $color1;
+    background: none repeat scroll 0 0 $black;
     padding: 0 2em;
-    color: $color2;
+    color: $black;
     font: 300 15px/1.625 "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
@@ -37,8 +35,8 @@ code, kbd {
 }
 
 pre {
-    background: $color3;
-    border: 1px solid $color4;
+    background: $lightGrey;
+    border: 1px solid $grey;
     margin: 0 15px 1.2em;
     padding: 3px;
 }
@@ -48,12 +46,12 @@ thead {
 }
 
 table {
-    background: $color3;
+    background: $lightGrey;
 }
 
 th, td {
     padding: 0 0.5em;
-    border: 1px solid $color2;
+    border: 1px solid $black;
 }
 
 blockquote {
@@ -64,7 +62,7 @@ blockquote {
 }
 
 a {
-    color: $color5;
+    color: $lightBlue;
     text-decoration: none;
 }
 
@@ -73,7 +71,7 @@ a img {
 }
 
 #page {
-    background: none repeat scroll 0 0 $color6;
+    background: none repeat scroll 0 0 $white;
     margin: 2em auto;
     max-width: 940px;;
 }
@@ -105,7 +103,7 @@ a img {
 }
 
 #site-title a {
-    color: $color7;
+    color: $black;
     font-size: 30px;
     font-weight: bold;
     line-height: 36px;
@@ -113,18 +111,21 @@ a img {
 }
 
 #site-description {
-    color: $color8;
+    color: $darkBlue;
     font-size: 14px;
     margin: 0 270px 1.65625em 0;
 }
 
+@mixin blue-gradiant($top, $bottom) {
+  background: -moz-linear-gradient($top, $bottom);  /* Firefox */
+  background: -webkit-linear-gradient($top, $bottom); /* Safari, Chrome */
+  background: -o-linear-gradient($top, $bottom); /* Opera */
+  background: -ms-linear-gradient($top, $bottom); /* IE */
+  background: linear-gradient($top, $bottom); /* W3C Standard */
+}
+
 #access {
-    /*background: -moz-linear-gradient(#252525, #0A0A0A); *//* Firefox */
-    /*background: -webkit-linear-gradient(#252525, #0A0A0A); *//* Safari, Chrome */
-    /*background: -o-linear-gradient(#252525, #0A0A0A); *//* Opera */
-    /*background: -ms-linear-gradient(#252525, #0A0A0A); *//* IE */
-    /*background: linear-gradient(#252525, #0A0A0A); *//* W3C Standard */
-    background: $color8;
+    @include blue-gradiant($darkBlue, $lightBlue);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
     clear: both;
     display: block;
@@ -138,7 +139,7 @@ a img {
 }
 
 #access a {
-    color: $color3;
+    color: $lightGrey;
     display: block;
     line-height: 3.333em;
     padding: 0 1.2125em;
@@ -178,7 +179,7 @@ a img {
 }
 
 #primary ul {
-    color: $color2;
+    color: $black;
     list-style: none;
     margin-bottom: 1.2em;
     margin-left: 10px;
@@ -223,7 +224,7 @@ a img {
 }
 
 .meta {
-    color: $color7;
+    color: $black;
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.1em;
@@ -237,7 +238,7 @@ a img {
 }
 
 #secondary aside ul li {
-    color: $color9;
+    color: $darkGrey;
     font-size: 13px;
 }
 
@@ -247,10 +248,10 @@ a img {
 }
 
 footer {
+    @include blue-gradiant($lightBlue, $darkBlue);
     clear: both;
-    background: none repeat scroll 0 0 $color8;
-    border-top: 1px solid $color10;
-    color: $color3;
+    border-top: 1px solid $black;
+    color: $lightGrey;
     font-size: 12px;
     line-height: 1.2em;
     padding: 1.2em 0.5em;
@@ -258,7 +259,7 @@ footer {
 }
 
 footer a {
-    color: $color3;
+    color: $lightGrey;
     font-weight: bold;
 }
 
