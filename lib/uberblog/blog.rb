@@ -42,10 +42,11 @@ module Uberblog
     include Uberblog
     include Comparable
     attr_reader :title, :date, :content, :siteUrl
-    attr_accessor :prev, :next
+    attr_accessor :prevPost, :nextPost
 
-    def initialize(title, content, date, siteUrl)
-      @title, @content, @date, @siteUrl = title, content, date, siteUrl
+    def initialize(data, siteUrl)
+      @title, @content, @date = data.title, data.to_html, data.date
+      @siteUrl = siteUrl
     end
 
     def <=> other
@@ -69,24 +70,53 @@ module Uberblog
     end
 
     def to_s
-      "<BlogPost: #{@title}, #{@date}>"
+      str = "<BlogPost: #{filename}, #{@date}"
+
+      if @prevPost or @nextPost
+        str += " ("
+      end
+
+      if @prevPost
+          str += "prev: #{@prevPost}"
+      end
+
+      if @nextPost
+        if @prevPost
+          str += ", "
+        end
+
+        str += "next: #{@nextPost}"
+      end
+
+      if @prevPost or @nextPost
+        str += ")"
+      end
+
+      str += ">"
     end
   end
 
   class BlogPostList
-    attr_reader :posts, :siteUrl
 
-    def initialize(siteUrl)
-      @posts, @siteUrl = Array.new, siteUrl
+    def initialize()
+      @posts  = Array.new
     end
 
-    def append(aBlogPost)
-      @posts.push aBlogPost
-      self
+    def add(aBlogPost)
+      unless @posts.empty?
+        @posts[0].nextPost = aBlogPost.url
+        aBlogPost.prevPost = @posts[0].url
+      end
+
+      @posts.unshift(aBlogPost)
     end
 
-    def last
-      @posts[-1]
+    def posts
+      @posts
+    end
+
+    def each(&blk)
+      @posts.each(&blk)
     end
 
     def get_binding

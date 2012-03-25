@@ -598,6 +598,9 @@ a img {
   line-height: 1.2em;
   margin-bottom: 0.6em; }
 
+#pagination {
+  text-align: center; }
+
 #secondary {
   float: left;
   margin-left: 7.6%;

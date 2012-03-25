@@ -82,10 +82,11 @@ module Uberblog
       @dataDir     = Pathname.new(@baseDir + @config['dataDir']).realpath
       @htdocs      = Pathname.new(@baseDir + @config['htdocs']).realpath
       @tplDir      = Pathname.new(@baseDir + @config['tplDir']).realpath
-      @list        = Uberblog::BlogPostList.new(@config['siteUrl'])
+      @list        = Uberblog::BlogPostList.new()
       @layout      = Uberblog::Layout.new(@config['siteUrl'], create_template("layout"), @config['language'])
       @layout.headline    = @config['headline']
       @layout.description = @config['description']
+      load_posts
       create_posts
       create_index
       create_feed
@@ -121,18 +122,22 @@ module Uberblog
       File.open("#{@tplDir}/#{name}.erb", "rb") { |file| ERB.new(file.read) }
     end
 
-    def create_posts
-      be_verbose 'Create posts...'
-      count = 0
-      template = create_template("post")
+    def load_posts
       Dir.foreach(@dataDir) do |file|
         next if file == '.' or file == '..'
 
         data = Uberblog::BlogData.new("#{@dataDir}/#{file}")
-        post = Uberblog::BlogPost.new(data.title, data.to_html, data.date, @config['siteUrl'])
-        @list.append(post)
+        post = Uberblog::BlogPost.new(data, @config['siteUrl'])
+        @list.add(post)
+      end
+    end
 
-        @layout.title   = "#{@config['headline']} | #{data.title}"
+    def create_posts
+      be_verbose 'Create posts...'
+      count = 0
+      template = create_template("post")
+      @list.each do |post|
+        @layout.title   = "#{@config['headline']} | #{post.title}"
         @layout.content = template.result(post.get_binding)
         targetFile      = "#{@htdocs}/#{post.filename}"
 

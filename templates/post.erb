@@ -1,4 +1,20 @@
 <article>
-    <h3 class="meta">Posted on <%= date_formatted %></h3>
+    <h3 class="meta">Posted <%= date_formatted %></h3>
     <%= @content %>
 </article>
+
+<% if @prevPost or @nextPost %>
+<nav id="pagination">
+  <% if @prevPost %>
+    <a href="<%= @prevPost %>">&laquo; previous post</a>
+  <% end %>
+
+  <% if @prevPost and @nextPost %>
+      &ndash;
+  <% end %>
+
+  <% if @nextPost %>
+    <a href="<%= @nextPost %>">next post &raquo;</a>
+  <% end %>
+</nav>
+<% end %>
