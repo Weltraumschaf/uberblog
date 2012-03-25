@@ -30,12 +30,17 @@
 
     function loadDependencies(onReadyFn) {
         $LAB.script('js/jquery-1.7.2.js')
+            .script('js/jquery.raty.js')
             .wait(onReadyFn)
     }
 
     function main() {
         loadDependencies(function() {
-
+            $(function() {
+                $("#rating").raty({
+                    path: "img/raty/"
+                }).fadeIn();
+            });
         });
         initGoogleAnalytics();
     }
