@@ -1,0 +1,259 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address,
+big, cite, code, del, dfn, em, font, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol,
+ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    border: 0 none;
+    font-size: 100%;
+    margin: 0;
+    outline: 0 none;
+    padding: 0;
+    vertical-align: baseline;
+    font-style: inherit;
+    font-weight: inherit;
+}
+
+body {
+    background: none repeat scroll 0 0 #646D68;
+    padding: 0 2em;
+    color: #373737;
+    font: 300 15px/1.625 "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+cite, em, i {
+    font-style: italic;
+}
+
+code, kbd {
+    font: 13px Monaco,Consolas,"Andale Mono","DejaVu Sans Mono",monospace;
+}
+
+pre {
+    background: #EEEEEE;
+    border: 1px solid #CCCCCC;
+    margin: 0 20px 1.2em;
+    padding: 3px;
+}
+
+thead {
+    font-weight: bold;
+}
+
+table {
+    background: #EEEEEE;
+}
+
+th, td {
+    padding: 0 0.5em;
+    border: 1px solid #373737;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: "";
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: "";
+}
+
+blockquote {
+    font-family: Georgia,"Bitstream Charter",serif;
+    font-style: italic;
+    font-weight: normal;
+    margin: 0 3em;
+}
+
+blockquote, q {
+    quotes: "" "";
+}
+
+a {
+    color: #6995AE;
+    text-decoration: none;
+}
+
+a img {
+    border: 0 none;
+}
+
+#page {
+    background: none repeat scroll 0 0 #FFFFFF;
+    margin: 2em auto;
+    max-width: 940px;;
+}
+
+#branding {
+    padding-bottom: 10px;
+    position: relative;
+    z-index: 2;
+}
+
+#branding hgroup {
+    margin: 0 3.6%;
+}
+
+#branding img {
+    height: auto;
+    margin-bottom: -7px;
+}
+
+#rss {
+    float: right;
+    margin-top: -128px;
+    margin-right: -50px;
+}
+
+#site-title {
+    margin-right: 270px;
+    padding: 1.8em 0 0;
+}
+
+#site-title a {
+    color: #666666;
+    font-size: 30px;
+    font-weight: bold;
+    line-height: 36px;
+    text-decoration: none;
+}
+
+#site-description {
+    color: #507FAB;
+    font-size: 14px;
+    margin: 0 270px 1.65625em 0;
+}
+
+#access {
+    /*background: -moz-linear-gradient(#252525, #0A0A0A); *//* Firefox */
+    /*background: -webkit-linear-gradient(#252525, #0A0A0A); *//* Safari, Chrome */
+    /*background: -o-linear-gradient(#252525, #0A0A0A); *//* Opera */
+    /*background: -ms-linear-gradient(#252525, #0A0A0A); *//* IE */
+    /*background: linear-gradient(#252525, #0A0A0A); *//* W3C Standard */
+    background: #507FAB;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    clear: both;
+    display: block;
+    float: left;
+    margin: 0 auto 6px;
+    width: 100%;
+}
+
+#access div {
+    margin: 0 3.6%;
+}
+
+#access a {
+    color: #EEEEEE;
+    display: block;
+    line-height: 3.333em;
+    padding: 0 1.2125em;
+    text-decoration: none;
+}
+
+#access .current_page_item > a {
+    font-weight: bold;
+}
+
+#access ul {
+    font-size: 13px;
+    list-style: none outside none;
+    margin: 0 0 0 -0.8125em;
+    padding-left: 0;
+}
+
+#access li {
+    float: left;
+    position: relative;
+}
+
+.assistive-text {
+    clip: rect(1px, 1px, 1px, 1px);
+    position: absolute !important;
+}
+
+#main {
+    clear: both;
+    padding: 1.625em 0 0;
+}
+
+#primary {
+    float: right;
+    margin: 0 0 0 -26.4%;
+    width: 100%;
+}
+
+#primary ul {
+    color: #6995AE;
+    list-style: square;
+    margin-bottom: 1.2em;
+    margin-left: 20px;
+}
+
+#content {
+    margin: 0 7.6% 2% 34%;
+    width: 58.4%;
+}
+
+#content h2 {
+    font-size: 2.2em;
+    line-height: 1.2em;
+    margin-bottom: 0.6em;
+}
+
+#secondary {
+    float: left;
+    margin-left: 7.6%;
+    margin-right: 0;
+    width: 18.8%;
+    font-size: 12px;
+}
+
+#secondary ul {
+    list-style: none;
+}
+
+#secondary aside {
+    clear: both;
+    margin: 0 0 2.2em;
+}
+
+.meta {
+    color: #666666;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    line-height: 2.6em;
+    text-transform: uppercase;
+}
+
+#secondary aside ul {
+    font-size: 15px;
+    margin: 0;
+}
+
+#secondary aside ul li {
+    color: #777777;
+    font-size: 13px;
+}
+
+#secondary aside a {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+footer {
+    clear: both;
+    background: none repeat scroll 0 0 #507FAB;
+    border-top: 1px solid #444444;
+    color: #EEEEEE;
+    font-size: 12px;
+    line-height: 1.2em;
+    padding: 1.2em 0.5em;
+    text-align: center;
+}
+
+footer a {
+    color: #EEEEEE;
+    font-weight: bold;
+}
+
+article p {
+    margin-bottom: 1.625em;
+}
