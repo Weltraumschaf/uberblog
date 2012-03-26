@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+$baseDir = File.dirname(__FILE__) + '/..'
+
+require "#{$baseDir}/lib/uberblog"
+require 'uberblog/api'
+require 'sinatra'
+require "sinatra/json"
+
+service = Uberblog::Api::Service.new($baseDir + '/data/dev.sqlite3')
+
+not_found do
+  "Go away!"
+end
+
+get '/' do
+  "/rating\n"
+end
+
+get '/rating' do
+  redirect '/rating/', 303
+end
+
+get '/rating/' do
+  uris = ''
+  service.get_all_ratings.each { |uri| uris << "/rating/#{uri}\n" }
+  uris
+end
+
+get '/rating/:post' do
+  rating = service.get_rating params[:post]
+  json :post => rating.post, :sum => rating.sum, :count => rating.count, :average => rating.average
+end
+
+put '/rating/:post' do
+  501
+end

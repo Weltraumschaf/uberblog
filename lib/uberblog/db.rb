@@ -24,8 +24,8 @@ module Uberblog
         super(self.class.to_s, dbFile)
       end
 
-      def create_repo
-        return RatingRepo.new(db, name)
+      def create_repository
+        return RatingRepository.new(db, name)
       end
 
       def create
@@ -51,7 +51,7 @@ module Uberblog
       end
     end
 
-    class RatingRepo
+    class RatingRepository
 
       def initialize(name, db)
         @db   = db
@@ -64,12 +64,14 @@ module Uberblog
         end
       end
 
-      def create(rating)
-        @db.execute "insert into #{name} values (?, ?, ?, ?)", rating.post, rating.sum, rating.count, rating.average
-      end
+      def save(rating)
+        found = find_by_post rating.post
 
-      def update(rating)
-
+        if found.nil?
+          @db.execute "insert into #{name} values (?, ?, ?)", rating.post, rating.sum, rating.count
+        else
+          @db.execute "update #{name} set sum = ?, count = ? where post = ?", rating.sum, rating.count, rating.post
+        end
       end
 
       def delete(rating)

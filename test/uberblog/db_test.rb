@@ -35,7 +35,7 @@ module Uberblog
 
         def test_must_create_find_update_and_delete
           table = Uberblog::Db::RatingsTable.new
-          repo  = table.create_repo
+          repo  = table.create_repository
           post  = Uberblog::Model::Rating.new('post-id')
           add_failure ' not ready'
         end

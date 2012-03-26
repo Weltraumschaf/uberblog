@@ -33,6 +33,10 @@ module Uberblog
           assert_equal 5, rating.count
           assert_equal 18, rating.sum
           assert_equal 4, rating.average
+
+          rating2 = Uberblog::Model::Rating.new('post-id', 18, 5)
+          assert_equal rating, rating2
+
         end
 
       end

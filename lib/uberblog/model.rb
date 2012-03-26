@@ -17,8 +17,16 @@ module Uberblog
       end
 
       def add(rate)
-        @sum += rate
+        @sum   += rate
         @count += 1
+      end
+
+      def <=> other
+        average <=> other.average
+      end
+
+      def == other
+        post == other.post && average == other.average
       end
 
     end
