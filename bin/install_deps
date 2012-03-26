@@ -4,3 +4,6 @@ gem install kramdown
 gem install twitter
 gem install bitly
 gem install sqlite3
+gem install sinatra
+gem install sinatra
+gem install sinatra-contrib
