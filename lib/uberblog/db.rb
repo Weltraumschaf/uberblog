@@ -1,3 +1,5 @@
+require 'sqlite3'
+
 module Uberblog
 
   module Db
@@ -7,7 +9,7 @@ module Uberblog
 
       def initialize(name, dbFile = "test.db")
         @db   = SQLite3::Database.new(dbFile)
-        @name = extract_table_name(name )
+        @name = Table.extract_table_name(name )
       end
 
       def self.extract_table_name(className)
@@ -18,12 +20,12 @@ module Uberblog
 
     class RatingsTable < Table
 
-      def initialize(name, dbFile = "test.db")
-        super(self.class, dbFile)
+      def initialize(dbFile = "test.db")
+        super(self.class.to_s, dbFile)
       end
 
       def create_repo
-        return RatingRepo.new(db, name
+        return RatingRepo.new(db, name)
       end
 
       def create
@@ -32,7 +34,6 @@ module Uberblog
             post     varchar(500), # host agnostic URI /foo/bar-baz.html eg.
             sum      int,
             count    int,
-            average  int           # ratingSum / ratingCount
           );
         SQL
       end
