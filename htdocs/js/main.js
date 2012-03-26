@@ -1,4 +1,5 @@
 (function(){
+    var apiUrl;
 
     function initGoogleAnalytics() {
         var _gaq = _gaq || [], ga, s;
@@ -34,16 +35,42 @@
             .wait(onReadyFn)
     }
 
+    function initRaty() {
+        var $rating    = $("#rating"),
+            pathname   = document.location.pathname,
+            resourceId = pathname.replace(".html", "")
+                                 .substring(pathname.lastIndexOf("/") + 1);
+
+        if ($rating.size() === 0 || '' === resourceId) {
+            return;
+        }
+
+        $.ajax({
+            url: apiUrl + "rating/" + resourceId,
+            dataType: 'json',
+            crossDomain: true,
+            success: function(data) {
+                console.debug(data);
+                $("#rating").raty({
+                    path: "img/raty/",
+                    start: data.average,
+                    click: function(score, event) {
+                        console.debug(score);
+                    }
+                }).fadeIn();
+            }
+        });
+    }
+
     function main() {
         loadDependencies(function() {
-            $(function() {
-                $("#rating").raty({
-                    path: "img/raty/"
-                }).fadeIn();
-            });
+            $(initRaty);
         });
         initGoogleAnalytics();
     }
 
-    main();
+    window.weltraumschaf = function(options) {
+        apiUrl = options.api;
+        main();
+    }
 })()

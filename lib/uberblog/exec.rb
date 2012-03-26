@@ -95,6 +95,7 @@ module Uberblog
       @layout      = Uberblog::Layout.new(@config['siteUrl'], create_template("layout"), @config['language'])
       @layout.headline    = @config['headline']
       @layout.description = @config['description']
+      @layout.apiUrl      = @config['api']['url']
       load_posts
       create_posts
       create_index
@@ -141,7 +142,7 @@ module Uberblog
       end
 
       dataList.sort!.each do |data|
-        post = Uberblog::BlogPost.new(data, @config['siteUrl'])
+        post = Uberblog::BlogPost.new(data, @config)
         @list.add(post)
       end
     end

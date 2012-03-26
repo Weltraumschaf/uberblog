@@ -10,6 +10,10 @@ twitter:
     consumer_secret:    ''
     oauth_token:        ''
     oauth_token_secret: ''
- bitly:
+bitly:
     username: ''
     apikey:   ''
+api:
+  url: http://www.your-blog.de/api/
+features:
+  rating: false

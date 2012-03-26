@@ -1,6 +1,6 @@
 <article>
   <strong class="meta">Posted <%= date_formatted %></strong>
-  <!--<div id="rating"></div>-->
+  <% if @features['rating'] %><div id="rating"></div><% end  %>
   <%= @content %>
 </article>
 

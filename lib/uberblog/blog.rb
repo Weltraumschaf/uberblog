@@ -45,12 +45,13 @@ module Uberblog
   class BlogPost
     include Uberblog
     include Comparable
-    attr_reader :title, :date, :content, :siteUrl
+    attr_reader :title, :date, :content, :siteUrl, :features
     attr_accessor :prevPost, :nextPost
 
-    def initialize(data, siteUrl)
+    def initialize(data, config)
       @title, @content, @date = data.title, data.to_html, data.date
-      @siteUrl = siteUrl
+      @siteUrl  = config['siteUrl']
+      @features = config['features']
     end
 
     def <=> other
@@ -130,11 +131,12 @@ module Uberblog
 
   class Layout
     attr_reader :siteUrl, :language
-    attr_accessor :title, :headline, :description, :content
+    attr_accessor :title, :headline, :description, :content, :apiUrl
 
     def initialize(siteUrl, template, language)
       @siteUrl, @template, @language = siteUrl, template, language
       @title, @headline, @description, @content = 'n/a'
+      @apiUrl = ''
     end
 
     def to_html
