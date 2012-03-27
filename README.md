@@ -24,3 +24,4 @@ All other stuff made by me (Weltraumschaf) is under the
 
 https://github.com/luislavena/sqlite3-ruby
 http://www.wbotelhos.com/raty/
+http://stackoverflow.com/questions/1001040/which-ruby-orm-framework-to-use-in-a-standalone-ruby-app
