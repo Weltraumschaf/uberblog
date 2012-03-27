@@ -1,15 +1,17 @@
+require 'data_mapper'
+
+DataMapper::Property::String.length(255)
 
 module Uberblog
 
   module Model
 
     class Rating
+      include DataMapper::Resource
 
-      attr_reader :post, :sum, :count
-
-      def initialize(post, sum = 0, count = 0)
-        @post, @sum, @count = post, sum, count;
-      end
+      property :post,  String,  :key => true
+      property :sum,   Integer, :required => true, :default => 0
+      property :count, Integer, :required => true, :default => 0
 
       def average
         return 0 if 0 == @count
@@ -17,8 +19,10 @@ module Uberblog
       end
 
       def add(rate)
-        @sum   += rate
-        @count += 1
+        attributes = {
+          :sum   => sum + rate,
+          :count => count + 1
+        }
       end
 
       def <=> other

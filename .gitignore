@@ -5,4 +5,5 @@ htdocs/.htaccess
 htdocs/redirect.php
 htdocs/*.html
 htdocs/*.xml
-/htdocs/nbproject/private/
+nbproject/
+*.sqlite

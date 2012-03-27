@@ -8,6 +8,7 @@ require 'twitter'
 require 'bitly'
 require 'uberblog/blog'
 require 'uberblog/sitemap'
+require 'uberblog/db'
 
 module Uberblog
 
@@ -34,6 +35,10 @@ module Uberblog
         @options[:config] = file.to_sym
       end
 
+      opts.on('-v', '--verbose', 'Tell you more.') do
+        @options[:verbose] = true
+      end
+
       opts.on_tail('-?', '-h', '--help', 'Show this message.') do
         puts opts
         exit 0
@@ -43,6 +48,11 @@ module Uberblog
     def load_config(filepath)
       File.open("#{Pathname.getwd}/#{filepath}") { |file| YAML.load(file) }
     end
+
+    def be_verbose(message)
+      puts message if @options[:verbose]
+    end
+
   end
 
   class Create < Generic
@@ -117,17 +127,9 @@ module Uberblog
         @options[:quiet] = true
       end
 
-      opts.on('-v', '--verbose', 'Tell you more.') do
-        @options[:verbose] = true
-      end
-
     end
 
     private
-    def be_verbose(message)
-      puts message if @options[:verbose]
-    end
-
     def create_template(name)
       File.open("#{@tplDir}/#{name}.erb", "rb") { |file| ERB.new(file.read) }
     end
@@ -272,10 +274,4 @@ module Uberblog
     end
   end
 
-  class Db < Generic
-    def execute
-      super
-
-    end
-  end
 end

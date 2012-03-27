@@ -1,8 +1,0 @@
-#!/usr/bin/env ruby
-
-$baseDir = File.dirname(__FILE__) + '/..'
-require "#{$baseDir}/lib/uberblog"
-require 'uberblog/exec'
-
-cmd = Uberblog::Db.new($baseDir, ARGV)
-cmd.execute

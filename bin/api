@@ -1,13 +1,19 @@
 #!/usr/bin/env ruby
 
-$baseDir = File.dirname(__FILE__) + '/..'
+require 'pathname'
+$baseDir = Pathname.new(File.dirname(__FILE__) + '/..').realpath
 
 require "#{$baseDir}/lib/uberblog"
-require 'uberblog/api'
+require 'data_mapper'
 require 'sinatra'
 require "sinatra/json"
+require 'json'
 
-service = Uberblog::Api::Service.new($baseDir + '/data/dev.sqlite3')
+DataMapper::Logger.new($stdout, :debug)
+DataMapper.setup(:default, "sqlite://#{$baseDir}/data/database.sqlite")
+DataMapper::Model.raise_on_save_failure = true
+require 'uberblog/model'
+DataMapper.finalize
 
 not_found do
   "Go away!"
@@ -23,15 +29,22 @@ end
 
 get '/rating/' do
   uris = ''
-  service.get_all_ratings.each { |uri| uris << "/rating/#{uri}\n" }
+  Uberblog::Model::Rating.all.each { |rating| uris << "/rating/#{rating.post}\n" }
   uris
 end
 
 get '/rating/:post' do
-  rating = service.get_rating params[:post]
+  rating = Uberblog::Model::Rating.get(params[:post])
   json :post => rating.post, :sum => rating.sum, :count => rating.count, :average => rating.average
 end
 
 put '/rating/:post' do
-  501
+  data   = JSON.parse(request.body.read)
+  rating = Uberblog::Model::Rating.first_or_create({ :post => params[:post] })
+  rating.attributes = {
+    :sum   => rating.sum + data['rate'].to_i,
+    :count => rating.count + 1
+  }
+  rating.save
+  redirect "/rating/#{params[:post]}", 303
 end

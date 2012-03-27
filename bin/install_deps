@@ -1,9 +1,9 @@
 #!/bin/bash
 
-gem install kramdown
-gem install twitter
-gem install bitly
-gem install sqlite3
-gem install sinatra
-gem install sinatra
-gem install sinatra-contrib
+gem install kramdown \
+            twitter \
+            bitly \
+            sinatra \
+            sinatra-contrib \
+            dm-sqlite-adapter \
+            data_mapper

@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+$baseDir = Pathname.new(File.dirname(__FILE__) + '/..').realpath
+
+require "#{$baseDir}/lib/uberblog"
+require 'uberblog/model'
+require 'data_mapper'
+
+DataMapper::Logger.new($stdout, :debug)
+DataMapper.setup(:default, "sqlite://#{$baseDir}/data/database.sqlite")
+DataMapper.finalize
+DataMapper.auto_migrate!
