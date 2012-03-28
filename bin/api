@@ -16,7 +16,7 @@ require 'uberblog/model'
 DataMapper.finalize
 
 not_found do
-  "Go away!"
+  "Go away!\n"
 end
 
 get '/' do
