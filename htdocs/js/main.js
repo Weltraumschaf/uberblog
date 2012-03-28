@@ -1,5 +1,8 @@
 (function(){
-    var apiUrl;
+    var apiUrl,
+        pathname   = document.location.pathname,
+        resourceId = pathname.replace(".html", "")
+                             .substring(pathname.lastIndexOf("/") + 1);
 
     function initGoogleAnalytics() {
         var _gaq = _gaq || [], ga, s;
@@ -35,35 +38,61 @@
             .wait(onReadyFn)
     }
 
+    function saveRate(score, event) {
+        $.ajax({
+            url:         apiUrl + "rating/" + resourceId,
+            type:        'PUT',
+            data:        JSON.stringify({"rate": score}),
+            dataType:    'json',
+            error:       function(jqXhr, textStatus, errorThrown) {
+                console.debug(jqXhr, textStatus, errorThrown);
+            },
+            success:     function(data) {
+                console.debug(data);
+            }
+        });
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    function showRaty(rate) {
+        $("#rating").raty({
+            path: "img/raty/",
+            start: rate,
+            click: saveRate
+        }).fadeIn();
+    }
+
     function initRaty() {
-        var $rating    = $("#rating"),
-            pathname   = document.location.pathname,
-            resourceId = pathname.replace(".html", "")
-                                 .substring(pathname.lastIndexOf("/") + 1);
+        var $rating = $("#rating");
 
         if ($rating.size() === 0 || '' === resourceId) {
             return;
         }
 
         $.ajax({
-            url: apiUrl + "rating/" + resourceId,
-            dataType: 'json',
-            crossDomain: true,
-            success: function(data) {
-                console.debug(data);
-                $("#rating").raty({
-                    path: "img/raty/",
-                    start: data.average,
-                    click: function(score, event) {
-                        console.debug(score);
-                    }
-                }).fadeIn();
+            url:         apiUrl + "rating/" + resourceId,
+            type:        'GET',
+            dataType:    'json',
+            error:       function(jqXhr, textStatus, errorThrown) {
+                if (404 === jqXhr.status) {
+                    showRaty(0);
+                }
+            }   ,
+            success:     function(data) {
+                showRaty(data.average);
             }
         });
     }
 
     function main() {
         loadDependencies(function() {
+            $.ajaxSetup({
+                cache:       false,
+                processData: false,
+                dataType:    "json",
+                contentType: "application/json"
+            });
             $(initRaty);
         });
         initGoogleAnalytics();
