@@ -31,6 +31,8 @@ foreach ($headersSpec as $name => $key) {
 $request->setHeaders($headers);
 $response = $request->send();
 
+header("HTTP/{$response->getHttpVersion()} {$response->getResponseCode()} {$response->getResponseStatus()}");
+
 foreach ($response->getHeaders() as $name => $value) {
     header("{$name}: {$value}");
 }
