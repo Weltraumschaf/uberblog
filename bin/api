@@ -35,6 +35,7 @@ end
 
 get '/rating/:post' do
   rating = Uberblog::Model::Rating.get(params[:post])
+  halt 404 if rating.nil?
   json :post => rating.post, :sum => rating.sum, :count => rating.count, :average => rating.average
 end
 
