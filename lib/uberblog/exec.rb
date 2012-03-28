@@ -8,7 +8,6 @@ require 'twitter'
 require 'bitly'
 require 'uberblog/blog'
 require 'uberblog/sitemap'
-require 'uberblog/db'
 
 module Uberblog
 
