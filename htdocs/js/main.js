@@ -4,6 +4,12 @@
         resourceId = pathname.replace(".html", "")
                              .substring(pathname.lastIndexOf("/") + 1);
 
+    if (undefined === window.console) {
+        window.console = {
+            debug: function() {},
+            log: function() {}
+        };
+    }
     function initGoogleAnalytics() {
         var _gaq = _gaq || [], ga, s;
 
@@ -48,18 +54,33 @@
                 console.debug(jqXhr, textStatus, errorThrown);
             },
             success:     function(data) {
-                console.debug(data);
+                // @todo errorhandling
+
+                if (data && data.average) {
+//                    showRaty(data.average, true);
+                    $("#rating").raty('start',data.average).raty('readOnly', true);;
+                } else {
+                    console.log("Didn't get expected data!");
+                    console.debug(data);
+                }
             }
         });
         event.preventDefault();
         event.stopPropagation();
     }
 
-    function showRaty(rate) {
+    function showRaty(rate, readOnly) {
+        readOnly = readOnly || false;
         $("#rating").raty({
             path: "img/raty/",
             start: rate,
-            click: saveRate
+            click: readOnly ?
+                function(score, event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } :
+                saveRate,
+            readOnly: readOnly
         }).fadeIn();
     }
 

@@ -19,6 +19,10 @@ def raise_error(code, message)
   halt json :error_code => code, :error_message => message
 end
 
+def to_json(rating)
+  json :post => rating.post, :sum => rating.sum, :count => rating.count, :average => rating.average
+end
+
 not_found do
   "Nothing here.\n"
 end
@@ -46,24 +50,23 @@ end
 put '/rating/:post' do
   body   = request.body.read
 
-  #halt 400, "Empty request body! Expects JSON like '{rate: 5}'."if body.size == 0 or body.nil?
   raise_error 400, "Empty request body! Expects JSON like '{rate: 5}'." if body.size == 0 or body.nil?
+
   begin
     data   = JSON.parse body
   rescue
-    #halt 500, "Can't parse JSON! Given request body was '#{body}'."
     raise_error 500, "Can't parse JSON! Given request body was '#{body}'."
   end
 
   rating = Uberblog::Model::Rating.first_or_create({ :post => params[:post] })
 
-  #halt 400, "Expected JSON key rate' not present!."
-  raise_error 400, "Expected JSON key 'rate(Integer)' not present!."
+  raise_error 400, "Expected JSON key 'rate(Integer)' not present!." if data['rate'].nil?
 
   rating.attributes = {
     :sum   => rating.sum + data['rate'].to_i,
     :count => rating.count + 1
   }
   rating.save
-  redirect "/rating/#{params[:post]}", 303
+
+  to_json rating
 end
