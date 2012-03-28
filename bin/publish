@@ -2,7 +2,7 @@
 
 $baseDir = File.dirname(__FILE__) + '/..'
 require "#{$baseDir}/lib/uberblog"
-require 'uberblog/exec'
+require 'uberblog/publish'
 
 cmd = Uberblog::Publisher.new($baseDir, ARGV)
 cmd.execute
