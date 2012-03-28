@@ -137,12 +137,12 @@ module Uberblog
       dataList = []
 
       Dir.foreach(@dataDir) do |file|
-        next if file == '.' or file == '..' or is_draft?(file)
+        next if file == '.' or file == '..' or is_draft?(file) or file == 'database.sqlite'
 
         dataList << Uberblog::BlogData.new("#{@dataDir}/#{file}")
       end
 
-      dataList.sort!.each do |data|
+      dataList.sort.each do |data|
         post = Uberblog::BlogPost.new(data, @config)
         @list.add(post)
       end

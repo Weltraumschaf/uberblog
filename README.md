@@ -20,7 +20,7 @@ All other stuff made by me (Weltraumschaf) is under the
 
 - generate suffixed output files if duplicate (on blogposts with same title)
 - better error handling on wrong paramters on cli
-
+- move posts and drafts in own subdir
 
 https://github.com/luislavena/sqlite3-ruby
 http://www.wbotelhos.com/raty/
