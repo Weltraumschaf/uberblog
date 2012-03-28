@@ -15,8 +15,12 @@ DataMapper::Model.raise_on_save_failure = true
 require 'uberblog/model'
 DataMapper.finalize
 
+def raise_error(code, message)
+  halt json :error_code => code, :error_message => message
+end
+
 not_found do
-  "Go away!\n"
+  "Nothing here.\n"
 end
 
 get '/' do
@@ -40,8 +44,22 @@ get '/rating/:post' do
 end
 
 put '/rating/:post' do
-  data   = JSON.parse(request.body.read)
+  body   = request.body.read
+
+  #halt 400, "Empty request body! Expects JSON like '{rate: 5}'."if body.size == 0 or body.nil?
+  raise_error 400, "Empty request body! Expects JSON like '{rate: 5}'." if body.size == 0 or body.nil?
+  begin
+    data   = JSON.parse body
+  rescue
+    #halt 500, "Can't parse JSON! Given request body was '#{body}'."
+    raise_error 500, "Can't parse JSON! Given request body was '#{body}'."
+  end
+
   rating = Uberblog::Model::Rating.first_or_create({ :post => params[:post] })
+
+  #halt 400, "Expected JSON key rate' not present!."
+  raise_error 400, "Expected JSON key 'rate(Integer)' not present!."
+
   rating.attributes = {
     :sum   => rating.sum + data['rate'].to_i,
     :count => rating.count + 1
