@@ -13,6 +13,7 @@ switch (strtolower($_SERVER['REQUEST_METHOD'])) {
 }
 
 $request = new HttpRequest($uri, $method);
+
 $headersSpec = array(
     'Accept'          => 'HTTP_ACCEPT',
     'Accept-Encoding' => 'HTTP_ACCEPT_ENCODING',
@@ -29,6 +30,14 @@ foreach ($headersSpec as $name => $key) {
 }
 
 $request->setHeaders($headers);
+$body = http_get_request_body();
+
+if ($request->getMethod() === HttpRequest::METH_PUT) {
+    $request->setPutData($body);
+} else {
+    $request->setBody($body);
+}
+
 $response = $request->send();
 
 header("HTTP/{$response->getHttpVersion()} {$response->getResponseCode()} {$response->getResponseStatus()}");
