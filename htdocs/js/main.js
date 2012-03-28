@@ -57,8 +57,8 @@
                 // @todo errorhandling
 
                 if (data && data.average) {
-//                    showRaty(data.average, true);
-                    $("#rating").raty('start',data.average).raty('readOnly', true);;
+                    $("#rating").raty('start',data.average)
+                                .raty('readOnly', true);
                 } else {
                     console.log("Didn't get expected data!");
                     console.debug(data);
