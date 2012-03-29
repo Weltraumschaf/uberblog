@@ -1,4 +1,5 @@
 require 'optparse'
+require 'yaml'
 require 'uberblog/config'
 
 module Uberblog
@@ -44,7 +45,7 @@ module Uberblog
           exit run
         rescue SystemExit
           shutdown
-        rescue OptionParser::InvalidOption => exception
+        rescue OptionParser::InvalidOption, OptionParser::MissingArgument => exception
           puts exception
           puts
           puts @opts
@@ -129,13 +130,16 @@ module Uberblog
 
       # @param baseDir [String]
       def initialize(baseDir)
+        super()
         @baseDir = baseDir
+        @options[:title] = 'no title'
+        @options[:draft] = false
       end
 
       def set_options(opts)
         super
 
-        opts.banner = 'Usage: create -c <file> -t "The Blog Title" [-h]'
+        opts.banner = 'Usage: create -c <file> -t "The Blog Title. [required]" [-h]'
 
         opts.on('-c', '--config <FILE>', 'Config file to use.') do |file|
           @config = load_config "#{Pathname.getwd}/#{file}"
@@ -152,15 +156,17 @@ module Uberblog
       end
 
       def run
-        dataDir = Pathname.new(@baseDir + @config.dataDir).realpath
-        id  = 0
-        now = Time.now
+        raise OptionParser::MissingArgument if @config.nil?
+        dataDir = Pathname.new(@baseDir + @config.dataDir).realpath.to_s
 
         if @options[:draft]
           dataDir << '/drafts'
         else
           dataDir<< '/posts'
         end
+
+        id  = 0
+        now = Time.now
 
         while true
           filename = dataDir + '/'

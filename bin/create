@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
 
-$baseDir = File.dirname(__FILE__) + '/..'
-require "#{$baseDir}/lib/uberblog"
-require 'uberblog/exec'
+require 'pathname'
+$baseDir = Pathname.new(File.dirname(__FILE__) + '/..').realpath.to_s
 
-cmd = Uberblog::Create.new($baseDir, ARGV)
-cmd.execute
+require "#{$baseDir}/lib/uberblog"
+require 'uberblog/cli'
+
+cmd = Uberblog::Cli::Create.new $baseDir
+cmd.exec ARGV
