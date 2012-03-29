@@ -1,0 +1,8 @@
+
+@mixin blue-gradiant($top, $bottom){
+  background: -moz-linear-gradient($top, $bottom); /* Firefox */
+  background: -webkit-linear-gradient($top, $bottom); /* Safari, Chrome */
+  background: -o-linear-gradient($top, $bottom); /* Opera */
+  background: -ms-linear-gradient($top, $bottom); /* IE */
+  background: linear-gradient($top, $bottom); /* W3C Standard */
+}

@@ -1,0 +1,60 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym,
+address, big, cite, code, del, dfn, em, font, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+  font-size: 100%;
+  margin: 0;
+  padding: 0;
+  font-weight: inherit;
+}
+
+body {
+  background: none repeat scroll 0 0 $darkBlue16;
+  padding: 0 2em;
+  color: $darkBlue18;
+  font: 300 15px/1.625 "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+cite, em, i {
+  font-style: italic;
+}
+
+code, kbd {
+  font: 13px Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+}
+
+pre {
+  background: $lightBlue4;
+  border: 1px solid $darkBlue16;
+  margin: 0 15px 1.2em;
+  padding: 3px;
+}
+
+thead {
+  font-weight: bold;
+}
+
+table {
+  background: $lightBlue4;
+}
+
+th, td {
+  padding: 0 0.5em;
+  border: 1px solid $darkBlue16;
+}
+
+blockquote {
+  font-family: Georgia, "Bitstream Charter", serif;
+  font-style: italic;
+  font-weight: normal;
+  margin: 0 3em;
+}
+
+a {
+  color: $darkBlue14;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a img {
+  border: 0 none;
+}

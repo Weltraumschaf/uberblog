@@ -1,68 +1,10 @@
 @import "normalize";
-@import "colors"
-
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym,
-address, big, cite, code, del, dfn, em, font, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var,
-dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
-  font-size: 100%;
-  margin: 0;
-  padding: 0;
-  font-weight: inherit;
-}
-
-body {
-  background: none repeat scroll 0 0 $black;
-  padding: 0 2em;
-  color: $black;
-  font: 300 15px/1.625 "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-cite, em, i {
-  font-style: italic;
-}
-
-code, kbd {
-  font: 13px Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
-}
-
-pre {
-  background: $lightGrey;
-  border: 1px solid $grey;
-  margin: 0 15px 1.2em;
-  padding: 3px;
-}
-
-thead {
-  font-weight: bold;
-}
-
-table {
-  background: $lightGrey;
-}
-
-th, td {
-  padding: 0 0.5em;
-  border: 1px solid $black;
-}
-
-blockquote {
-  font-family: Georgia, "Bitstream Charter", serif;
-  font-style: italic;
-  font-weight: normal;
-  margin: 0 3em;
-}
-
-a {
-  color: $lightBlue;
-  text-decoration: none;
-}
-
-a img {
-  border: 0 none;
-}
+@import "colors";
+@import "tags";
+@import "mixins";
 
 #page {
-  background: none repeat scroll 0 0 $white;
+  background: none repeat scroll 0 0 $lightBlue1;
   margin: 2em auto;
   max-width: 940px;;
 }
@@ -91,28 +33,21 @@ a img {
 #site-title {
   margin-right: 270px;
   padding: 20px 0 0.05em 0;
-  color: $black;
+  color: $darkBlue18;
   font-size: 30px;
   font-weight: bold;
-  line-height: 36px;
+  line-height: 32px;
 }
 
 #site-description {
-  color: $darkBlue;
-  font-size: 14px;
+  color: $lightBlue13;
+  font-size: 16px;
   margin: 0 270px 1.65625em 2px;
-}
-
-@mixin blue-gradiant($top, $bottom){
-  background: -moz-linear-gradient($top, $bottom); /* Firefox */
-  background: -webkit-linear-gradient($top, $bottom); /* Safari, Chrome */
-  background: -o-linear-gradient($top, $bottom); /* Opera */
-  background: -ms-linear-gradient($top, $bottom); /* IE */
-  background: linear-gradient($top, $bottom); /* W3C Standard */
+  padding:  0;
 }
 
 #access {
-  @include blue-gradiant($darkBlue, $lightBlue);
+  @include blue-gradiant($darkBlue6, $darkBlue11);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   clear: both;
   display: block;
@@ -126,7 +61,7 @@ a img {
 }
 
 #access a {
-  color: $lightGrey;
+  color: $lightBlue1;
   display: block;
   line-height: 3.333em;
   padding: 0 1.2125em;
@@ -147,11 +82,6 @@ a img {
 #access li {
   float: left;
   position: relative;
-}
-
-.assistive-text {
-  clip: rect(1px, 1px, 1px, 1px);
-  position: absolute !important;
 }
 
 #main {
@@ -226,7 +156,6 @@ a img {
 }
 
 .meta {
-  color: $black;
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -249,11 +178,12 @@ a img {
   text-decoration: none;
 }
 
+
 footer {
-  @include blue-gradiant($lightBlue, $darkBlue);
+  @include blue-gradiant($darkBlue6, $darkBlue11);
   clear: both;
-  border-top: 1px solid $black;
-  color: $lightGrey;
+  border-top: 1px solid $darkBlue16;
+  color: $lightBlue1;
   font-size: 12px;
   line-height: 1.2em;
   padding: 1.2em 0.5em;
@@ -261,8 +191,8 @@ footer {
 }
 
 footer a {
-  color: $lightGrey;
   font-weight: bold;
+  color: $lightBlue1;
 }
 
 article p {
