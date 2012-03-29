@@ -39,7 +39,7 @@ module Uberblog
       include DataMapper::Resource
 
       property :post,  String, :key => true
-      property :text,  Text    :required => true
+      property :text,  Text,   :required => true
       property :name,  String, :default => 'anonymous'
       property :url,   String, :default => ''
     end
