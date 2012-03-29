@@ -4,10 +4,6 @@ require 'find'
 require 'pathname'
 require 'yaml'
 require 'optparse'
-require 'twitter'
-require 'bitly'
-require 'uberblog/blog'
-require 'uberblog/sitemap'
 
 module Uberblog
 

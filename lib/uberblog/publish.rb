@@ -1,4 +1,9 @@
+#require 'twitter'
+#require 'bitly'
+require 'uberblog/blog'
+require 'uberblog/sitemap'
 require 'uberblog/exec'
+require 'uberblog/model'
 
 module Uberblog
   class Publisher < Generic
@@ -19,6 +24,7 @@ module Uberblog
       create_index
       create_feed
       create_site_map
+      create_static_sites if @options[:sites]
       exit 0
     end
 
@@ -35,6 +41,10 @@ module Uberblog
         @options[:quiet] = true
       end
 
+      opts.on('-s', '--sites', 'Generate static sites.') do
+        @options[:sites] = true
+      end
+
     end
 
     private
@@ -42,14 +52,22 @@ module Uberblog
       File.open("#{@tplDir}/#{name}.erb", "rb") { |file| ERB.new(file.read) }
     end
 
-    def load_posts
-      dataList = []
-      dirname  = "#{@dataDir}/posts"
+    def load_files(dirname)
+      fileList = []
 
       Dir.foreach(dirname) do |file|
         next if file == '.' or file == '..'
+        fileList << "#{dirname}/#{file}"
+      end
 
-        dataList << Uberblog::BlogData.new("#{dirname}/#{file}")
+      fileList
+    end
+
+    def load_posts
+      dataList = []
+
+      load_files("#{@dataDir}/posts").each do |file|
+        dataList << Uberblog::BlogData.new(file)
       end
 
       dataList.sort.each do |data|
@@ -88,10 +106,13 @@ module Uberblog
     def create_index
       be_verbose 'Create index...'
 
-      @layout.title   = "#{@config['headline']} | Blog"
-      @layout.content = create_template("index").result(@list.get_binding)
-
-      File.open("#{@htdocs}/index.html", 'w') { |file| file.write(@layout.to_html) }
+      layout = Uberblog::Model::Layout.new(create_template('layout'), @config['siteUrl']);
+      layout.title       = "#{@config['headline']} | Blog"
+      layout.description = @config['description']
+      layout.apiUrl      = @config['api']['url']
+      index  = Uberblog::Model::Index.new(create_template('index'), layout)
+      index.posts = @list
+      File.open("#{@htdocs}/index.html", 'w') { |file| file.write(index.to_html) }
     end
 
     def create_feed
@@ -130,7 +151,7 @@ module Uberblog
       File.open("#{@htdocs}/sitemap.xml", "w") { |f| f.write(site_map.to_xml) }
     end
 
-    def to_log?(msg)
+    def to_long?(msg)
       msg.length > 140
     end
 
@@ -148,18 +169,18 @@ module Uberblog
       #url.sub!('http:', '').sub!('https:', '')
       msg = "#{title} - #{url}"
 
-      if to_log? msg
+      if to_long? msg
         reduce = msg.length - 140 + 3
         title = title[0, reduce] + '...'
       end
 
       msg = "#{title} - #{url}"
 
-      if to_log? msg
+      if to_long? msg
         msg = "Blogged: #{url}"
       end
 
-      if to_log? msg
+      if to_long? msg
         puts "Can't post to twitter! Way too manny characters."
         return
       end
@@ -177,6 +198,13 @@ module Uberblog
       end
     end
 
+    def create_static_sites
+      be_verbose 'Create static sites...'
+
+      load_files("#{@dataDir}/sites").each do |file|
+
+      end
+    end
   end
 
 end

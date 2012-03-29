@@ -5,6 +5,70 @@ DataMapper::Property::String.length(255)
 module Uberblog
 
   module Model
+    attr_accessor :profileLinks, :otherLinks, :sites
+
+    class Html
+      attr_reader :template, :layout
+
+      def initialize(template, layout)
+        @template = template
+        @layout   = layout
+      end
+
+      def to_html
+        @layout.content = @template.result binding
+        @layout.to_html
+      end
+    end
+
+    class Layout
+
+      attr_reader :siteUrl, :language, :template
+      attr_accessor :title, :headline, :description, :content, :apiUrl
+
+      def initialize(template, siteUrl, language = 'en')
+        @template, @siteUrl, @language = template, siteUrl, language
+        @title       = 'n/a'
+        @headline    = 'n/a'
+        @description = 'n/a'
+        @content     = 'n/a'
+        @apiUrl      = ''
+        @profileLinks = []
+        @otherLinks   = []
+        @sites        = []
+      end
+
+      def to_html
+        @template.result binding
+      end
+    end
+
+    class Index < Html
+      attr_accessor :posts
+
+      def initialize(template, layout)
+        super(template, layout)
+        @posts = []
+      end
+
+    end
+
+    class BlogPost < Html
+      attr_accessor :title, :content
+
+      def initialize(template, layout)
+        super(template, layout)
+      end
+
+    end
+
+    class Site
+      attr_accessor :title, :content
+    end
+
+    class Link
+      attr_accessor :uri, :text
+    end
 
     class Rating
       include DataMapper::Resource
