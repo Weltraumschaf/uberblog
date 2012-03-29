@@ -1,13 +1,10 @@
 #!/usr/bin/env ruby
 
 require 'pathname'
-$baseDir = Pathname.new(File.dirname(__FILE__) + '/..').realpath
+$baseDir = Pathname.new(File.dirname(__FILE__) + '/..').realpath.to_s
 
 require "#{$baseDir}/lib/uberblog"
-require 'uberblog/model'
-require 'data_mapper'
+require 'uberblog/cli'
 
-DataMapper::Logger.new($stdout, :debug)
-DataMapper.setup(:default, "sqlite://#{$baseDir}/data/database.sqlite")
-DataMapper.finalize
-DataMapper.auto_migrate!
+cmd = Uberblog::Cli::Install.new $baseDir
+cmd.exec ARGV

@@ -93,7 +93,12 @@ module Uberblog
 
       # @param baseDir [String]
       def initialize(baseDir)
+        super()
         @baseDir = baseDir
+        @options[:purge]  = false
+        @options[:quiet]  = false
+        @options[:sites]  = false
+        @options[:drafts] = false
       end
 
       def set_options(opts)
@@ -120,6 +125,16 @@ module Uberblog
       end
 
       def run
+        raise OptionParser::MissingArgument if @config.nil?
+
+        publisher = Uberblog::Publisher.new
+        publisher.purge  = @options[:purge]
+        publisher.sites  = @options[:sites]
+        publisher.quiet  = @options[:quiet]
+        publisher.drafts = @options[:drafts]
+        publisher.source = @config.dataDir
+        publisher.target = @config.htdocs
+        publisher.publish
         RET_OK
       end
     end
@@ -191,6 +206,7 @@ module Uberblog
 
       # @param baseDir [String]
       def initialize(baseDir)
+        super()
         @baseDir = baseDir
       end
 
