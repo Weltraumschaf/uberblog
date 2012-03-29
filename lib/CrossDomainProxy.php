@@ -91,8 +91,8 @@ class CrossDomainProxy {
     private function sendResponse(HttpMessage $response) {
         $versionHeader  = "HTTP/{$response->getHttpVersion()} ";
         $versionHeader .= "{$response->getResponseCode()} {$response->getResponseStatus()}";
+        header($versionHeader);
         $headers = $response->getHeaders();
-        array_unshift($headers, $versionHeader);
 
         foreach ($headers as $name => $value) {
 //            if ('Location' === $name) {
