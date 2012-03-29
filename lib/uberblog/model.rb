@@ -19,10 +19,8 @@ module Uberblog
       end
 
       def add(rate)
-        attributes = {
-          :sum   => sum + rate,
-          :count => count + 1
-        }
+        attribute_set :sum, rate + @sum
+        attribute_set :count, @count + 1
       end
 
       def <=> other
@@ -33,6 +31,9 @@ module Uberblog
         post == other.post && average == other.average
       end
 
+      def hash
+        {:post => @post, :sum => @sum, :count => @count, :average => average}
+      end
     end
 
     class Comment

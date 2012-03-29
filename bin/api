@@ -19,20 +19,12 @@ def raise_error(code, message)
   halt json :error_code => code, :error_message => message
 end
 
-def to_json(rating)
-  json :post => rating.post, :sum => rating.sum, :count => rating.count, :average => rating.average
-end
-
 not_found do
   "Nothing here.\n"
 end
 
 get '/' do
   "/rating\n"
-end
-
-get '/rating' do
-  redirect '/rating/', 303
 end
 
 get '/rating/' do
@@ -44,7 +36,7 @@ end
 get '/rating/:post' do
   rating = Uberblog::Model::Rating.get(params[:post])
   halt 404 if rating.nil?
-  json :post => rating.post, :sum => rating.sum, :count => rating.count, :average => rating.average
+  json rating.hash
 end
 
 put '/rating/:post' do
@@ -61,12 +53,7 @@ put '/rating/:post' do
   rating = Uberblog::Model::Rating.first_or_create({ :post => params[:post] })
 
   raise_error 400, "Expected JSON key 'rate(Integer)' not present!." if data['rate'].nil?
-
-  rating.attributes = {
-    :sum   => rating.sum + data['rate'].to_i,
-    :count => rating.count + 1
-  }
+  rating.add data['rate'].to_i
   rating.save
-
-  to_json rating
+  json rating.hash
 end
