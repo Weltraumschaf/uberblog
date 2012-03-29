@@ -1,6 +1,7 @@
 .idea
 .sass-cache
 config/blog.yml
+config/proxy.json
 htdocs/.htaccess
 htdocs/redirect.php
 htdocs/*.html
