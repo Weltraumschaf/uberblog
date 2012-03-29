@@ -13,7 +13,7 @@ use \HttpMessage as HttpMessage;
  */
 class CrossDomainProxy {
 
-    private static $headersSpec = array(
+    private static $headersMap = array(
         'Accept'          => 'HTTP_ACCEPT',
         'Accept-Encoding' => 'HTTP_ACCEPT_ENCODING',
         'Accept-Language' => 'HTTP_ACCEPT_LANGUAGE',
@@ -25,16 +25,18 @@ class CrossDomainProxy {
      * @var HttpRequest
      */
     private $request;
+    private $thisHost;
+    private $otherHost;
 
     /**
      *
      * @return CrossDomainProxy
      */
-    public static function createDefault() {
+    public static function createDefault($thisHost, $otherHost) {
         if (!class_exists('HttpRequest', false)) {
             throw new \RuntimeException("No class def HttpRequest found! Please install pecl_http.");
         }
-        return new static(new HttpRequest());
+        return new static(new HttpRequest(), $thisHost, $otherHost);
     }
 
     public function __construct(HttpRequest $requst) {
@@ -44,7 +46,7 @@ class CrossDomainProxy {
     private function getRequestHeaders() {
         $headers = array();
 
-        foreach (self::$headersSpec as $name => $key) {
+        foreach (self::$headersMap as $name => $key) {
             if (!empty($_SERVER[$key])) {
                 $headers[$name] = $_SERVER[$key];
             }
@@ -82,6 +84,10 @@ class CrossDomainProxy {
         return $this->request->send();
     }
 
+    private function rewriteHost($uri) {
+        return str_replace($this->otherHost, $this->thisHost, $uri);
+    }
+
     private function sendResponse(HttpMessage $response) {
         $versionHeader  = "HTTP/{$response->getHttpVersion()} ";
         $versionHeader .= "{$response->getResponseCode()} {$response->getResponseStatus()}";
@@ -89,7 +95,12 @@ class CrossDomainProxy {
         array_unshift($headers, $versionHeader);
 
         foreach ($headers as $name => $value) {
-            header("{$name}: {$value}");
+//            if ('Location' === $name) {
+//                var_dump($value);
+//                $value = $this->rewriteHost($value);
+//            }
+
+            $this->sendHeader($name, $value);
         }
 
         echo $response->getBody();

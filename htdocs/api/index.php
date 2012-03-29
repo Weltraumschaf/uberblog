@@ -2,10 +2,11 @@
 
 namespace de\weltraumschaf;
 
-require_once __DIR__ . '/CrossDomainProxy.php';
+$baseDir = dirname(dirname(__DIR__));
 
-$configFile = dirname(dirname(__DIR__)) . '/config/proxy.json';
-$config = json_decode(file_get_contents($configFile));
+require_once "{$baseDir}/lib/CrossDomainProxy.php";
+
+$config = json_decode(file_get_contents("{$baseDir}/config/proxy.json"));
 
 $uriPath = !empty($_SERVER['REQUEST_URI'])
          ? $_SERVER['REQUEST_URI']
@@ -19,5 +20,5 @@ if (false !== $apiMatch) {
 
 $uri   = "http://{$config->host}:{$config->port}{$uriPath}";
 
-$proxy = CrossDomainProxy::createDefault();
+$proxy = CrossDomainProxy::createDefault($_SERVER['HTTP_HOST'], $config->host);
 $proxy->start($uri);
