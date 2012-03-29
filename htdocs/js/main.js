@@ -101,7 +101,9 @@
                 }
             }   ,
             success:     function(data) {
-                showRaty(data.average);
+                if (data && data.average) {
+                    showRaty(data.average);
+                }
             }
         });
     }
