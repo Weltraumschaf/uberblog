@@ -52,6 +52,11 @@ module Uberblog
       @hash['features']
     end
 
+    def hasFeature(name)
+      return false if @hash['features'][name].nil?
+      return @hash['features'][name]
+    end
+
   end
 
 end

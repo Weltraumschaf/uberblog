@@ -14,7 +14,6 @@ module Uberblog
     def initialize(config)
       @config  = config
       @verbose = false
-      @list    = Uberblog::BlogPostList.new()
       @layout  = Uberblog::Layout.new(@config.siteUrl, create_template("layout"), @config.language)
       @layout.headline    = @config.headline
       @layout.description = @config.description
@@ -55,17 +54,21 @@ module Uberblog
       fileList
     end
 
-    def load_posts
+    def load_posts(source)
       dataList = []
 
-      load_files("#{@config.dataDir}/posts").each do |file|
+      load_files(source).each do |file|
+        be_verbose "Loading file '#{file}'."
         dataList << Uberblog::BlogData.new(file)
       end
 
+      list = Uberblog::BlogPostList.new()
       dataList.sort.each do |data|
         post = Uberblog::BlogPost.new(data, @config)
-        @list.add(post)
+        list.add(post)
       end
+
+      list
     end
 
     def generate_sites(source, target)
@@ -74,12 +77,13 @@ module Uberblog
 
     def generate_posts(source, target)
       be_verbose "Generate posts..."
-      count = 0
+      count    = 0
       template = create_template("post")
-      @list.each do |post|
-        @layout.title   = "#{@config['headline']} | #{post.title}"
+      list     = load_posts(source)
+      list.each do |post|
+        @layout.title   = "#{@config.headline} | #{post.title}"
         @layout.content = template.result(post.get_binding)
-        targetFile      = "#{@htdocs}/#{post.filename}"
+        targetFile      = "#{target}/#{post.filename}"
 
         if File.exist?(targetFile) && !@options[:purge]
           be_verbose("Skip regeneration of '#{Pathname.new(targetFile).realpath.to_s}'.")
@@ -105,9 +109,11 @@ module Uberblog
       generate_posts(source + '/posts', target + '/posts')
     end
 
-    def post_to_twitter(title, url)
+    def update_twitter(title, url)
       be_verbose "Post to twitter..."
 
+      @logger.error "Not implemented yet!"
+      return
       begin
         Bitly.use_api_version_3
         bitly = Bitly.new(@config['bitly']['username'], @config['bitly']['apikey'])

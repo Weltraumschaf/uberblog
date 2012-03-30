@@ -50,8 +50,8 @@ module Uberblog
 
     def initialize(data, config)
       @title, @content, @date = data.title, data.to_html, data.date
-      @siteUrl  = config['siteUrl']
-      @features = config['features']
+      @siteUrl  = config.siteUrl
+      @features = config.features
     end
 
     def <=> other
