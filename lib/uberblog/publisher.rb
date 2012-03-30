@@ -49,26 +49,6 @@ module Uberblog
       fileList
     end
 
-    def load_posts(source)
-      dataList = []
-
-      load_files(source).each do |file|
-        be_verbose "Loading file '#{file}'."
-        dataList << Uberblog::Model::BlogData.new(file)
-      end
-
-      dataList
-
-
-      #list = Uberblog::BlogPostList.new()
-      #dataList.sort.each do |data|
-      #  post = Uberblog::BlogPost.new(data, @config)
-      #  list.add(post)
-      #end
-      #
-      #list
-    end
-
     def create_layout
       layout = Uberblog::Model::Layout.new(create_template('layout'), @config.siteUrl)
       layout.title       = "n/a"
@@ -121,12 +101,14 @@ module Uberblog
       layout      = create_layout
       list        = Uberblog::Model::BlogPostList.new()
 
-      load_posts(source).each do |data|
+      load_files(source).each do |file|
+        be_verbose "Loading file '#{file}'."
         post         = create_html_resource('post', layout)
-        post.data    = data
+        post.data    = Uberblog::Model::BlogData.new(file)
         post.config  = @config
         list.add(post)
       end
+
       # first add all posts to the list to update prev/next pagination, then write them
       list.each do |post|
         layout.title = "#{@config.headline} | #{post.title}"
