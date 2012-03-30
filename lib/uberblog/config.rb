@@ -1,10 +1,11 @@
 module Uberblog
 
   class Config
-    attr_reader :hash
+    attr_reader :hash, :baseDir
 
-    def initialize(hash)
-      @hash = hash
+    def initialize(hash, baseDir)
+      @hash    = hash
+      @baseDir = baseDir
     end
 
     def headline

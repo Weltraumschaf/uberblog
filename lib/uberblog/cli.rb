@@ -11,8 +11,9 @@ module Uberblog
     # Mixin to load YAML configuration from file.
     module ConfigLoader
 
-      def load_config(file)
-        Uberblog::Config.new File.open(file) { |f| YAML.load(f) }
+      def load_config(file, baseDir)
+        config = File.open(file) { |f| YAML.load(f) }
+        Uberblog::Config.new(config, baseDir)
       end
 
     end
@@ -34,7 +35,8 @@ module Uberblog
       attr_accessor :logger
 
       # Initialize options hash.
-      def initialize
+      def initialize(baseDir)
+        @baseDir = baseDir
         @options = {:verbose => false}
       end
 
@@ -96,8 +98,7 @@ module Uberblog
 
       # @param baseDir [String]
       def initialize(baseDir)
-        super()
-        @baseDir = baseDir
+        super(baseDir)
         @options[:purge]  = false
         @options[:quiet]  = false
         @options[:sites]  = false
@@ -113,7 +114,7 @@ module Uberblog
 
         opts.on('-c', '--config <FILE>', 'Config file to use. [required]') do |file|
           begin
-            @config = load_config "#{Pathname.getwd}/#{file}"
+            @config = load_config("#{Pathname.getwd}/#{file}", @baseDir)
           rescue
             @logger.error("Can't read config file '#{file}'!")
             exit RET_CANT_READ_FILE
@@ -137,7 +138,7 @@ module Uberblog
       def run
         raise OptionParser::MissingArgument, "Give at least the config file." if @config.nil?
 
-        publisher = Uberblog::Publisher.new
+        publisher = Uberblog::Publisher.new(@config)
         publisher.logger  = @logger
         publisher.verbose = @options[:verbose]
         publisher.purge   = @options[:purge]
@@ -157,8 +158,7 @@ module Uberblog
 
       # @param baseDir [String]
       def initialize(baseDir)
-        super()
-        @baseDir = baseDir
+        super(baseDir)
         @options[:title] = 'no title'
         @options[:draft] = false
       end
@@ -172,7 +172,7 @@ module Uberblog
 
         opts.on('-c', '--config <FILE>', 'Config file to use.') do |file|
           begin
-            @config = load_config "#{Pathname.getwd}/#{file}"
+            @config = load_config("#{Pathname.getwd}/#{file}", @baseDir)
           rescue
             @logger.error("Can't read config file '#{file}'!")
             exit RET_CANT_READ_FILE
@@ -223,12 +223,6 @@ module Uberblog
     #
     # - Create tables in SQLite database.
     class Install < Command
-
-      # @param baseDir [String]
-      def initialize(baseDir)
-        super()
-        @baseDir = baseDir
-      end
 
       protected
 
