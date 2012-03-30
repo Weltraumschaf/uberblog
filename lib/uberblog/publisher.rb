@@ -22,7 +22,7 @@ module Uberblog
 
     def publish
       puts 'Publishing the blog...'
-      #generate_sites(@source + '/sites', @target + '/sites') if @sites
+      generate_sites(@source + '/sites', @target + '/sites') if @sites
       posts = generate_posts(@source + '/posts', @target + '/posts')
       generate_index(@target, posts)
       #generate_drafts(@source + '/drafts', @target + '/drafts') if @drafts
@@ -81,7 +81,18 @@ module Uberblog
     end
 
     def create_html_resource(name, layout)
-      Uberblog::Model::Index.new(create_template(name), layout)
+      name = name.downcase
+      tpl  = create_template(name)
+
+      case name
+        when "site"
+          Uberblog::Model::Site.new(tpl, layout)
+        when "index"
+          Uberblog::Model::Index.new(tpl, layout)
+        when "post"
+          Uberblog::Model::BlogPost.new(tpl, layout)
+      end
+
     end
 
     def generate_sites(source, target)
@@ -91,6 +102,15 @@ module Uberblog
       layout.title = "TODO"
 
       site = create_html_resource('site', layout)
+      load_files(source).each do |file|
+        be_verbose "Generate site for '#{file}'..."
+        data = Uberblog::BlogData.new(file)
+        site.title   = data.title
+        site.content = data.to_html
+        fileName = Pathname.new(file).basename.to_s.gsub(".md", ".html")
+        File.open("#{target}/#{fileName}", 'w') { |f| f.write(site.to_html) }
+      end
+
     end
 
     def generate_posts(source, target)

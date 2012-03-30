@@ -62,7 +62,7 @@ module Uberblog
 
     end
 
-    class Site
+    class Site < Html
       attr_accessor :title, :content
     end
 
