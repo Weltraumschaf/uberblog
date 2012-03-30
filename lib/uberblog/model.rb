@@ -38,19 +38,26 @@ module Uberblog
       slug
     end
 
-    class BlogData
+    class MarkdownData
 
       def initialize(filename)
         @basename = Pathname.new(filename).basename.to_s
         @document = File.open(filename, "rb") { |file| Kramdown::Document.new(file.read) }
       end
 
-      def title
-        @document.root.children[0].children[0].value
-      end
-
       def to_html
         @document.to_html
+      end
+
+      def extract_meta_data
+        puts @document.inspect
+      end
+    end
+
+    class BlogData < MarkdownData
+
+      def title
+        @document.root.children[0].children[0].value
       end
 
       def date
@@ -64,6 +71,11 @@ module Uberblog
       def to_s
         "<BlogData: #{title}, #{date}>"
       end
+
+    end
+
+    class SiteData < MarkdownData
+
     end
 
     class BlogPostList

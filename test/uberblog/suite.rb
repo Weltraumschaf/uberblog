@@ -10,6 +10,7 @@ module Uberblog
       def self.suite
         result = self.new(self.class.name)
         result << Uberblog::UnitTests::Model::ModuleTest.suite
+        result << Uberblog::UnitTests::Model::MarkdownDataTest.suite
         result << Uberblog::UnitTests::Model::RatingTest.suite
         return result
       end

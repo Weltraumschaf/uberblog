@@ -23,6 +23,15 @@ module Uberblog
 
       end
 
+      class MarkdownDataTest < Test::Unit::TestCase
+
+        must 'extract meta data' do
+          md   = Uberblog::Model::MarkdownData.new("#{$FIXTURES}/site.md")
+          meta = {'Title' => '', 'Foo' => 'Bar'}
+          assert_equal meta, md.extract_meta_data
+        end
+      end
+
       class RatingTest < Test::Unit::TestCase
 
         must 'count and calc average' do

@@ -1,5 +1,6 @@
 dir = File.dirname(__FILE__)
 $LOAD_PATH.unshift dir unless $LOAD_PATH.include?(dir)
+$FIXTURES = "#{dir}/fixtures"
 
 require 'rubygems'
 require 'test/unit'
