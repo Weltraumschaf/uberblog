@@ -9,13 +9,33 @@ module Uberblog
 
   module Model
 
-    def create_date(filename)
+    def Model.create_date(filename)
+      return nil if filename.index('_').nil?
+
       dateParts = filename[0, filename.index('_')].split(/-/)
-      Time.utc(dateParts[0], dateParts[1], dateParts[2])
+
+      return nil if 3 != dateParts.size
+      return nil if dateParts.any? { |part| part.nil? or part.to_i == 0}
+
+      begin
+        return Time.utc(dateParts[0], dateParts[1], dateParts[2])
+      rescue
+        return nil
+      end
     end
 
-    def generate_slug_url(path)
-      path.downcase.gsub(/[^a-z0-9]/, '-').gsub(/-+/, '-')
+    def Model.generate_slug_url(path)
+      slug = path.downcase.gsub(/[^a-z0-9]/, '-').gsub(/-+/, '-')
+
+      if 45 == slug[0]
+        slug = slug[1, slug.size - 1]
+      end
+
+      if 45 == slug[slug.size - 1]
+        slug = slug[0, slug.size - 1]
+      end
+
+      slug
     end
 
     class BlogData
