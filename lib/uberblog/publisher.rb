@@ -71,8 +71,26 @@ module Uberblog
       list
     end
 
+    def create_layout
+      layout = Uberblog::Model::Layout.new(create_template('layout'), @config.siteUrl)
+      layout.title       = "n/a"
+      layout.headline    = @config.headline
+      layout.description = @config.description
+      layout.apiUrl      = @config.api['url']
+      layout
+    end
+
+    def create_html_resource(name, layout)
+      Uberblog::Model::Index.new(create_template(name), layout)
+    end
+
     def generate_sites(source, target)
       be_verbose "Generate sites..."
+
+      layout = create_layout
+      layout.title = "TODO"
+
+      site = create_html_resource('site', layout)
     end
 
     def generate_posts(source, target)
@@ -157,12 +175,10 @@ module Uberblog
 
     def generate_index(target, posts)
       be_verbose "Generate index..."
-      layout = Uberblog::Model::Layout.new(create_template('layout'), @config.siteUrl);
-      layout.title       = "#{@config.headline} | Blog"
-      layout.headline    = @config.headline
-      layout.description = @config.description
-      layout.apiUrl      = @config.api['url']
-      index  = Uberblog::Model::Index.new(create_template('index'), layout)
+
+      layout = create_layout
+      layout.title = "#{@config.headline} | Blog"
+      index  = create_html_resource('index', layout)
       index.posts = posts
       File.open("#{target}/index.html", 'w') { |file| file.write(index.to_html) }
     end

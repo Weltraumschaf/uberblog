@@ -71,6 +71,7 @@ module Uberblog
     end
 
     def url
+      # @todo move 'posts/' into config
       @siteUrl + 'posts/' + filename
     end
 
