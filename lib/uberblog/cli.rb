@@ -99,10 +99,12 @@ module Uberblog
       # @param baseDir [String]
       def initialize(baseDir)
         super(baseDir)
-        @options[:purge]  = false
-        @options[:quiet]  = false
-        @options[:sites]  = false
-        @options[:drafts] = false
+        @options = {
+          :purge  => false,
+          :quiet  => false,
+          :sites  => false,
+          :drafts => false
+        }
       end
 
       protected
@@ -131,6 +133,10 @@ module Uberblog
 
         opts.on('-s', '--sites', 'Generate static sites.') do
           @options[:sites] = true
+        end
+
+        opts.on('-d', '--drafts', 'Publish drafts.') do
+          @options[:drafts] = true
         end
 
       end

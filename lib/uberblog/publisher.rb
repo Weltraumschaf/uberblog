@@ -13,12 +13,14 @@ module Uberblog
     def initialize(config)
       @config  = config
       @verbose = false
+      @drafts  = false
     end
 
     def publish
       puts 'Publishing the blog...'
-      sites = generate_sites(@source + '/sites', @target + '/sites') if @sites
-      posts = generate_posts(@source + '/posts', @target + '/posts')
+      sites  = generate_sites(@source + '/sites', @target + '/sites') if @sites
+      posts  = generate_posts(@source + '/posts', @target + '/posts')
+      @quiet = true # supress twitter for drafts
       generate_drafts(@source + '/drafts', @target + '/drafts') if @drafts
       generate_index(@target, posts, sites)
       #generate_site_map(@target)
@@ -77,10 +79,9 @@ module Uberblog
       be_verbose "Generate sites..."
 
       layout = create_layout
-      layout.title = "TODO"
+      site   = create_html_resource('site', layout)
+      sites  = []
 
-      site = create_html_resource('site', layout)
-      sites = []
       load_files(source).each do |file|
         be_verbose "Generate site for '#{file}'..."
         data = Uberblog::Model::BlogData.new(file)
@@ -92,6 +93,7 @@ module Uberblog
         File.open("#{target}/#{fileName}", 'w') { |f| f.write(site.to_html) }
       end
 
+      sites
     end
 
     def generate_posts(source, target)
