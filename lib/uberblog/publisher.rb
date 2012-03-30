@@ -1,5 +1,6 @@
 require 'erb'
 require 'find'
+require 'rss'
 #require 'twitter'
 #require 'bitly'
 require 'uberblog/sitemap'
@@ -20,13 +21,13 @@ module Uberblog
 
     def publish
       puts 'Publishing the blog...'
-      sites  = generate_sites(@source + '/sites', @target + '/sites') if @sites
       posts  = generate_posts(@source + '/posts', @target + '/posts')
       @quiet = true # supress twitter for drafts
+      sites  = generate_sites(@source + '/sites', @target + '/sites') if @sites
       generate_drafts(@source + '/drafts', @target + '/drafts') if @drafts
       generate_index(@target, posts, sites)
       generate_site_map(@target)
-      #generate_rss(@target)
+      generate_rss(@target, posts)
     end
 
     private
@@ -219,20 +220,18 @@ module Uberblog
        File.open("#{target}/sitemap.xml", "w") { |f| f.write(site_map.to_xml) }
     end
 
-    def generate_rss(target)
+    def generate_rss(target, posts)
       be_verbose "Generate RSS..."
 
-      be_verbose 'Create feed...'
-
       feed = RSS::Maker.make('2.0') do |maker|
-        maker.channel.title         = @config['headline']
-        maker.channel.link          = "#{@config['siteUrl']}feed.xml"
-        maker.channel.description   = @config['description']
-        maker.channel.language      = @config['language']
+        maker.channel.title         = @config.headline
+        maker.channel.link          = "#{@config.siteUrl}feed.xml"
+        maker.channel.description   = @config.description
+        maker.channel.language      = @config.language
         maker.channel.lastBuildDate = Time.now
         maker.items.do_sort         = true
 
-        @list.posts.each do |post|
+        posts.posts.each do |post|
           item             = maker.items.new_item
           item.title       = post.title
           item.link        = post.url
@@ -241,7 +240,7 @@ module Uberblog
         end
       end
 
-      File.open("#{@htdocs}/feed.xml", "w") { |file| file.write(feed) }
+      File.open("#{target}/feed.xml", "w") { |file| file.write(feed) }
     end
   end
 
