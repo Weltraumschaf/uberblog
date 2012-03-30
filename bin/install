@@ -7,4 +7,5 @@ require "#{$baseDir}/lib/uberblog"
 require 'uberblog/cli'
 
 cmd = Uberblog::Cli::Install.new $baseDir
+cmd.logger = Uberblog::Logger.new
 cmd.exec ARGV

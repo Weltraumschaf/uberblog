@@ -1,6 +1,7 @@
 require 'optparse'
 require 'yaml'
 require 'uberblog/config'
+require 'uberblog/publisher'
 
 module Uberblog
 
@@ -28,6 +29,8 @@ module Uberblog
       # Return codes.
       RET_OK = 0
       RET_INVALID_OPTION = 1
+
+      attr_accessor :logger
 
       # Initialize options hash.
       def initialize
@@ -76,7 +79,7 @@ module Uberblog
 
       # Writes message to stdout if -v was given.
       def be_verbose(message)
-        puts message if @options[:verbose]
+        @logger.log(message) if @options[:verbose]
       end
 
       # Default implementation.
@@ -101,12 +104,14 @@ module Uberblog
         @options[:drafts] = false
       end
 
+      protected
+
       def set_options(opts)
         super
 
         opts.banner = 'Usage: publish -c <file> [-p] [-h]'
 
-        opts.on('-c', '--config <FILE>', 'Config file to use.') do |file|
+        opts.on('-c', '--config <FILE>', 'Config file to use. [required]') do |file|
           @config = load_config "#{Pathname.getwd}/#{file}"
         end
 
@@ -125,15 +130,17 @@ module Uberblog
       end
 
       def run
-        raise OptionParser::MissingArgument if @config.nil?
+        raise OptionParser::MissingArgument, "Give at least the config file." if @config.nil?
 
         publisher = Uberblog::Publisher.new
-        publisher.purge  = @options[:purge]
-        publisher.sites  = @options[:sites]
-        publisher.quiet  = @options[:quiet]
-        publisher.drafts = @options[:drafts]
-        publisher.source = @config.dataDir
-        publisher.target = @config.htdocs
+        publisher.logger  = @logger
+        publisher.verbose = @options[:verbose]
+        publisher.purge   = @options[:purge]
+        publisher.sites   = @options[:sites]
+        publisher.quiet   = @options[:quiet]
+        publisher.drafts  = @options[:drafts]
+        publisher.source  = @config.dataDir
+        publisher.target  = @config.htdocs
         publisher.publish
         RET_OK
       end
@@ -150,6 +157,8 @@ module Uberblog
         @options[:title] = 'no title'
         @options[:draft] = false
       end
+
+      protected
 
       def set_options(opts)
         super
@@ -171,7 +180,12 @@ module Uberblog
       end
 
       def run
-        raise OptionParser::MissingArgument if @config.nil?
+        if @config.nil?
+          #exception = OptionParser::MissingArgument.new
+          #exception.reason = "Give at least the config file."
+          #raise exception
+        end
+
         dataDir = Pathname.new(@baseDir + @config.dataDir).realpath.to_s
 
         if @options[:draft]
@@ -209,6 +223,8 @@ module Uberblog
         super()
         @baseDir = baseDir
       end
+
+      protected
 
       def run
         require 'data_mapper'
