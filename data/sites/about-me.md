@@ -1,7 +1,10 @@
-## About Me
+Title: About Me  
+Foo: Bar  
 
-Praesent facilisis, elit id aliquam lobortis, ligula nisl scelerisque nunc, a euismod lorem nisi nec massa. In hac habitasse platea dictumst. Praesent sapien eros, dapibus at molestie ac, malesuada vel orci. Pellentesque arcu libero, dictum ut tempor id, condimentum pharetra tellus. Phasellus vitae enim augue. Nulla gravida mauris non lectus elementum vehicula. In dictum ante et quam porta lacinia! Mauris aliquet lacinia nisl; vitae viverra nulla cursus rutrum. Etiam nec consectetur ipsum. Phasellus adipiscing pharetra vehicula. Etiam et iaculis mauris. Integer varius velit ut dolor ultrices tempus.
+## Some Words About Me
 
-Proin id enim et metus cursus vulputate. Duis aliquam massa a nisi rutrum ornare. Phasellus ultricies consectetur nisi, ac convallis mauris congue eget. Aenean vulputate tristique tortor id rhoncus. In non mauris augue. Suspendisse venenatis condimentum enim, a facilisis tellus sollicitudin non. Vestibulum tempus quam et nulla blandit id pulvinar eros varius. Quisque posuere egestas imperdiet. Quisque mauris metus, accumsan sit amet auctor in, feugiat et ligula. Nam ac dui at arcu feugiat ultricies! In metus justo, viverra nec congue sed, blandit non sem. Pellentesque urna lectus, cursus sit amet vestibulum in, convallis sed purus.
+<img src="../img/ich.jpg" width="130" style="float:left; padding: 5px 15px 15px 0;"/> My name is Sven Strittmatter and I'm a software engineer home based in [Stuttgart (Germany)][1]. 2005 I've graduated as [Diplom-Ingenieur][2] for information technology at [Duale Hochschule Stuttgart][3].
 
-Vivamus aliquam dictum nisi, ut pretium metus pretium vitae. Duis placerat faucibus massa et blandit. Etiam dolor diam, tempus eget semper vitae, consequat nec diam. Donec sed nisl sit amet ante aliquet congue. Phasellus viverra, risus non dignissim mattis, nisi sem dignissim nisi, a imperdiet enim ligula ut odio. In hendrerit varius faucibus. Donec sit amet est in magna suscipit aliquet. Curabitur id purus vitae eros ultricies tincidunt id et est. Etiam condimentum ultrices ipsum, eget semper mauris tempus quis. Fusce nec nisi non sem auctor accumsan. Sed imperdiet facilisis turpis, ut porta nunc viverra a? Etiam pretium commodo tortor, at posuere lorem egestas id. Nulla ac justo dictum risus pulvinar interdum. Nullam semper congue ullamcorper.
+[1]: http://maps.google.de/maps?q=maps+stuttgart&ie=UTF8&oe=utf-8&client=firefox-a&hnear=Stuttgart,+Baden-W%C3%BCrttemberg&gl=de&t=h&z=11
+[2]: http://en.wikipedia.org/wiki/Engineer%27s_degree#Germany
+[3]: http://www.dhbw-stuttgart.de/
