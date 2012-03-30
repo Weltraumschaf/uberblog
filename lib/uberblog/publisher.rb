@@ -1,8 +1,10 @@
+require 'erb'
+require 'find'
 #require 'twitter'
 #require 'bitly'
-require 'erb'
 require 'uberblog/sitemap'
 require 'uberblog/model'
+require 'pathname'
 
 module Uberblog
 
@@ -23,7 +25,7 @@ module Uberblog
       @quiet = true # supress twitter for drafts
       generate_drafts(@source + '/drafts', @target + '/drafts') if @drafts
       generate_index(@target, posts, sites)
-      #generate_site_map(@target)
+      generate_site_map(@target)
       #generate_rss(@target)
     end
 
@@ -200,15 +202,21 @@ module Uberblog
     def generate_site_map(target)
        be_verbose "Generate site map..."
 
-       site_map = Uberblog::SiteMap.new(@config['siteUrl'], create_template("site_map"))
+       site_map = Uberblog::SiteMap.new(@config.siteUrl, create_template("site_map"))
 
-       Find.find(@htdocs) do |file|
+       Find.find("#{target}/posts") do |file|
          if file =~ /.html$/
            site_map.append(file)
          end
        end
 
-       File.open("#{@htdocs}/sitemap.xml", "w") { |f| f.write(site_map.to_xml) }
+       Find.find("#{target}/sites") do |file|
+         if file =~ /.html$/
+           site_map.append(file)
+         end
+       end
+
+       File.open("#{target}/sitemap.xml", "w") { |f| f.write(site_map.to_xml) }
     end
 
     def generate_rss(target)
