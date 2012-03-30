@@ -1,7 +1,6 @@
 #require 'twitter'
 #require 'bitly'
 require 'erb'
-require 'uberblog/blog'
 require 'uberblog/sitemap'
 require 'uberblog/model'
 
@@ -14,18 +13,14 @@ module Uberblog
     def initialize(config)
       @config  = config
       @verbose = false
-      @layout  = Uberblog::Layout.new(@config.siteUrl, create_template("layout"), @config.language)
-      @layout.headline    = @config.headline
-      @layout.description = @config.description
-      @layout.apiUrl      = @config.api['url']
     end
 
     def publish
       puts 'Publishing the blog...'
-      generate_sites(@source + '/sites', @target + '/sites') if @sites
+      sites = generate_sites(@source + '/sites', @target + '/sites') if @sites
       posts = generate_posts(@source + '/posts', @target + '/posts')
-      generate_index(@target, posts)
-      #generate_drafts(@source + '/drafts', @target + '/drafts') if @drafts
+      generate_drafts(@source + '/drafts', @target + '/drafts') if @drafts
+      generate_index(@target, posts, sites)
       #generate_site_map(@target)
       #generate_rss(@target)
     end
@@ -59,16 +54,19 @@ module Uberblog
 
       load_files(source).each do |file|
         be_verbose "Loading file '#{file}'."
-        dataList << Uberblog::BlogData.new(file)
+        dataList << Uberblog::Model::BlogData.new(file)
       end
 
-      list = Uberblog::BlogPostList.new()
-      dataList.sort.each do |data|
-        post = Uberblog::BlogPost.new(data, @config)
-        list.add(post)
-      end
+      dataList
 
-      list
+
+      #list = Uberblog::BlogPostList.new()
+      #dataList.sort.each do |data|
+      #  post = Uberblog::BlogPost.new(data, @config)
+      #  list.add(post)
+      #end
+      #
+      #list
     end
 
     def create_layout
@@ -102,9 +100,11 @@ module Uberblog
       layout.title = "TODO"
 
       site = create_html_resource('site', layout)
+      sites = []
       load_files(source).each do |file|
         be_verbose "Generate site for '#{file}'..."
-        data = Uberblog::BlogData.new(file)
+        data = Uberblog::Model::BlogData.new(file)
+        sites << data
         site.title   = data.title
         site.content = data.to_html
         fileName = Pathname.new(file).basename.to_s.gsub(".md", ".html")
@@ -115,13 +115,22 @@ module Uberblog
 
     def generate_posts(source, target)
       be_verbose "Generate posts..."
-      count    = 0
-      template = create_template("post")
-      list     = load_posts(source)
+
+      count       = 0
+      template    = create_template("post")
+      layout      = create_layout
+      list        = Uberblog::Model::BlogPostList.new()
+
+      load_posts(source).each do |data|
+        post         = create_html_resource('post', layout)
+        post.data    = data
+        post.config  = @config
+        list.add(post)
+      end
+      # first add all posts to the list to update prev/next pagination, then write them
       list.each do |post|
-        @layout.title   = "#{@config.headline} | #{post.title}"
-        @layout.content = template.result(post.get_binding)
-        targetFile      = "#{target}/#{post.filename}"
+        layout.title = "#{@config.headline} | #{post.title}"
+        targetFile   = "#{target}/#{post.filename}"
 
         if File.exist?(targetFile) && !@purge
           be_verbose("Skip regeneration of '#{Pathname.new(targetFile).realpath.to_s}'.")
@@ -132,7 +141,7 @@ module Uberblog
 
         File.open(targetFile, 'w') do |file|
           be_verbose("Write post to '#{Pathname.new(targetFile).realpath.to_s}'.")
-          file.write(@layout.to_html)
+          file.write(post.to_html)
         end
 
         count +=1
@@ -193,7 +202,7 @@ module Uberblog
       end
     end
 
-    def generate_index(target, posts)
+    def generate_index(target, posts, sites)
       be_verbose "Generate index..."
 
       layout = create_layout
