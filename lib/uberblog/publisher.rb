@@ -15,16 +15,14 @@ module Uberblog
       @config  = config
       @verbose = false
       @list    = Uberblog::BlogPostList.new()
+      @layout  = Uberblog::Layout.new(@config.siteUrl, create_template("layout"), @config.language)
+      @layout.headline    = @config.headline
+      @layout.description = @config.description
+      @layout.apiUrl      = @config.api['url']
     end
 
     def publish
       puts 'Publishing the blog...'
-
-      #@layout      = Uberblog::Layout.new(@config['siteUrl'], create_template("layout"), @config['language'])
-      #@layout.headline    = @config['headline']
-      #@layout.description = @config['description']
-      #@layout.apiUrl      = @config['api']['url']
-
       #generate_sites(@source + '/sites', @target + '/sites') if @sites
       generate_posts(@source + '/posts', @target + '/posts')
       #generate_drafts(@source + '/drafts', @target + '/drafts') if @drafts
