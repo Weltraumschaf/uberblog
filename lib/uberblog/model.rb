@@ -39,7 +39,6 @@ module Uberblog
     end
 
     class BlogData
-      include Model
 
       def initialize(filename)
         @basename = Pathname.new(filename).basename.to_s
@@ -55,7 +54,7 @@ module Uberblog
       end
 
       def date
-        create_date(@basename)
+        Model.create_date(@basename)
       end
 
       def <=>(other)
@@ -144,7 +143,7 @@ module Uberblog
     end
 
     class BlogPost < Html
-      include Model
+
       attr_reader :title, :date, :content, :siteUrl, :features
       attr_accessor :title, :content, :prevPost, :nextPost, :data, :config
 
@@ -162,7 +161,7 @@ module Uberblog
       end
 
       def filename
-        "#{generate_slug_url(@title)}.html"
+        "#{Model.generate_slug_url(@title)}.html"
       end
 
       def date_formatted
