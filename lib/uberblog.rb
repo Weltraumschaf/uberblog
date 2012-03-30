@@ -11,8 +11,8 @@ module Uberblog
 
     def initialize(stdout, stderr)
       @stdout = stdout
-      @stdout = stderr
-      @stdout = @stdout if @stdout.nil?
+      @stderr = stderr
+      @stderr = @stdout if @stderr.nil?
       @on     = true
     end
 
