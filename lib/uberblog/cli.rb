@@ -29,6 +29,7 @@ module Uberblog
       # Return codes.
       RET_OK = 0
       RET_INVALID_OPTION = 1
+      RET_CANT_READ_FILE = 2
 
       attr_accessor :logger
 
@@ -49,10 +50,9 @@ module Uberblog
         rescue SystemExit
           shutdown
         rescue OptionParser::InvalidOption, OptionParser::MissingArgument => exception
-          puts exception
-          puts
-          puts @opts
-          puts
+          errorMessage = exception.to_s + "\n\n"
+          errorMessage << @opts.to_s + "\n"
+          @logger.error(errorMessage)
           exit RET_INVALID_OPTION
         end
       end
@@ -112,7 +112,12 @@ module Uberblog
         opts.banner = 'Usage: publish -c <file> [-p] [-h]'
 
         opts.on('-c', '--config <FILE>', 'Config file to use. [required]') do |file|
-          @config = load_config "#{Pathname.getwd}/#{file}"
+          begin
+            @config = load_config "#{Pathname.getwd}/#{file}"
+          rescue
+            @logger.error("Can't read config file '#{file}'!")
+            exit RET_CANT_READ_FILE
+          end
         end
 
         opts.on('-p', '--purge', 'Regenerate all blog posts.') do
@@ -166,7 +171,12 @@ module Uberblog
         opts.banner = 'Usage: create -c <file> -t "The Blog Title. [required]" [-h]'
 
         opts.on('-c', '--config <FILE>', 'Config file to use.') do |file|
-          @config = load_config "#{Pathname.getwd}/#{file}"
+          begin
+            @config = load_config "#{Pathname.getwd}/#{file}"
+          rescue
+            @logger.error("Can't read config file '#{file}'!")
+            exit RET_CANT_READ_FILE
+          end
         end
 
         opts.on('-t', '--title TITLE', 'Title of the blog post.') do |title|
@@ -180,11 +190,7 @@ module Uberblog
       end
 
       def run
-        if @config.nil?
-          #exception = OptionParser::MissingArgument.new
-          #exception.reason = "Give at least the config file."
-          #raise exception
-        end
+        raise OptionParser::MissingArgument, "Give at least the config file." if @config.nil?
 
         dataDir = Pathname.new(@baseDir + @config.dataDir).realpath.to_s
 
@@ -230,8 +236,17 @@ module Uberblog
         require 'data_mapper'
         require 'uberblog/model'
 
-        DataMapper::Logger.new($stdout, :debug)
-        DataMapper.setup(:default, "sqlite://#{@baseDir}/data/database.sqlite")
+        dbFile = "#{@baseDir}/data/database.sqlite"
+
+        unless File.readable?(dbFile)
+          @logger.error("Can't read db file '#{dbFile}'!")
+          exit RET_CANT_READ_FILE
+        end
+
+        be_verbose("Create db schema in '#{dbFile}'...")
+
+        DataMapper::Logger.new(@logger.stdout, :debug)
+        DataMapper.setup(:default, "sqlite://#{dbFile}")
         DataMapper.finalize
         DataMapper.auto_migrate!
 
