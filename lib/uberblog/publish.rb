@@ -108,6 +108,7 @@ module Uberblog
 
       layout = Uberblog::Model::Layout.new(create_template('layout'), @config['siteUrl']);
       layout.title       = "#{@config['headline']} | Blog"
+      layout.headline    = @config['headline']
       layout.description = @config['description']
       layout.apiUrl      = @config['api']['url']
       index  = Uberblog::Model::Index.new(create_template('index'), layout)
