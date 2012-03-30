@@ -87,6 +87,7 @@ module Uberblog
         sites << data
         site.title   = data.title
         site.content = data.to_html
+        layout.title = "#{@config.headline} | #{data.title}"
         fileName = Pathname.new(file).basename.to_s.gsub(".md", ".html")
         File.open("#{target}/#{fileName}", 'w') { |f| f.write(site.to_html) }
       end
