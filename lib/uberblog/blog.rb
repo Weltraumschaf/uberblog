@@ -71,7 +71,7 @@ module Uberblog
     end
 
     def url
-      @siteUrl + filename
+      @siteUrl + 'posts/' + filename
     end
 
     def to_s

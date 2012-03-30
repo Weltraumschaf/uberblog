@@ -23,9 +23,9 @@ module Uberblog
     def publish
       puts 'Publishing the blog...'
       #generate_sites(@source + '/sites', @target + '/sites') if @sites
-      generate_posts(@source + '/posts', @target + '/posts')
+      posts = generate_posts(@source + '/posts', @target + '/posts')
+      generate_index(@target, posts)
       #generate_drafts(@source + '/drafts', @target + '/drafts') if @drafts
-      #generate_index(@target)
       #generate_site_map(@target)
       #generate_rss(@target)
     end
@@ -85,12 +85,12 @@ module Uberblog
         @layout.content = template.result(post.get_binding)
         targetFile      = "#{target}/#{post.filename}"
 
-        if File.exist?(targetFile) && !@options[:purge]
+        if File.exist?(targetFile) && !@purge
           be_verbose("Skip regeneration of '#{Pathname.new(targetFile).realpath.to_s}'.")
           next
         end
 
-        update_twitter(post.title, post.url) unless File.exist?(targetFile) or @options[:quiet]
+        update_twitter(post.title, post.url) unless File.exist?(targetFile) or @quiet
 
         File.open(targetFile, 'w') do |file|
           be_verbose("Write post to '#{Pathname.new(targetFile).realpath.to_s}'.")
@@ -101,6 +101,7 @@ module Uberblog
       end
 
       puts "#{count} posts generated."
+      list
     end
 
     def generate_drafts(source, target)
@@ -154,16 +155,16 @@ module Uberblog
       end
     end
 
-    def generate_index(target)
+    def generate_index(target, posts)
       be_verbose "Generate index..."
-      layout = Uberblog::Model::Layout.new(create_template('layout'), @config['siteUrl']);
-      layout.title       = "#{@config['headline']} | Blog"
-      layout.headline    = @config['headline']
-      layout.description = @config['description']
-      layout.apiUrl      = @config['api']['url']
+      layout = Uberblog::Model::Layout.new(create_template('layout'), @config.siteUrl);
+      layout.title       = "#{@config.headline} | Blog"
+      layout.headline    = @config.headline
+      layout.description = @config.description
+      layout.apiUrl      = @config.api['url']
       index  = Uberblog::Model::Index.new(create_template('index'), layout)
-      index.posts = @list
-      File.open("#{@htdocs}/index.html", 'w') { |file| file.write(index.to_html) }
+      index.posts = posts
+      File.open("#{target}/index.html", 'w') { |file| file.write(index.to_html) }
     end
 
     def generate_site_map(target)

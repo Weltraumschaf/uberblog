@@ -4,6 +4,7 @@ config/blog.yml
 config/proxy.json
 htdocs/.htaccess
 htdocs/redirect.php
+htdocs/*.html
 htdocs/*/*.html
 htdocs/*.xml
 /nbproject
