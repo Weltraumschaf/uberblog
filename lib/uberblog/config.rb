@@ -25,15 +25,15 @@ module Uberblog
     end
 
     def dataDir
-      @hash['dataDir']
+      "#{@baseDir}/#{@hash['dataDir']}"
     end
 
     def tplDir
-      @hash['tplDir']
+      "#{@baseDir}/#{@hash['tplDir']}"
     end
 
     def htdocs
-      @hash['htdocs']
+      "#{@baseDir}/#{@hash['htdocs']}"
     end
 
     def twitter

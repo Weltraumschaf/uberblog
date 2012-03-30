@@ -14,15 +14,12 @@ module Uberblog
     def initialize(config)
       @config  = config
       @verbose = false
+      @list    = Uberblog::BlogPostList.new()
     end
 
     def publish
       puts 'Publishing the blog...'
 
-      #@dataDir     = Pathname.new(@baseDir + @config['dataDir']).realpath
-      #@htdocs      = Pathname.new(@baseDir + @config['htdocs']).realpath
-      #@tplDir      = Pathname.new(@baseDir + @config['tplDir']).realpath
-      #@list        = Uberblog::BlogPostList.new()
       #@layout      = Uberblog::Layout.new(@config['siteUrl'], create_template("layout"), @config['language'])
       #@layout.headline    = @config['headline']
       #@layout.description = @config['description']
@@ -46,7 +43,7 @@ module Uberblog
     end
 
     def create_template(name)
-      File.open("#{@config.baseDir}/#{@config.tplDir}/#{name}.erb", "rb") { |file| ERB.new(file.read) }
+      File.open("#{@config.tplDir}/#{name}.erb", "rb") { |file| ERB.new(file.read) }
     end
 
     def load_files(dirname)
@@ -63,7 +60,7 @@ module Uberblog
     def load_posts
       dataList = []
 
-      load_files("#{@dataDir}/posts").each do |file|
+      load_files("#{@config.dataDir}/posts").each do |file|
         dataList << Uberblog::BlogData.new(file)
       end
 
