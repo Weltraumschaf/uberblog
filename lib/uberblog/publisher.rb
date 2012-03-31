@@ -214,13 +214,13 @@ module Uberblog
 
        Find.find("#{target}/posts") do |file|
          if file =~ /.html$/
-           site_map.append(file)
+           site_map.append(file, 'posts/')
          end
        end
 
        Find.find("#{target}/sites") do |file|
          if file =~ /.html$/
-           site_map.append(file)
+           site_map.append(file, 'sites/')
          end
        end
 

@@ -1,6 +1,7 @@
 require 'pathname'
 
 module Uberblog
+
   class SiteMap
     class Url
       attr_accessor :loc, :lastmod, :changefreq, :priority
@@ -16,10 +17,10 @@ module Uberblog
       @siteUrl, @template, @urls = siteUrl, template, Array.new
     end
 
-    def append(aFile)
+    def append(aFile, path)
       url = Url.new
       url.lastmod = File.mtime(aFile).strftime('%Y-%m-%d')
-      url.loc = @siteUrl + Pathname.new(aFile).basename.to_s
+      url.loc = @siteUrl + path + Pathname.new(aFile).basename.to_s
       @urls.push(url)
     end
 
