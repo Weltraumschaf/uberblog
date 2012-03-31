@@ -40,7 +40,7 @@ module Uberblog
 
     class MarkdownData
 
-      attr_reader :metadata
+      attr_reader :metadata, :basename
 
       def MarkdownData.is_key?(str)
         58 == str[str.size - 1] # Last character is :?
@@ -116,6 +116,10 @@ module Uberblog
 
     class SiteData < MarkdownData
 
+      def to_s
+        "<SiteData: #{title}>"
+      end
+
     end
 
     class BlogPostList
@@ -139,10 +143,6 @@ module Uberblog
 
       def each(&blk)
         @posts.each(&blk)
-      end
-
-      def get_binding
-        binding
       end
 
     end
@@ -196,11 +196,19 @@ module Uberblog
 
     class BlogPost < Html
 
-      attr_reader :title, :date, :content, :siteUrl, :features
-      attr_accessor :title, :content, :prevPost, :nextPost, :data, :config
+      attr_reader :siteUrl, :features
+      attr_accessor :prevPost, :nextPost, :config, :data
 
-      def data=(d)
-        @title, @content, @date = d.title, d.to_html, d.date
+      def title
+        @data.title
+      end
+
+      def content
+        @data.to_html
+      end
+
+      def date
+        @data.date
       end
 
       def config=(c)
@@ -213,11 +221,11 @@ module Uberblog
       end
 
       def filename
-        "#{Model.generate_slug_url(@title)}.html"
+        "#{Model.generate_slug_url(self.title)}.html"
       end
 
       def date_formatted
-        @date.strftime('%d.%m.%Y')
+        self.date.strftime('%d.%m.%Y')
       end
 
       def url
@@ -232,7 +240,29 @@ module Uberblog
     end
 
     class Site < Html
-      attr_accessor :title, :content
+      attr_accessor :title, :content, :data
+
+      def config=(c)
+        @siteUrl  = c.siteUrl
+      end
+
+      def title
+        @data.title
+      end
+
+      def content
+        @data.to_html
+      end
+
+      def filename
+        @data.basename.gsub(".md", ".html")
+      end
+
+      def url
+        # @todo move 'sites/' into config
+        @siteUrl + 'sites/' + filename
+      end
+
     end
 
     class Link

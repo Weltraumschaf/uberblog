@@ -1,21 +1,21 @@
 <article>
   <strong class="meta">Posted <%= date_formatted %></strong>
-  <% if @features['rating'] %><div id="rating"></div><% end  %>
-  <%= @content %>
+  <% if features['rating'] %><div id="rating"></div><% end  %>
+  <%= content %>
 </article>
 
-<% if @prevPost or @nextPost %>
+<% if prevPost or nextPost %>
 <nav id="pagination">
-  <% if @prevPost %>
-    <a href="<%= @prevPost %>">&laquo; previous post</a>
+  <% if prevPost %>
+    <a href="<%= prevPost %>">&laquo; previous post</a>
   <% end %>
 
-  <% if @prevPost and @nextPost %>
+  <% if prevPost and nextPost %>
       &ndash;
   <% end %>
 
-  <% if @nextPost %>
-    <a href="<%= @nextPost %>">next post &raquo;</a>
+  <% if nextPost %>
+    <a href="<%= nextPost %>">next post &raquo;</a>
   <% end %>
 </nav>
 <% end %>

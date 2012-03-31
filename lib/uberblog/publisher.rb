@@ -26,7 +26,7 @@ module Uberblog
       sites  = generate_sites(@source + '/sites', @target + '/sites') if @sites
       generate_drafts(@source + '/drafts', @target + '/drafts') if @drafts
       generate_index(@target, posts, sites)
-      generate_site_map(@target)
+      generate_site_map(@target, posts, sites)
       generate_rss(@target, posts)
     end
 
@@ -82,18 +82,16 @@ module Uberblog
       be_verbose "Generate sites..."
 
       layout = create_layout
-      site   = create_html_resource('site', layout)
       list  = []
 
       load_files(source).each do |file|
         be_verbose "Generate site for '#{file}'..."
-        data = Uberblog::Model::BlogData.new(file)
-        list << data
-        site.title   = data.title
-        site.content = data.to_html
-        layout.title = "#{@config.headline} | #{data.title}"
-        fileName = Pathname.new(file).basename.to_s.gsub(".md", ".html")
-        File.open("#{target}/#{fileName}", 'w') { |f| f.write(site.to_html) }
+        site        = create_html_resource('site', layout)
+        site.data   = Uberblog::Model::SiteData.new(file)
+        site.config = @config
+        list << site
+        layout.title = "#{@config.headline} | #{site.title}"
+        File.open("#{target}/#{site.filename}", 'w') { |f| f.write(site.to_html) }
       end
 
       puts "#{list.size} sites generated."
@@ -207,24 +205,27 @@ module Uberblog
       File.open("#{target}/index.html", 'w') { |file| file.write(index.to_html) }
     end
 
-    def generate_site_map(target)
-       be_verbose "Generate site map..."
+    def generate_site_map(target, posts, sites)
+      be_verbose "Generate site map..."
 
-       site_map = Uberblog::SiteMap.new(@config.siteUrl, create_template("site_map"))
+      site_map = Uberblog::SiteMap.new(@config.siteUrl, create_template("site_map"))
 
-       Find.find("#{target}/posts") do |file|
-         if file =~ /.html$/
-           site_map.append(file, 'posts/')
-         end
-       end
+      posts.each do |post|
+        #File.mtime(aFile).strftime('%Y-%m-%d')
+        url = Uberblog::SiteMap::Url.new
+        url.loc = post.url
+        url.lastmod = Time.now.strftime('%Y-%m-%d')
+        site_map.append(url)
+      end
 
-       Find.find("#{target}/sites") do |file|
-         if file =~ /.html$/
-           site_map.append(file, 'sites/')
-         end
-       end
+      sites.each do |site|
+        url = Uberblog::SiteMap::Url.new
+        url.loc = site.url
+        url.lastmod = Time.now.strftime('%Y-%m-%d')
+        site_map.append(url)
+      end
 
-       File.open("#{target}/sitemap.xml", "w") { |f| f.write(site_map.to_xml) }
+      File.open("#{target}/sitemap.xml", "w") { |f| f.write(site_map.to_xml) }
     end
 
     def generate_rss(target, posts)

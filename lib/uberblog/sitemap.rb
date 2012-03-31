@@ -17,11 +17,8 @@ module Uberblog
       @siteUrl, @template, @urls = siteUrl, template, Array.new
     end
 
-    def append(aFile, path)
-      url = Url.new
-      url.lastmod = File.mtime(aFile).strftime('%Y-%m-%d')
-      url.loc = @siteUrl + path + Pathname.new(aFile).basename.to_s
-      @urls.push(url)
+    def append(url)
+      @urls << url
     end
 
     def to_xml

@@ -1,31 +1,33 @@
 <!DOCTYPE html public "for-legacy-parsers">
 <html>
-<head lang="<%= @language %>">
-  <title><%= @title %></title>
+<head lang="<%= language %>">
+  <title><%= title %></title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-  <link href="<%= @siteUrl %>css/main.css" rel="stylesheet" type="text/css" media="screen"/>
-  <link href="<%= @siteUrl %>img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
-  <link rel="alternate" type="application/rss+xml" title="Das Weltraumschaf | Feed" href="<%= @siteUrl %>feed.xml"/>
+  <link href="<%= siteUrl %>css/main.css" rel="stylesheet" type="text/css" media="screen"/>
+  <link href="<%= siteUrl %>img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+  <link rel="alternate" type="application/rss+xml" title="Das Weltraumschaf | Feed" href="<%= siteUrl %>feed.xml"/>
 </head>
 <body>
 <div id="page">
   <header id="branding">
     <hgroup>
-      <h1 id="site-title"><%= @headline %></h1>
-      <h2 id="site-description"><%= @description %></h2>
-      <a id="rss" href="<%= @siteUrl %>feed.xml" title="RSS"><img src="<%= @siteUrl %>img/rss.png" width="128" height="128"/></a>
+      <h1 id="site-title"><%= headline %></h1>
+      <h2 id="site-description"><%= description %></h2>
+      <a id="rss" href="<%= siteUrl %>feed.xml" title="RSS">
+        <img src="<%= siteUrl %>img/rss.png" width="128" height="128"/>
+      </a>
     </hgroup>
 
-  <img width="940" height="198" src="<%= @siteUrl %>img/logo.jpg">
+  <img width="940" height="198" src="<%= siteUrl %>img/logo.jpg">
 
     <nav id="access">
       <div>
         <ul>
           <li class="current_page_item">
-            <a title="Home" href="<%= @siteUrl %>">Home</a>
+            <a title="Home" href="<%= siteUrl %>">Home</a>
           </li>
           <li>
-            <a title="About me" href="<%= @siteUrl %>sites/about-me.html">About Me</a>
+            <a title="About me" href="<%= siteUrl %>sites/about-me.html">About Me</a>
           </li>
         </ul>
       </div>
@@ -35,7 +37,7 @@
   <div id="main">
     <div id="primary">
       <div id="content" role="main">
-        <%= @content %>
+        <%= content %>
       </div>
     </div>
 
@@ -67,11 +69,11 @@
     </footer>
   </div>
 </div>
-<script type="text/javascript" src="<%= @siteUrl %>js/LAB.js"></script>
-<script type="text/javascript" src="<%= @siteUrl %>js/main.js"></script>
+<script type="text/javascript" src="<%= siteUrl %>js/LAB.js"></script>
+<script type="text/javascript" src="<%= siteUrl %>js/main.js"></script>
 <script type="text/javascript">
     weltraumschaf({
-        api: '<%= @apiUrl %>'
+        api: '<%= apiUrl %>'
     });
 </script>
 </body>
