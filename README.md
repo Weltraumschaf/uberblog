@@ -23,6 +23,17 @@ All other stuff made by me (Weltraumschaf) is under the
 - move posts and drafts in own subdir
 - keywords/description etc. in header
 
-https://github.com/luislavena/sqlite3-ruby
-http://www.wbotelhos.com/raty/
-http://stackoverflow.com/questions/1001040/which-ruby-orm-framework-to-use-in-a-standalone-ruby-app
+## Links
+- Used Libs
+    - JavaScript
+        - [jQuery](http://jquery.com/)
+        - [LABjs](http://labjs.com/)
+        - [Raty jQuery Plugin](http://www.wbotelhos.com/raty/)
+    - Ruby
+        - [Kramdown](http://kramdown.rubyforge.org/)
+        - [Bitly](https://github.com/philnash/bitly)
+        - [Twitter](http://twitter.rubyforge.org/)
+        - [Data Mapper](http://datamapper.org/)
+        - [Sinatra](http://www.sinatrarb.com/)
+- Other    
+    - [Markdown Meta Data](http://bywordapp.com/markdown/guide.html)
