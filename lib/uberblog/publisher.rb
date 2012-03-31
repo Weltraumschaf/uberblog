@@ -13,6 +13,12 @@ module Uberblog
     attr_writer :purge, :sites, :quiet, :drafts, :source, :target
     attr_accessor :logger, :verbose
 
+    DIR_NAMES = {
+      :sites  => 'sites',
+      :posts  => 'posts',
+      :drafts => 'drafts'
+    }
+
     def initialize(config)
       @config  = config
       @verbose = false
@@ -21,16 +27,20 @@ module Uberblog
 
     def publish
       puts 'Publishing the blog...'
-      posts  = generate_posts(@source + '/posts', @target + '/posts')
-      @quiet = true # supress twitter for drafts
-      sites  = generate_sites(@source + '/sites', @target + '/sites') if @sites
-      generate_drafts(@source + '/drafts', @target + '/drafts') if @drafts
+      posts  = generate_posts(@source, @target)
+      sites  = generate_sites(@source, @target) if @sites
+      generate_drafts(@source, @target) if @drafts
       generate_index(@target, posts, sites)
       generate_site_map(@target, posts, sites)
       generate_rss(@target, posts)
     end
 
     private
+
+    def join_file_names(*args)
+      args.join('/')
+    end
+
     def be_verbose(message)
       @logger.log(message) if @verbose and !logger.nil?
     end
@@ -78,17 +88,18 @@ module Uberblog
 
     end
 
-    def generate_sites(source, target)
+    def generate_sites(s, t)
       be_verbose "Generate sites..."
-
+      source = join_file_names(s, DIR_NAMES[:sites])
+      target = join_file_names(t, DIR_NAMES[:sites])
       layout = create_layout
       list  = []
 
       load_files(source).each do |file|
         be_verbose "Generate site for '#{file}'..."
-        site        = create_html_resource('site', layout)
-        site.data   = Uberblog::Model::SiteData.new(file)
-        site.config = @config
+        site         = create_html_resource('site', layout)
+        site.data    = Uberblog::Model::SiteData.new(file)
+        site.baseUrl = @config.siteUrl + DIR_NAMES[:sites] + '/'
         list << site
         layout.title = "#{@config.headline} | #{site.title}"
         File.open("#{target}/#{site.filename}", 'w') { |f| f.write(site.to_html) }
@@ -98,8 +109,11 @@ module Uberblog
       list
     end
 
-    def generate_posts(source, target)
+    def generate_posts(s, t)
       be_verbose "Generate posts..."
+
+      source = join_file_names(s, DIR_NAMES[:posts])
+      target = join_file_names(t, DIR_NAMES[:posts])
 
       count  = 0
       layout = create_layout
@@ -114,9 +128,10 @@ module Uberblog
       list = Uberblog::Model::BlogPostList.new()
       # Sort and create posts.
       data.sort.each do |item|
-        post        = create_html_resource('post', layout)
-        post.data   = item
-        post.config = @config
+        post          = create_html_resource('post', layout)
+        post.data     = item
+        post.features = @config.features
+        post.baseUrl  = @config.siteUrl + DIR_NAMES[:posts].to_s + '/'
         list.add(post)
       end
 
@@ -144,10 +159,19 @@ module Uberblog
       list
     end
 
-    def generate_drafts(source, target)
+    def generate_drafts(s, t)
       be_verbose "Generate drafts..."
-      generate_sites(source + '/sites', target + '/sites')
-      generate_posts(source + '/posts', target + '/posts')
+
+      source = join_file_names(source, DIR_NAMES[:drafts])
+      target = join_file_names(target, DIR_NAMES[:drafts])
+
+      backup = @quiet
+      @quiet = true # supress twitter for drafts
+
+      generate_sites(source, target)
+      generate_posts(source, target)
+
+      @quiet = backup
     end
 
     def update_twitter(title, longUrl)

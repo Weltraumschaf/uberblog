@@ -149,7 +149,7 @@ module Uberblog
     end
 
     class Html
-      attr_accessor :profileLinks, :otherLinks, :sites
+      attr_accessor :profileLinks, :otherLinks
       attr_reader :template, :layout
 
       def initialize(template, layout)
@@ -166,7 +166,7 @@ module Uberblog
     class Layout
 
       attr_reader :siteUrl, :language, :template
-      attr_accessor :title, :headline, :description, :content, :apiUrl
+      attr_accessor :title, :headline, :description, :content, :apiUrl, :sites
 
       def initialize(template, siteUrl, language = 'en')
         @template, @siteUrl, @language = template, siteUrl, language
@@ -197,8 +197,8 @@ module Uberblog
 
     class BlogPost < Html
 
-      attr_reader :siteUrl, :features
-      attr_accessor :prevPost, :nextPost, :config, :data
+      attr_reader :features
+      attr_accessor :prevPost, :nextPost, :config, :data, :baseUrl, :features
 
       def title
         @data.title
@@ -210,11 +210,6 @@ module Uberblog
 
       def date
         @data.date
-      end
-
-      def config=(c)
-        @siteUrl  = c.siteUrl
-        @features = c.features
       end
 
       def <=> other
@@ -230,8 +225,7 @@ module Uberblog
       end
 
       def url
-        # @todo move 'posts/' into config
-        @siteUrl + 'posts/' + filename
+        @baseUrl + filename
       end
 
       def to_s
@@ -241,11 +235,7 @@ module Uberblog
     end
 
     class Site < Html
-      attr_accessor :title, :content, :data
-
-      def config=(c)
-        @siteUrl  = c.siteUrl
-      end
+      attr_accessor :title, :content, :data, :baseUrl
 
       def title
         @data.title
@@ -260,8 +250,7 @@ module Uberblog
       end
 
       def url
-        # @todo move 'sites/' into config
-        @siteUrl + 'sites/' + filename
+        @baseUrl + filename
       end
 
     end
