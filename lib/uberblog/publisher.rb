@@ -29,10 +29,10 @@ module Uberblog
       puts 'Publishing the blog...'
       posts  = generate_posts(@source, @target)
       sites  = generate_sites(@source, @target) if @sites
-      generate_drafts(@source, @target) if @drafts
       generate_index(@target, posts, sites)
       generate_site_map(@target, posts, sites)
       generate_rss(@target, posts)
+      generate_drafts(@source, @target) if @drafts
     end
 
     private
@@ -162,8 +162,8 @@ module Uberblog
     def generate_drafts(s, t)
       be_verbose "Generate drafts..."
 
-      source = join_file_names(source, DIR_NAMES[:drafts])
-      target = join_file_names(target, DIR_NAMES[:drafts])
+      source = join_file_names(s, DIR_NAMES[:drafts])
+      target = join_file_names(t, DIR_NAMES[:drafts])
 
       backup = @quiet
       @quiet = true # supress twitter for drafts
