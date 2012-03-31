@@ -103,20 +103,26 @@ module Uberblog
     def generate_posts(source, target)
       be_verbose "Generate posts..."
 
-      count       = 0
-      template    = create_template("post")
-      layout      = create_layout
-      list        = Uberblog::Model::BlogPostList.new()
+      count  = 0
+      layout = create_layout
+      data   = []
 
+      # Loading data from files.
       load_files(source).each do |file|
         be_verbose "Loading file '#{file}'."
-        post         = create_html_resource('post', layout)
-        post.data    = Uberblog::Model::BlogData.new(file)
-        post.config  = @config
+        data << Uberblog::Model::BlogData.new(file)
+      end
+
+      list = Uberblog::Model::BlogPostList.new()
+      # Sort and create posts.
+      data.sort.each do |item|
+        post        = create_html_resource('post', layout)
+        post.data   = item
+        post.config = @config
         list.add(post)
       end
 
-      # first add all posts to the list to update prev/next pagination, then write them
+      # First add all posts to the list to update prev/next pagination, then write them.
       list.each do |post|
         layout.title = "#{@config.headline} | #{post.title}"
         targetFile   = "#{target}/#{post.filename}"
