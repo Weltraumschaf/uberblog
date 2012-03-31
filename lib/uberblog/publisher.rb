@@ -27,8 +27,8 @@ module Uberblog
 
     def publish
       puts 'Publishing the blog...'
-      posts  = generate_posts(@source, @target)
-      sites  = generate_sites(@source, @target) if @sites
+      sites = generate_sites(@source, @target)
+      posts = generate_posts(@source, @target, sites)
       generate_index(@target, posts, sites)
       generate_site_map(@target, posts, sites)
       generate_rss(@target, posts)
@@ -101,15 +101,22 @@ module Uberblog
         site.data    = Uberblog::Model::SiteData.new(file)
         site.baseUrl = @config.siteUrl + DIR_NAMES[:sites] + '/'
         list << site
-        layout.title = "#{@config.headline} | #{site.title}"
-        File.open("#{target}/#{site.filename}", 'w') { |f| f.write(site.to_html) }
       end
 
-      puts "#{list.size} sites generated."
+      layout.sites = list
+
+      if @sites
+        list.each do |site|
+          layout.title = "#{@config.headline} | #{site.title}"
+          File.open("#{target}/#{site.filename}", 'w') { |file| file.write(site.to_html) }
+        end
+        puts "#{list.size} sites generated."
+      end
+
       list
     end
 
-    def generate_posts(s, t)
+    def generate_posts(s, t, sites)
       be_verbose "Generate posts..."
 
       source = join_file_names(s, DIR_NAMES[:posts])
@@ -117,6 +124,7 @@ module Uberblog
 
       count  = 0
       layout = create_layout
+      layout.sites = sites
       data   = []
 
       # Loading data from files.
@@ -220,6 +228,7 @@ module Uberblog
       be_verbose "Generate index..."
 
       layout = create_layout
+      layout.sites = sites
       layout.title = "#{@config.headline} | Blog"
       index  = create_html_resource('index', layout)
       index.posts = posts

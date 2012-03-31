@@ -253,6 +253,10 @@ module Uberblog
         @baseUrl + filename
       end
 
+      def navi
+        @data.metadata['Navi']
+      end
+
     end
 
     class Link

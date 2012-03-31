@@ -26,9 +26,11 @@
           <li class="current_page_item">
             <a title="Home" href="<%= siteUrl %>">Home</a>
           </li>
+          <% for site in sites %>
           <li>
-            <a title="About me" href="<%= siteUrl %>sites/about-me.html">About Me</a>
+            <a title="<%= site.title %>" href="<%= site.url %>"><%= site.navi %></a>
           </li>
+          <% end %>
         </ul>
       </div>
     </nav>
