@@ -83,12 +83,12 @@ module Uberblog
 
       layout = create_layout
       site   = create_html_resource('site', layout)
-      sites  = []
+      list  = []
 
       load_files(source).each do |file|
         be_verbose "Generate site for '#{file}'..."
         data = Uberblog::Model::BlogData.new(file)
-        sites << data
+        list << data
         site.title   = data.title
         site.content = data.to_html
         layout.title = "#{@config.headline} | #{data.title}"
@@ -96,7 +96,8 @@ module Uberblog
         File.open("#{target}/#{fileName}", 'w') { |f| f.write(site.to_html) }
       end
 
-      sites
+      puts "#{list.size} sites generated."
+      list
     end
 
     def generate_posts(source, target)
