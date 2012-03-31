@@ -1,8 +1,8 @@
 require 'erb'
 require 'find'
 require 'rss'
-#require 'twitter'
-#require 'bitly'
+require 'twitter'
+require 'bitly'
 require 'uberblog/sitemap'
 require 'uberblog/model'
 require 'pathname'
@@ -150,20 +150,17 @@ module Uberblog
       generate_posts(source + '/posts', target + '/posts')
     end
 
-    def update_twitter(title, url)
+    def update_twitter(title, longUrl)
       be_verbose "Post to twitter..."
 
-      @logger.error "Not implemented yet!"
-      return
       begin
         Bitly.use_api_version_3
-        bitly = Bitly.new(@config['bitly']['username'], @config['bitly']['apikey'])
+        bitly = Bitly.new(@config.bitly['username'], @config.bitly['apikey'])
         url = bitly.shorten(longUrl).short_url
       rescue BitlyError
         url = longUrl
       end
 
-      #url.sub!('http:', '').sub!('https:', '')
       msg = "#{title} - #{url}"
 
       if to_long? msg
@@ -184,11 +181,11 @@ module Uberblog
 
       begin
         twitter = Twitter.new({
-                                :consumer_key       => @config['twitter']['consumer_key'],
-                                :consumer_secret    => @config['twitter']['consumer_secret'],
-                                :oauth_token        => @config['twitter']['oauth_token'],
-                                :oauth_token_secret => @config['twitter']['oauth_token_secret']
-                              })
+          :consumer_key       => @config.twitter['consumer_key'],
+          :consumer_secret    => @config.twitter['consumer_secret'],
+          :oauth_token        => @config.twitter['oauth_token'],
+          :oauth_token_secret => @config.twitter['oauth_token_secret']
+        })
         twitter.update(msg)
       rescue
         puts "Error on updating twitter!"
