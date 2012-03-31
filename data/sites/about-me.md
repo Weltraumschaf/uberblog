@@ -1,5 +1,4 @@
-Title: About Me  
-Foo: Bar  
+Navi: About Me
 
 ## Some Words About Me
 
