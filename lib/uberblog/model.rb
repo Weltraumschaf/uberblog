@@ -82,7 +82,7 @@ module Uberblog
       end
 
       def to_html
-        return @document.to_html if self.metadata.nil? # No metadata to remove.
+        return @document.to_html if self.metadata.size == 0 # No metadata to remove.
         return MarkdownData.remove_meta_data(@document).to_html
       end
 
