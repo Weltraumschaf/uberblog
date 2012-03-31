@@ -25,11 +25,39 @@ module Uberblog
 
       class MarkdownDataTest < Test::Unit::TestCase
 
-        must 'extract meta data' do
-          md   = Uberblog::Model::MarkdownData.new("#{$FIXTURES}/site.md")
-          meta = {'Title' => '', 'Foo' => 'Bar'}
-          assert_equal meta, md.extract_meta_data
+        def load_kramdown_document(file)
+          File.open(file, "rb") { |f| Kramdown::Document.new(f.read) }
         end
+
+        must 'extract meta data' do
+          document = load_kramdown_document("#{$FIXTURES}/blog_post.md")
+          meta     = {}
+          assert_equal meta, Uberblog::Model::MarkdownData.extract_meta_data(document)
+
+          document = load_kramdown_document("#{$FIXTURES}/blog_post_with_meta.md")
+          meta     = {'Title' => 'Some title', 'Foo' => 'Bar'}
+          assert_equal meta, Uberblog::Model::MarkdownData.extract_meta_data(document)
+        end
+
+        must 'parse meta data' do
+          meta = {}
+          assert_equal meta, Uberblog::Model::MarkdownData.parse_meta_data('')
+
+          meta = {}
+          assert_equal meta, Uberblog::Model::MarkdownData.parse_meta_data('foobar')
+          assert_equal meta, Uberblog::Model::MarkdownData.parse_meta_data('foo bar baz')
+
+          meta = {'Title' => 'Some title', 'Foo' => 'Bar'}
+          assert_equal meta, Uberblog::Model::MarkdownData.parse_meta_data("Title: Some title\nFoo: Bar")
+        end
+
+        must 'is key?' do
+          assert_equal true, Uberblog::Model::MarkdownData.is_key?('Key:')
+          assert_equal true, Uberblog::Model::MarkdownData.is_key?('key:')
+          assert_equal false, Uberblog::Model::MarkdownData.is_key?('Key')
+          assert_equal false, Uberblog::Model::MarkdownData.is_key?('key')
+        end
+
       end
 
       class RatingTest < Test::Unit::TestCase
