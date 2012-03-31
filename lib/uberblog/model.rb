@@ -207,7 +207,7 @@ module Uberblog
       property :count, Integer, :required => true, :default => 0
 
       def average
-        return 0 if 0 == @count
+        return 0 unless @count
         return ((@sum + 0.0) / @count).round
       end
 

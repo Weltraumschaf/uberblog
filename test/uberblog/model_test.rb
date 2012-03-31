@@ -35,7 +35,20 @@ module Uberblog
       class RatingTest < Test::Unit::TestCase
 
         must 'count and calc average' do
-          fail "not ready"
+          rating = Uberblog::Model::Rating.new
+          assert_equal 0, rating.sum
+          assert_equal 0, rating.average
+          assert_equal 0, rating.count
+
+          rating.add(5)
+          assert_equal 5, rating.sum
+          assert_equal 5, rating.average
+          assert_equal 1, rating.count
+
+          rating.add(3)
+          assert_equal 8, rating.sum
+          assert_equal 4, rating.average
+          assert_equal 2, rating.count
         end
 
       end
