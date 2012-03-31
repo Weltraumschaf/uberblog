@@ -58,6 +58,20 @@ module Uberblog
           assert_equal false, Uberblog::Model::MarkdownData.is_key?('key')
         end
 
+        must 'remove meta data' do
+          document = load_kramdown_document("#{$FIXTURES}/blog_post_with_meta.md")
+          cleaned  = Uberblog::Model::MarkdownData.remove_meta_data(document)
+          #puts cleaned.inspect
+        end
+
+        must 'title' do
+          md = Uberblog::Model::MarkdownData.new("#{$FIXTURES}/blog_post.md")
+          assert_equal 'This is the title', md.title
+
+          md = Uberblog::Model::MarkdownData.new("#{$FIXTURES}/blog_post_with_meta.md")
+          assert_equal 'This is the title', md.title
+        end
+
       end
 
       class RatingTest < Test::Unit::TestCase
