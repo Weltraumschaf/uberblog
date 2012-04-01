@@ -73,7 +73,7 @@
         readOnly = readOnly || false;
         $("#rating").raty({
             path: siteUrl + 'img/raty/',
-            start: rate,
+            start: parseInt(rate, 10),
             click: readOnly ?
                 function(score, event) {
                     event.preventDefault();
@@ -101,7 +101,7 @@
                 }
             }   ,
             success:     function(data) {
-                if (data && data.average) {
+                if (data && data.average !== undefined) {
                     showRaty(data.average);
                 }
             }

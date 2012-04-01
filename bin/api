@@ -9,7 +9,9 @@ require 'sinatra'
 require "sinatra/json"
 require 'json'
 
-DataMapper::Logger.new($stdout, :debug)
+$logger  = Uberblog::Logger.new($stdout, $stderr)
+
+DataMapper::Logger.new($logger.stdout, :debug)
 DataMapper.setup(:default, "sqlite://#{$baseDir}/data/database.sqlite")
 DataMapper::Model.raise_on_save_failure = true
 require 'uberblog/model'
@@ -36,7 +38,7 @@ end
 get '/rating/:post' do
   rating = Uberblog::Model::Rating.get(params[:post])
   halt 404 if rating.nil?
-  json rating.hash
+  json rating.get_attributes
 end
 
 put '/rating/:post' do
@@ -53,7 +55,15 @@ put '/rating/:post' do
   rating = Uberblog::Model::Rating.first_or_create({ :post => params[:post] })
 
   raise_error 400, "Expected JSON key 'rate(Integer)' not present!." if data['rate'].nil?
-  rating.add data['rate'].to_i
-  rating.save
-  json rating.hash
+  rating.add(data['rate'].to_i)
+  $logger.log("Saving rate with: #{data['rate'].to_i}")
+
+  begin
+    rating.save
+  rescue
+    $logger.error $!
+    raise_error 500, "Can't save entity! Exception was: #{$!}"
+  end
+
+  json rating.get_attributes
 end

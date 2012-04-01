@@ -270,8 +270,13 @@ module Uberblog
       property :count, Integer, :required => true, :default => 0
 
       def average
-        return 0 unless @count
-        return ((@sum + 0.0) / @count).round
+        return 0 if @count == 0
+
+        begin
+          return ((@sum + 0.0) / @count).round
+        rescue FloatDomainError
+          return 0
+        end
       end
 
       def add(rate)
@@ -287,7 +292,7 @@ module Uberblog
         post == other.post && average == other.average
       end
 
-      def hash
+      def get_attributes
         {:post => @post, :sum => @sum, :count => @count, :average => average}
       end
     end
