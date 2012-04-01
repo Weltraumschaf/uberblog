@@ -95,21 +95,20 @@
   width: 100%;
 }
 
-#primary ul {
+#primary ul, #primary ol {
   color: $black;
-  list-style: none;
   margin-bottom: 1.2em;
-  margin-left: 10px;
+  margin-left: 20px;
+}
+
+#primary ul {
+  list-style: none;
 }
 
 #primary ul li:before {
-  content: "–";
+  content: "¬";
   position: relative;
-  left: -5px;
-}
-
-#primary ul li {
-  text-indent: -12px;
+  left: -20px;
 }
 
 #content {
