@@ -1,4 +1,3 @@
-#require 'data_mapper'
 require 'dm-core'
 require 'kramdown'
 require 'uri'
