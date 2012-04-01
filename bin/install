@@ -4,7 +4,7 @@ require 'pathname'
 $baseDir = Pathname.new(File.dirname(__FILE__) + '/..').realpath.to_s
 
 require "#{$baseDir}/lib/uberblog"
-require 'uberblog/cli'
+require 'uberblog/cli/install'
 
 cmd = Uberblog::Cli::Install.new $baseDir
 cmd.logger = Uberblog::Logger.new($stdout, $stderr)

@@ -3,9 +3,15 @@ require 'find'
 require 'rss'
 require 'twitter'
 require 'bitly'
-require 'uberblog/sitemap'
-require 'uberblog/model'
 require 'pathname'
+require 'uberblog/sitemap'
+require 'uberblog/model/site_data'
+require 'uberblog/model/blog_post_data'
+require 'uberblog/view/index'
+require 'uberblog/view/layout'
+require 'uberblog/view/site'
+require 'uberblog/view/blog_post'
+require 'uberblog/view/blog_post_list'
 
 module Uberblog
 
@@ -65,11 +71,12 @@ module Uberblog
     end
 
     def create_layout
-      layout = Uberblog::Model::Layout.new(create_template('layout'), @config.siteUrl)
+      layout = Uberblog::View::Layout.new(create_template('layout'), @config.siteUrl)
       layout.title       = "n/a"
       layout.headline    = @config.headline
       layout.description = @config.description
       layout.apiUrl      = @config.api['url']
+      layout.version     = Uberblog::VERSION
       layout
     end
 
@@ -79,30 +86,32 @@ module Uberblog
 
       case name
         when "site"
-          Uberblog::Model::Site.new(tpl, layout)
+          Uberblog::View::Site.new(tpl, layout)
         when "index"
-          Uberblog::Model::Index.new(tpl, layout)
+          Uberblog::View::Index.new(tpl, layout)
         when "post"
-          Uberblog::Model::BlogPost.new(tpl, layout)
+          Uberblog::View::BlogPost.new(tpl, layout)
       end
 
     end
 
-    def generate_sites(s, t, sites = [])
+    def generate_sites(s, t, allSites = [])
       be_verbose "Generate sites..."
       source = join_file_names(s, DIR_NAMES[:sites])
       target = join_file_names(t, DIR_NAMES[:sites])
       layout = create_layout
+      sites  = []
 
       load_files(source).each do |file|
         be_verbose "Generate site for '#{file}'..."
         site         = create_html_resource('site', layout)
         site.data    = Uberblog::Model::SiteData.new(file)
         site.baseUrl = @config.siteUrl + DIR_NAMES[:sites] + '/'
-        sites << site
+        sites    << site
+        allSites << site
       end
 
-      layout.sites = sites
+      layout.sites = allSites
 
       if @sites
         count = 0
@@ -114,7 +123,7 @@ module Uberblog
         puts "#{count} sites generated."
       end
 
-      sites
+      allSites
     end
 
     def generate_posts(s, t, sites)
@@ -131,10 +140,10 @@ module Uberblog
       # Loading data from files.
       load_files(source).each do |file|
         be_verbose "Loading file '#{file}'."
-        data << Uberblog::Model::BlogData.new(file)
+        data << Uberblog::Model::BlogPostData.new(file)
       end
 
-      list = Uberblog::Model::BlogPostList.new()
+      list = Uberblog::View::BlogPostList.new()
       # Sort and create posts.
       data.sort.each do |item|
         post          = create_html_resource('post', layout)
@@ -176,7 +185,6 @@ module Uberblog
 
       backup = @quiet
       @quiet = true # supress twitter for drafts
-
       sitesWithDrafts = generate_sites(source, target, sites)
       generate_posts(source, target, sitesWithDrafts)
 

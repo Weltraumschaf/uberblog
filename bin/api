@@ -14,7 +14,9 @@ $logger  = Uberblog::Logger.new($stdout, $stderr)
 DataMapper::Logger.new($logger.stdout, :debug)
 DataMapper.setup(:default, "sqlite://#{$baseDir}/data/database.sqlite")
 DataMapper::Model.raise_on_save_failure = true
-require 'uberblog/model'
+
+require 'uberblog/model/rating'
+
 DataMapper.finalize
 
 def raise_error(code, message)
