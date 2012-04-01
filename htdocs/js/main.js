@@ -1,5 +1,5 @@
 (function(){
-    var apiUrl,
+    var apiUrl, siteUrl,
         pathname   = document.location.pathname,
         resourceId = pathname.replace(".html", "")
                              .substring(pathname.lastIndexOf("/") + 1);
@@ -39,8 +39,8 @@
     }
 
     function loadDependencies(onReadyFn) {
-        $LAB.script('js/jquery-1.7.2.js')
-            .script('js/jquery.raty.js')
+        $LAB.script(siteUrl + 'js/jquery-1.7.2.js')
+            .script(siteUrl + 'js/jquery.raty.js')
             .wait(onReadyFn)
     }
 
@@ -72,7 +72,7 @@
     function showRaty(rate, readOnly) {
         readOnly = readOnly || false;
         $("#rating").raty({
-            path: "img/raty/",
+            path: siteUrl + 'img/raty/',
             start: rate,
             click: readOnly ?
                 function(score, event) {
@@ -123,6 +123,7 @@
 
     window.weltraumschaf = function(options) {
         apiUrl = options.api;
+        siteUrl = options.siteUrl;
         main();
     }
 })()
