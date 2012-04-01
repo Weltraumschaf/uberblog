@@ -32,7 +32,7 @@ module Uberblog
       generate_index(@target, posts, sites)
       generate_site_map(@target, posts, sites)
       generate_rss(@target, posts)
-      generate_drafts(@source, @target) if @drafts
+      generate_drafts(@source, @target, sites) if @drafts
     end
 
     private
@@ -88,32 +88,33 @@ module Uberblog
 
     end
 
-    def generate_sites(s, t)
+    def generate_sites(s, t, sites = [])
       be_verbose "Generate sites..."
       source = join_file_names(s, DIR_NAMES[:sites])
       target = join_file_names(t, DIR_NAMES[:sites])
       layout = create_layout
-      list  = []
 
       load_files(source).each do |file|
         be_verbose "Generate site for '#{file}'..."
         site         = create_html_resource('site', layout)
         site.data    = Uberblog::Model::SiteData.new(file)
         site.baseUrl = @config.siteUrl + DIR_NAMES[:sites] + '/'
-        list << site
+        sites << site
       end
 
-      layout.sites = list
+      layout.sites = sites
 
       if @sites
-        list.each do |site|
+        count = 0
+        sites.each do |site|
           layout.title = "#{@config.headline} | #{site.title}"
           File.open("#{target}/#{site.filename}", 'w') { |file| file.write(site.to_html) }
+          count += 1
         end
-        puts "#{list.size} sites generated."
+        puts "#{count} sites generated."
       end
 
-      list
+      sites
     end
 
     def generate_posts(s, t, sites)
@@ -167,7 +168,7 @@ module Uberblog
       list
     end
 
-    def generate_drafts(s, t)
+    def generate_drafts(s, t, sites)
       be_verbose "Generate drafts..."
 
       source = join_file_names(s, DIR_NAMES[:drafts])
@@ -176,8 +177,8 @@ module Uberblog
       backup = @quiet
       @quiet = true # supress twitter for drafts
 
-      generate_sites(source, target)
-      generate_posts(source, target)
+      sitesWithDrafts = generate_sites(source, target, sites)
+      generate_posts(source, target, sitesWithDrafts)
 
       @quiet = backup
     end
