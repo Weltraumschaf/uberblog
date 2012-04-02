@@ -9,14 +9,15 @@ module Uberblog
 
       DataMapper::Property::String.length(255)
 
-      property :post,  String, :key => true
+      property :id,    Serial, :key => true
+      property :post,  String, :required => true
       property :text,  Text,   :required => true
       property :name,  String, :default => 'anonymous'
       property :url,   String, :default => ''
     end
 
     def get_attributes
-      { :post => @post, :text => @text, :name => @name, :url => @url }
+      {:id => @id, :post => @post, :text => @text, :name => @name, :url => @url}
     end
 
   end
