@@ -27,7 +27,7 @@ module Uberblog
         DataMapper::Logger.new(@logger.stdout, :debug)
         DataMapper.setup(:default, "sqlite://#{dbFile}")
         DataMapper.finalize
-        DataMapper.auto_migrate!
+        DataMapper.auto_upgrade!
 
         RET_OK
       end
