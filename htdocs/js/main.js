@@ -41,6 +41,7 @@
     function loadDependencies(onReadyFn) {
         $LAB.script(siteUrl + 'js/jquery-1.7.2.js')
             .script(siteUrl + 'js/jquery.raty.js')
+            .script(siteUrl + 'js/handlebars.js')
             .wait(onReadyFn)
     }
 
