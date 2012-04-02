@@ -15,6 +15,10 @@ module Uberblog
       property :url,   String, :default => ''
     end
 
+    def get_attributes
+      { :post => @post, :text => @text, :name => @name, :url => @url }
+    end
+
   end
 
 end
