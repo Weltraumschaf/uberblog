@@ -18,20 +18,26 @@ All other stuff made by me (Weltraumschaf) is under the
 
 ## Todo
 
+- use nice features of Pathname (add strings to path w/o bothering the /)
 - generate suffixed output files if duplicate (on blogposts with same title)
 - keywords/description etc. in header
 
 ## Links
-- Used Libs
+
+### Used Libs
+    
     - JavaScript
-        - [jQuery](http://jquery.com/)
         - [LABjs](http://labjs.com/)
+        - [jQuery](http://jquery.com/)
         - [Raty jQuery Plugin](http://www.wbotelhos.com/raty/)
+        - [Handlebars](http://handlebarsjs.com/)
     - Ruby
         - [Kramdown](http://kramdown.rubyforge.org/)
         - [Bitly](https://github.com/philnash/bitly)
         - [Twitter](http://twitter.rubyforge.org/)
         - [Data Mapper](http://datamapper.org/)
         - [Sinatra](http://www.sinatrarb.com/)
-- Other    
+
+### Other    
+
     - [Markdown Meta Data](http://bywordapp.com/markdown/guide.html)
