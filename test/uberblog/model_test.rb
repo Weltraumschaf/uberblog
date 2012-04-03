@@ -49,6 +49,9 @@ module Uberblog
 
           meta = {'Title' => 'Some title', 'Foo' => 'Bar'}
           assert_equal meta, Uberblog::Model::MarkdownData.parse_meta_data("Title: Some title\nFoo: Bar")
+
+          meta = {'Description' => "My personal projects I'm working on"}
+          assert_equla meta, Uberblog::Model::MarkdownData.parse_meta_data("Description: My personal projects I'm working on")
         end
 
         must 'is key?' do

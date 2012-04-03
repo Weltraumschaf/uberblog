@@ -7,7 +7,7 @@ module Uberblog
     class Layout
 
       attr_reader :siteUrl, :language, :template
-      attr_accessor :title, :headline, :description, :content, :apiUrl, :sites, :version
+      attr_accessor :title, :headline, :description, :content, :apiUrl, :sites, :version, :metadata
 
       def initialize(template, siteUrl, language = 'en')
         @template, @siteUrl, @language = template, siteUrl, language
@@ -19,6 +19,7 @@ module Uberblog
         @profileLinks = []
         @otherLinks   = []
         @sites        = []
+        @metadata     = {}
       end
 
       def to_html

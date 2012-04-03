@@ -104,8 +104,10 @@ module Uberblog
 
       load_files(source).each do |file|
         be_verbose "Generate site for '#{file}'..."
+        data         = Uberblog::Model::SiteData.new(file)
+        layout.metadata = data.metadata
         site         = create_html_resource('site', layout)
-        site.data    = Uberblog::Model::SiteData.new(file)
+        site.data    = data
         site.baseUrl = @config.siteUrl + DIR_NAMES[:sites] + '/'
         sites    << site
         allSites << site
