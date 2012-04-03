@@ -1,10 +1,19 @@
+# from tools and IDEs
 .idea
 .sass-cache
+*.sublime-*
+*.sublime-*
+/nbproject
+
+# config
 config/blog.yml
 config/proxy.json
-htdocs/.htaccess
-htdocs/redirect.php
-/nbproject
+
+# generated stuff
 *.html
 *.xml
+
+# other
+htdocs/.htaccess
+htdocs/redirect.php
 *.sqlite
