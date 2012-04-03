@@ -3,7 +3,6 @@ module Uberblog
 
   module View
 
-    # Mobe into module view or presentation
     class Html
       attr_accessor :profileLinks, :otherLinks
       attr_reader :template, :layout

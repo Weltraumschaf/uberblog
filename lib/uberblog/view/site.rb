@@ -4,7 +4,6 @@ module Uberblog
 
   module View
 
-    # Mobe into module view or presentation
     class Site < Html
       attr_accessor :title, :content, :data, :baseUrl
 

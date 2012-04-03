@@ -85,12 +85,12 @@ module Uberblog
       tpl  = create_template(name)
 
       case name
-        when "site"
-          Uberblog::View::Site.new(tpl, layout)
-        when "index"
-          Uberblog::View::Index.new(tpl, layout)
-        when "post"
-          Uberblog::View::BlogPost.new(tpl, layout)
+      when "site"
+        Uberblog::View::Site.new(tpl, layout)
+      when "index"
+        Uberblog::View::Index.new(tpl, layout)
+      when "post"
+        Uberblog::View::BlogPost.new(tpl, layout)
       end
 
     end

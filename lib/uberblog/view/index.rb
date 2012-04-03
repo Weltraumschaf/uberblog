@@ -4,7 +4,6 @@ module Uberblog
 
   module View
 
-    # Mobe into module view or presentation
     class Index < Html
       attr_accessor :posts
 
