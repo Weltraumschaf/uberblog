@@ -1,8 +1,6 @@
 (function(){
-    var apiUrl, siteUrl,
-        pathname   = document.location.pathname,
-        resourceId = pathname.replace(".html", "")
-                             .substring(pathname.lastIndexOf("/") + 1);
+    var options = {},
+        siteUrl;
 
     if (undefined === window.console) {
         window.console = {
@@ -38,16 +36,22 @@
         }
     }
 
-    function loadDependencies(onReadyFn) {
-        $LAB.script(siteUrl + 'js/jquery-1.7.2.js')
-            .script(siteUrl + 'js/jquery.raty.js')
-            .script(siteUrl + 'js/handlebars.js')
+    function loadDependencies(dependencies, onReadyFn) {
+        var libs = [];
+
+        for (dependency in dependencies) {
+            if (dependencies.hasOwnProperty(dependency)) {
+                libs.push(options.siteUrl + 'js/' + dependencies[dependency]);
+            }
+        }
+
+        $LAB.script(libs)
             .wait(onReadyFn)
     }
 
     function saveRate(score, event) {
         $.ajax({
-            url:         apiUrl + "rating/" + resourceId,
+            url:         options.apiUrl + "rating/" + resourceId,
             type:        'PUT',
             data:        JSON.stringify({"rate": score}),
             dataType:    'json',
@@ -85,7 +89,7 @@
         }).fadeIn();
     }
 
-    function initRaty() {
+    function initRaty(resourceId) {
         var $rating = $("#rating");
 
         if ($rating.size() === 0 || '' === resourceId) {
@@ -93,7 +97,7 @@
         }
 
         $.ajax({
-            url:         apiUrl + "rating/" + resourceId,
+            url:         options.apiUrl + "rating/" + resourceId,
             type:        'GET',
             dataType:    'json',
             error:       function(jqXhr, textStatus, errorThrown) {
@@ -109,22 +113,44 @@
         });
     }
 
+    function initComments(resourceId) {
+        var $rating = $("#comments");
+
+        if ($rating.size() === 0 || '' === resourceId) {
+            return;
+        }
+    }
+
     function main() {
-        loadDependencies(function() {
+        var dependencies = [
+            'jquery-1.7.2.js',
+            'jquery.raty.js',
+            'handlebars.js'
+        ];
+
+        loadDependencies(dependencies, function() {
             $.ajaxSetup({
                 cache:       false,
                 processData: false,
                 dataType:    "json",
                 contentType: "application/json"
             });
-            $(initRaty);
+            $(function() {
+                var pathname   = document.location.pathname,
+                    resourceId = pathname.replace(".html", "")
+                                         .substring(pathname.lastIndexOf("/") + 1);
+                initRaty(resourceId);
+                initComments(resourceId);
+            });
         });
         initGoogleAnalytics();
     }
 
-    window.weltraumschaf = function(options) {
-        apiUrl = options.api;
-        siteUrl = options.siteUrl;
+    function uberblog(opt) {
+        options = opt || {};
+        siteUrl = opt.siteUrl;
         main();
     }
+
+    window.weltraumschaf = window.uberblog = uberblog; // backward compatibility
 })()

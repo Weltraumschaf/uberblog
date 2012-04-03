@@ -1,8 +1,10 @@
 <article>
   <strong class="meta">Posted <%= date_formatted %></strong>
-  <% if features['rating'] %><div id="rating"></div><% end  %>
+  <% if features['rating'] %><div id="rating"></div><% end %>
   <%= content %>
 </article>
+
+<% if features['comments'] %><div id="comments"></div><% end %>
 
 <% if prevPost or nextPost %>
 <nav id="pagination">

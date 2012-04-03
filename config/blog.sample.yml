@@ -17,3 +17,4 @@ api:
   url: http://www.your-blog.de/api/
 features:
   rating: false
+  comments: false
