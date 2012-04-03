@@ -1,8 +1,7 @@
 # from tools and IDEs
 .idea
 .sass-cache
-*.sublime-*
-*.sublime-*
+*.sublime-workspace
 /nbproject
 
 # config
