@@ -1,4 +1,6 @@
 Navi: About Me
+Description: Some words about Sven Strittmatter.
+Keywords: Sven, Strittmatter, about, CV
 
 ## Some Words About Me
 
