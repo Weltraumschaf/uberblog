@@ -1,14 +1,24 @@
 {
-  "folders": [
-    {
-      "path": "../uberblog",
-      "folder_exclude_patterns": [".sass-cache", ".idea", "nbproject"]
-    },
-    {
-      "path": "/usr/local/lib/ruby/gems/1.8/gems"
-    }
-  ],
-  "settings": {
-    "tab_size": 2
-  }
+	"folders":
+	[
+		{
+			"folder_exclude_patterns":
+			[
+				".sass-cache",
+				".idea",
+				"nbproject"
+			],
+			"path": "/Users/sxs/src/ruby/uberblog"
+		},
+		{
+			"path": "/usr/local/lib/ruby/gems/1.8/gems"
+		},
+		{
+			"path": "/Users/sxs/src/ruby/ruby.local"
+		}
+	],
+	"settings":
+	{
+		"tab_size": 2
+	}
 }
