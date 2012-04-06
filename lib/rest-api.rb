@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: UTF-8
 
 require 'pathname'
 $baseDir = Pathname.new(File.dirname(__FILE__) + '/..').realpath
@@ -24,7 +25,6 @@ def raise_error(code, message)
   halt(code, json(:error_code => code, :error_message => message))
 end
 
-
 def parse_json(str)
   begin
     return JSON.parse(str)
@@ -33,27 +33,33 @@ def parse_json(str)
   end
 end
 
+configure do
+  mime_type :urilist, 'text/uri-list'
+end
+
 not_found do
   "Nothing here.\n"
 end
 
-get '/' do
-  "/rating/\n/comment/\n"
+get '/api/' do
+  content_type :urilist
+  "/api/rating/\n/api/comment/\n"
 end
 
-get '/rating/' do
+get '/api/rating/' do
   uris = ''
-  Uberblog::Model::Rating.all.each { |rating| uris << "/rating/#{rating.post}\n" }
+  Uberblog::Model::Rating.all.each { |rating| uris << "/api/rating/#{rating.post}\n" }
+  content_type :urilist
   uris
 end
 
-get '/rating/:post' do
+get '/api/rating/:post' do
   rating = Uberblog::Model::Rating.get(params[:post])
   halt 404 if rating.nil?
   json rating.get_attributes
 end
 
-put '/rating/:post' do
+put '/api/rating/:post' do
   body = request.body.read
   raise_error 400, %q{Empty request body! Expects JSON like '{rate: 5}'.} if body.size == 0 or body.nil?
 
@@ -74,19 +80,20 @@ put '/rating/:post' do
   json rating.get_attributes
 end
 
-get '/comment/' do
+get '/api/comment/' do
   uris = ''
   Uberblog::Model::Comment.all.each { |comment| uris << "/comment/#{comment.post}\n" }
+  content_type :urilist
   uris
 end
 
-get '/comment/:post' do
+get '/api/comment/:post' do
   comment = Uberblog::Model::Comment.get(params[:post])
   halt 404 if comment.nil?
   json comment.get_attributes
 end
 
-put '/comment/:post' do
+put '/api/comment/:post' do
   body = request.body.read
   raise_error 400, %q{Empty request body! Expects JSON like '{text: "..."}'.} if body.size == 0 or body.nil?
 

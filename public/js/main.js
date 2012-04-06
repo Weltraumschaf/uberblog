@@ -1,4 +1,4 @@
-(function(){
+(function() {
     var options = {};
 
     if (undefined === window.console) {
@@ -7,6 +7,7 @@
             log: function() {}
         };
     }
+
     function initGoogleAnalytics() {
         var _gaq = _gaq || [], ga, s;
 
@@ -48,22 +49,24 @@
             .wait(onReadyFn)
     }
 
-    function saveRate(score, event) {
-        console.debug(this);
+    function saveRate(score, event, resourceId) {
+        var $container = $(this);
+
         $.ajax({
-            url:         options.apiUrl + "rating/" + resourceId,
-            type:        'PUT',
-            data:        JSON.stringify({"rate": score}),
-            dataType:    'json',
-            error:       function(jqXhr, textStatus, errorThrown) {
+            url:      options.apiUrl + "rating/" + resourceId,
+            type:     'PUT',
+            data:     JSON.stringify({"rate": score}),
+            dataType: 'json',
+            error:    function(jqXhr, textStatus, errorThrown) {
+                console.log("Error on Ajax request!")
                 console.debug(jqXhr, textStatus, errorThrown);
             },
             success:     function(data) {
                 // @todo errorhandling
 
                 if (data && data.average) {
-                    $("#rating").raty('start',data.average)
-                                .raty('readOnly', true);
+                    $container.raty('start', data.average)
+                              .raty('readOnly', true);
                 } else {
                     console.log("Didn't get expected data!");
                     console.debug(data);
@@ -74,19 +77,23 @@
         event.stopPropagation();
     }
 
-    function showRaty($container, rate, readOnly) {
+    function showRaty($container, resourceId, rate, readOnly) {
         rate     = rate || 0;
         readOnly = readOnly || false;
         $container.raty({
             path: options.siteUrl + 'img/raty/',
             start: parseInt(rate, 10),
-            click: readOnly ?
+            click: readOnly
+                ?
                 function(score, event) {
                     // Set dummy callback.
                     event.preventDefault();
                     event.stopPropagation();
-                } :
-                saveRate,
+                }
+                :
+                function(score, event) {
+                    saveRate.call(this, score, event, resourceId);
+                },
             readOnly: readOnly
         }).fadeIn();
     }
@@ -104,12 +111,12 @@
             dataType: 'json',
             error:    function(jqXhr, textStatus, errorThrown) {
                 if (404 === jqXhr.status) {
-                    showRaty($container);
+                    showRaty($container, resourceId);
                 }
             }   ,
             success:  function(data) {
                 if (data && data.average !== undefined) {
-                    showRaty($container, data.average);
+                    showRaty($container, resourceId, data.average);
                 }
             }
         });
