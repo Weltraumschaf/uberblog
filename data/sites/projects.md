@@ -6,9 +6,11 @@ Keywords: Projects, Jenkins, Darcs
 
 Things I've coded in my live.
 
+<!--
 ### Uberblog
 
 TBD
+-->
 
 ### Darcs Plugin for Jenkins
 
