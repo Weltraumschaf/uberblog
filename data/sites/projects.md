@@ -6,6 +6,10 @@ Keywords: Projects, Jenkins, Darcs
 
 Things I've coded in my live.
 
+### Uberblog
+
+TBD
+
 ### Darcs Plugin for Jenkins
 
 At one of my [employers][1] [Darcs][2] was in use as [VCS][3]. For it's age it is a really cool [DVCS][4]. One big disadvantage is lack of tool support. There was [no plugin][5] to integrate Darcs into [Jenkins CI][6]. So I decided to make a [Darcs plugin][7].
