@@ -1,6 +1,5 @@
 (function(){
-    var options = {},
-        siteUrl;
+    var options = {};
 
     if (undefined === window.console) {
         window.console = {
@@ -50,6 +49,7 @@
     }
 
     function saveRate(score, event) {
+        console.debug(this);
         $.ajax({
             url:         options.apiUrl + "rating/" + resourceId,
             type:        'PUT',
@@ -74,13 +74,15 @@
         event.stopPropagation();
     }
 
-    function showRaty(rate, readOnly) {
+    function showRaty($container, rate, readOnly) {
+        rate     = rate || 0;
         readOnly = readOnly || false;
-        $("#rating").raty({
-            path: siteUrl + 'img/raty/',
+        $container.raty({
+            path: options.siteUrl + 'img/raty/',
             start: parseInt(rate, 10),
             click: readOnly ?
                 function(score, event) {
+                    // Set dummy callback.
                     event.preventDefault();
                     event.stopPropagation();
                 } :
@@ -90,35 +92,71 @@
     }
 
     function initRaty(resourceId) {
-        var $rating = $("#rating");
+        var $container = $("#rating");
 
-        if ($rating.size() === 0 || '' === resourceId) {
+        if ($container.size() === 0 || '' === resourceId) {
             return;
         }
 
         $.ajax({
-            url:         options.apiUrl + "rating/" + resourceId,
-            type:        'GET',
-            dataType:    'json',
-            error:       function(jqXhr, textStatus, errorThrown) {
+            url:      options.apiUrl + "rating/" + resourceId,
+            type:     'GET',
+            dataType: 'json',
+            error:    function(jqXhr, textStatus, errorThrown) {
                 if (404 === jqXhr.status) {
-                    showRaty(0);
+                    showRaty($container);
                 }
             }   ,
-            success:     function(data) {
+            success:  function(data) {
                 if (data && data.average !== undefined) {
-                    showRaty(data.average);
+                    showRaty($container, data.average);
                 }
             }
         });
     }
 
-    function initComments(resourceId) {
-        var $rating = $("#comments");
+    function showCommentsForm($container) {
+        var template = Handlebars.compile($('#comments-form-tpl').html());
+        $container.append(template()).fadeIn();
+    }
 
-        if ($rating.size() === 0 || '' === resourceId) {
+    function showComments($container, comments) {
+        comments = comments || [];
+    }
+
+    function saveComment(event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
+    function initComments(resourceId) {
+        var $container = $("#comments");
+
+        if ($container.size() === 0 || '' === resourceId) {
             return;
         }
+
+        $container.append('<div class="comments-list"/><div class="comments-form"/>')
+                  .children()
+                  .hide()
+                  .end()
+                  .show();
+//        $.ajax({
+//            url:      options.apiUrl + "comments/" + resourceId,
+//            type:     'GET',
+//            dataType: 'json',
+//            error:    function(jqXhr, textStatus, errorThrown) {
+//                if (404 === jqXhr.status) {
+//                    showComments($container);
+//                }
+//            }   ,
+//            success:  function(data) {
+//                if (data !== undefined) {
+//                    showComments($container, data);
+//                }
+//            }
+//        });
+        showCommentsForm($container.find('.comments-form'));
     }
 
     function main() {
