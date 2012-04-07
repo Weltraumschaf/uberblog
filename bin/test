@@ -2,7 +2,7 @@
 
 require 'pathname'
 
-$baseDir = Pathname.new(File.dirname(__FILE__) + '/..').realpath.to_s
+$baseDir = Pathname.new(File.dirname(__FILE__)) + '..'
 
 require "#{$baseDir}/lib/uberblog"
 require "#{$baseDir}/test/uberblog"

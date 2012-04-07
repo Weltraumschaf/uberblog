@@ -2,7 +2,7 @@
 # encoding: UTF-8
 
 require 'pathname'
-$baseDir = Pathname.new(File.dirname(__FILE__) + '/../..').realpath
+$baseDir = Pathname.new(File.dirname(__FILE__)) + '../..'
 
 require "#{$baseDir}/lib/uberblog"
 require 'uberblog/config'
@@ -11,8 +11,8 @@ require 'sinatra'
 require 'sinatra/json'
 require 'json'
 
-$logger = Uberblog::Logger.new($stdout, $stderr)
-$config = Uberblog::Config.new(File.open("#{$baseDir}/config/blog.yml") { |f| YAML.load(f) }, $baseDir)
+$logger = Uberblog::CliLogger.new
+$config = Uberblog::Config.new(File.open("#{$baseDir}/config/blog.yml") { |f| YAML.load(f) }, $baseDir.to_s)
 
 DataMapper::Logger.new($logger.stdout, :debug)
 DataMapper.setup(:default, "sqlite://#{$baseDir}/data/database.sqlite")

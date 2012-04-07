@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 
 require 'pathname'
-$baseDir = Pathname.new(File.dirname(__FILE__) + '/..').realpath.to_s
+$baseDir = Pathname.new(File.dirname(__FILE__)) + '..'
 
 require "#{$baseDir}/lib/uberblog"
 require 'uberblog/cli/install'
 
-cmd = Uberblog::Cli::Install.new $baseDir
-cmd.logger = Uberblog::Logger.new($stdout, $stderr)
+cmd = Uberblog::Cli::Install.new($baseDir.to_s)
+cmd.logger = Uberblog::CliLogger.new
 cmd.exec ARGV
