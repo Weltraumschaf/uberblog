@@ -1,3 +1,3 @@
 # encoding: UTF-8
-require './lib/rest-api'
+require './lib/uberblog/rest-api'
 run Sinatra::Application
