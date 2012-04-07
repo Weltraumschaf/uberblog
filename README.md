@@ -41,6 +41,4 @@ All other stuff made by me (Weltraumschaf) is under the
 ### Other
 
 - [Markdown Meta Data](http://bywordapp.com/markdown/guide.html)
-- [mod rails](http://www.modrails.com/documentation/Users%20guide%20Apache.html)
 - [Sinatra Book](http://sinatra-book.gittr.com/#real_world_applications_in_sinatra)
-- [Phusion](http://blog.phusion.nl/2010/09/21/phusion-passenger-running-multiple-ruby-versions/)
