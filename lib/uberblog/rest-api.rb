@@ -41,9 +41,17 @@ not_found do
   "Nothing here.\n"
 end
 
+get '/api' do
+  redirect '/api/'
+end
+
 get '/api/' do
   content_type :urilist
   "/api/rating/\n/api/comment/\n"
+end
+
+get '/api/rating' do
+  redirect '/api/rating/'
 end
 
 get '/api/rating/' do
@@ -78,6 +86,10 @@ put '/api/rating/:post' do
   end
 
   json rating.get_attributes
+end
+
+get '/api/comment' do
+  redirect '/api/comment/'
 end
 
 get '/api/comment/' do
