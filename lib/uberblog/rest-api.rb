@@ -2,7 +2,7 @@
 # encoding: UTF-8
 
 require 'pathname'
-$baseDir = Pathname.new(File.dirname(__FILE__) + '/..').realpath
+$baseDir = Pathname.new(File.dirname(__FILE__) + '/../..').realpath
 
 require "#{$baseDir}/lib/uberblog"
 require 'data_mapper'
