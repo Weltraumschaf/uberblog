@@ -4,7 +4,7 @@ siteUrl:     http://www.your-blog.de/
 language:    en
 dataDir:     /data
 tplDir:      /templates
-htdocs:      /htdocs
+htdocs:      /public
 twitter:
 	consumer_key:       ''
     consumer_secret:    ''
