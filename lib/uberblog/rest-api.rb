@@ -5,12 +5,14 @@ require 'pathname'
 $baseDir = Pathname.new(File.dirname(__FILE__) + '/../..').realpath
 
 require "#{$baseDir}/lib/uberblog"
+require 'uberblog/config'
 require 'data_mapper'
 require 'sinatra'
-require "sinatra/json"
+require 'sinatra/json'
 require 'json'
 
-$logger  = Uberblog::Logger.new($stdout, $stderr)
+$logger = Uberblog::Logger.new($stdout, $stderr)
+$config = Uberblog::Config.new(File.open("#{$baseDir}/config/blog.yml") { |f| YAML.load(f) }, $baseDir)
 
 DataMapper::Logger.new($logger.stdout, :debug)
 DataMapper.setup(:default, "sqlite://#{$baseDir}/data/database.sqlite")
@@ -33,6 +35,12 @@ def parse_json(str)
   end
 end
 
+def create_uri_list(list, prefix = '')
+  uris = ''
+  list.each { |uri| uris << "#{prefix}#{uri}\n"}
+  uris
+end
+
 configure do
   mime_type :urilist, 'text/uri-list'
 end
@@ -47,7 +55,7 @@ end
 
 get '/api/' do
   content_type :urilist
-  "/api/rating/\n/api/comment/\n"
+  create_uri_list(['api/rating/', 'api/comment/'], $config.siteUrl)
 end
 
 get '/api/rating' do
@@ -55,10 +63,10 @@ get '/api/rating' do
 end
 
 get '/api/rating/' do
-  uris = ''
-  Uberblog::Model::Rating.all.each { |rating| uris << "/api/rating/#{rating.post}\n" }
   content_type :urilist
-  uris
+  uris = []
+  Uberblog::Model::Rating.all.each { |rating| uris << rating.post }
+  create_uri_list(uris, "#{$config.siteUrl}api/rating/")
 end
 
 get '/api/rating/:post' do
@@ -93,10 +101,10 @@ get '/api/comment' do
 end
 
 get '/api/comment/' do
-  uris = ''
-  Uberblog::Model::Comment.all.each { |comment| uris << "/comment/#{comment.post}\n" }
   content_type :urilist
-  uris
+  uris = []
+  Uberblog::Model::Comment.all.each { |comment| uris << comment.post }
+  create_uri_list(uris, "#{$config.siteUrl}api/comment/")
 end
 
 get '/api/comment/:post' do
