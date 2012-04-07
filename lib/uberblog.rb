@@ -5,7 +5,7 @@ require 'rubygems'
 
 module Uberblog
 
-  VERSION = "1.0.0"
+  VERSION = "1.1.0"
 
   # Default logger which loggs to STDOUT
   class Logger
