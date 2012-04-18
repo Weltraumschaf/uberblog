@@ -48,6 +48,7 @@
 
 #access {
   @include blue-gradiant($darkBlue6, $darkBlue11);
+  background-color: $darkBlue6;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   clear: both;
   display: block;
