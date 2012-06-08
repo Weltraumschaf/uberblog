@@ -6,6 +6,10 @@ Keywords: Projects, Jenkins, Darcs
 
 Things I've coded in my live.
 
+### EBNF Parser and Image Generator
+
+This project contains a library for PHP and Java to parse [EBNF][13] syntax and generate railroad diagrams in various image formats. The Java part is still work in progress. The source code is hosted on [GitHub][14]. More details about the project is here in an older [blog post][15].
+
 ### Darcs Plugin for Jenkins
 
 At one of my [employers][1] [Darcs][2] was in use as [VCS][3]. For it's age it is a really cool [DVCS][4]. One big disadvantage is lack of tool support. There was [no plugin][5] to integrate Darcs into [Jenkins CI][6]. So I decided to make a [Darcs plugin][7].
@@ -33,3 +37,6 @@ Old stuff mostly build just for fun is hosted [here][8].
 [10]: http://developer.kwick.com/
 [11]: http://www.lugagne.de/
 [12]: http://www.oa-vs.de/
+[13]: http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_Form
+[14]: https://github.com/Weltraumschaf/ebnf
+[15]: https://blog.weltraumschaf.de/posts/parser-and-image-generator-for-ebnf.html
