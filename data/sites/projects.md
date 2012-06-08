@@ -13,9 +13,9 @@ At one of my [employers][1] [Darcs][2] was in use as [VCS][3]. For it's age it i
 ### KAPIT
 [KAPIT][9] is the [KWICK! API Test-Tool][10]. I've built this small web based tool for playing around with KWICK! Social Platform API. With KAPIT you can try out the API very easy without coding.
 
-### Lugagne.de
+### Websites
 
-[Lugagne.de][11] is a website I've made for my former neighbor, where he publishes is work as film editor.
+[Lugagne.de][11] is a website I've made for my former neighbor, where he publishes his work as film editor. [oa-vs.de][12] is the website I've made for a friend, who works in the event organization/service area.
 
 ### Old stuff
 
@@ -32,3 +32,4 @@ Old stuff mostly build just for fun is hosted [here][8].
 [9]:  http://kapit.weltraumschaf.de/
 [10]: http://developer.kwick.com/
 [11]: http://www.lugagne.de/
+[12]: http://www.oa-vs.de/
