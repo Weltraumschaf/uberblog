@@ -6,7 +6,6 @@
 
 # config
 config/blog.yml
-config/proxy.json
 
 # generated stuff
 *.html
